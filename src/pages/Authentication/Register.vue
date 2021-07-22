@@ -44,11 +44,17 @@
                 lazy-rules
                 outlined
               />
-
               <q-input
                 type="password"
                 v-model="form.password"
                 label="Password"
+                lazy-rules
+                outlined
+              />
+              <q-input
+                type="password"
+                v-model="form.confirm_password"
+                label="Confirm Password"
                 lazy-rules
                 outlined
               />
@@ -64,7 +70,7 @@
               </div>
               <div>
                 <q-btn
-                  label="Login"
+                  label="Create Account"
                   type="button"
                   color="light-green-5"
                   unelevated
@@ -79,7 +85,7 @@
                   ><i class="fas fa-heart" style="color: #eb5daa"></i
                 ></a>
               </div>
-              <div>Don't have an account yet? <a href="">Sign-up here!</a></div>
+              <div>Already have an account?<a href="">Log in</a></div>
             </q-form>
           </q-card-section>
         </q-card>
@@ -90,13 +96,13 @@
 
 <script>
 import { defineComponent, reactive } from "vue";
-import { useQuasar } from "quasar";
 
 export default defineComponent({
   setup() {
     const form = reactive({
         email: '',
         password: '',
+        confirm_password: '',
     });
 
     return {
