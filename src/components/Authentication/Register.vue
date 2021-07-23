@@ -60,7 +60,7 @@
             title="Forgot Password"
             class="forgot-pass-field"
           >
-            Forgot Password?
+            <b> Forgot Password? </b>
           </a>
         </div>
         <div>
@@ -80,7 +80,12 @@
             ><i class="fas fa-heart" style="color: #eb5daa"></i
           ></a>
         </div>
-        <div>Already have an account?<a href="">Log in</a></div>
+        <div>
+          Already have an account?
+          <a href="" title="Sign-in your account" @click.prevent="page">
+            <b> Log-in </b></a
+          >
+        </div>
       </q-form>
     </q-card-section>
   </q-card>
@@ -88,17 +93,24 @@
 
 <script>
 import { defineComponent, reactive } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
+    const $store = useStore();
     const form = reactive({
       email: "",
       password: "",
       confirm_password: "",
     });
 
+    const page = () => {
+      $store.dispatch("authentication/SET_PAGE_TYPE_ACTION", "login");
+    };
+
     return {
       form,
+      page,
     };
   },
 });

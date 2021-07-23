@@ -46,12 +46,12 @@
         />
         <div>
           <a
-            href=""
+            href="#"
             target="_blank"
             title="Forgot Password"
             class="forgot-pass-field"
           >
-            Forgot Password?
+            <b> Forgot Password? </b>
           </a>
         </div>
         <div>
@@ -66,7 +66,12 @@
             ><i class="fas fa-heart" style="color: #eb5daa"></i
           ></a>
         </div>
-        <div>Don't have an account yet? <a href="">Sign-up here!</a></div>
+        <div>
+          Don't have an account yet?
+          <a href="" title="Create new account" @click.prevent="page">
+            <b> Sign-up here! </b></a
+          >
+        </div>
       </q-form>
     </q-card-section>
   </q-card>
@@ -74,17 +79,23 @@
 
 <script>
 import { defineComponent, reactive } from "vue";
-import { useQuasar } from "quasar";
+import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
+    const $store = useStore();
     const form = reactive({
       email: "",
       password: "",
     });
 
+    const page = () => {
+      $store.dispatch("authentication/SET_PAGE_TYPE_ACTION", "register");
+    };
+
     return {
       form,
+      page,
     };
   },
 });
