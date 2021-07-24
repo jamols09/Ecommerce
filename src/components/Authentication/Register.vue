@@ -13,7 +13,7 @@
   />
   <q-card
     class="login-form q-pa-sm q-pr-xl q-pl-xl"
-    v-bind:style="$q.platform.is.mobile ? { width: '80%' } : { width: '30%' }"
+    v-bind:style="$q.platform.is.mobile ? { width: '80%' } : { width: '20%' }"
   >
     <!-- <q-img src="/statics/images/pharmacy.jpg"></q-img> -->
     <!-- <q-avatar
@@ -38,21 +38,33 @@
           label="Email"
           lazy-rules
           outlined
-        />
+        >
+          <template v-slot:prepend>
+            <q-icon name="mail_outline" color="light-green-4" />
+          </template>
+        </q-input>
         <q-input
           type="password"
           v-model="form.password"
           label="Password"
           lazy-rules
           outlined
-        />
+        >
+          <template v-slot:prepend>
+            <q-icon name="lock_outline" color="light-green-4" />
+          </template>
+        </q-input>
         <q-input
           type="password"
           v-model="form.confirm_password"
           label="Confirm Password"
           lazy-rules
           outlined
-        />
+        >
+          <template v-slot:prepend>
+            <q-icon name="lock_outline" color="light-green-4" />
+          </template>
+        </q-input>
         <div>
           <a
             href=""
@@ -69,6 +81,7 @@
             type="button"
             color="light-green-5"
             unelevated
+            @click="submit"
           />
 
           <a
@@ -108,9 +121,14 @@ export default defineComponent({
       $store.dispatch("authentication/SET_PAGE_TYPE_ACTION", "login");
     };
 
+    const submit = () => {
+      $store.dispatch("authentication/SEND_REGISTRATION_FORM", form);
+    };
+
     return {
       form,
       page,
+      submit,
     };
   },
 });

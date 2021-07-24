@@ -13,7 +13,7 @@
   />
   <q-card
     class="login-form q-pa-sm q-pr-xl q-pl-xl"
-    v-bind:style="$q.platform.is.mobile ? { width: '80%' } : { width: '30%' }"
+    v-bind:style="$q.platform.is.mobile ? { width: '80%' } : { width: '20%' }"
   >
     <!-- <q-img src="/statics/images/pharmacy.jpg"></q-img> -->
 
@@ -35,7 +35,11 @@
           label="Email"
           lazy-rules
           outlined
-        />
+        >
+          <template v-slot:prepend>
+            <q-icon name="mail_outline" color="light-green-4" />
+          </template>
+        </q-input>
 
         <q-input
           type="password"
@@ -43,7 +47,11 @@
           label="Password"
           lazy-rules
           outlined
-        />
+        >
+          <template v-slot:prepend>
+            <q-icon name="lock_outline" color="light-green-4" />
+          </template>
+        </q-input>
         <div>
           <a
             href="#"
@@ -55,7 +63,13 @@
           </a>
         </div>
         <div>
-          <q-btn label="Login" type="button" color="light-green-5" unelevated />
+          <q-btn
+            label="Login"
+            type="button"
+            color="light-green-5"
+            unelevated
+            @click="submit"
+          />
 
           <a
             style="font-size: 30px"
@@ -93,9 +107,14 @@ export default defineComponent({
       $store.dispatch("authentication/SET_PAGE_TYPE_ACTION", "register");
     };
 
+    const submit = () => {
+      $store.dispatch("authentication/SEND_LOGIN_FORM", form);
+    };
+
     return {
       form,
       page,
+      submit,
     };
   },
 });
