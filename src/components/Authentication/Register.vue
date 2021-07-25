@@ -14,33 +14,29 @@
       key="0"
     />
     <q-card
-      class="login-form q-pa-sm q-pr-xl q-pl-xl"
-      v-bind:style="$q.platform.is.mobile ? { width: '80%' } : { width: '20%' }"
+      class="register-form q-pa-sm q-pr-xl q-pl-xl"
+      v-bind:class="$q.platform.is.mobile ? 'col-xs-12 col-sm-12 col-md-6' : 'col-xs-12' "
       key="1"
     >
-      <!-- <q-img src="/statics/images/pharmacy.jpg"></q-img> -->
-      <!-- <q-avatar
-            size="74px"
-            class="absolute"
-            style="top: 30%; left: 25px; transform: translateY(-50%)"
-          >
-            <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-          </q-avatar> -->
+      <q-card-section>
+        <img :src="icon" />
+      </q-card-section>
       <q-card-section>
         <div class="row no-wrap items-center">
-          <div class="col text-h4 ellipsis green-text text-bold">
+          <div class="col text-h5 ellipsis green-text text-bold">
             Create an account
           </div>
         </div>
       </q-card-section>
       <q-card-section>
-        <q-form class="q-gutter-lg">
+        <q-form class="q-gutter-lg" @submit="submit">
           <q-input
             type="email"
             v-model="form.email"
             label="Email"
-            lazy-rules
+            lazy-rules="ondemand"
             outlined
+            :rules="[(val) => !!val || '* Required']"
           >
             <template v-slot:prepend>
               <q-icon name="mail_outline" color="light-green-4" />
@@ -50,8 +46,9 @@
             type="password"
             v-model="form.password"
             label="Password"
-            lazy-rules
+            lazy-rules="ondemand"
             outlined
+            :rules="[(val) => !!val || '* Required']"
           >
             <template v-slot:prepend>
               <q-icon name="lock_outline" color="light-green-4" />
@@ -61,8 +58,9 @@
             type="password"
             v-model="form.confirm_password"
             label="Confirm Password"
-            lazy-rules
+            lazy-rules="ondemand"
             outlined
+            :rules="[(val) => !!val || '* Required']"
           >
             <template v-slot:prepend>
               <q-icon name="lock_outline" color="light-green-4" />
@@ -81,10 +79,10 @@
           <div>
             <q-btn
               label="Create Account"
-              type="button"
+              type="submit"
               color="light-green-5"
               unelevated
-              @click="submit"
+              class="q-pa-sm"
             />
 
             <a
@@ -106,15 +104,41 @@
       </q-card-section>
     </q-card>
   </transition-group>
+  <modal-slot v-if="modal">
+    <template v-slot:header>&nbsp;</template>
+    <template v-slot:icon
+      ><q-btn icon="close" flat round dense @click="close"
+    /></template>
+    <template v-slot:message>
+      A verification link was sent to your email address. Please verify email to
+      get started.
+    </template>
+    <template v-slot:button>
+      <q-btn
+        label="Re-send Link"
+        size="14px"
+        color="light-green-4"
+        v-close-popup
+        @click="resend"
+      />
+    </template>
+  </modal-slot>
 </template>
 
 <script>
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { useStore } from "vuex";
+import ModalSlot from "src/components-global/ModalSlot.vue";
+import icon from "src/assets/cart60x60.png";
 
 export default defineComponent({
+  components: {
+    ModalSlot,
+  },
   setup() {
     const $store = useStore();
+    const modal = ref(false);
+    const cooldown = ref(15);
     const form = reactive({
       email: "",
       password: "",
@@ -125,14 +149,31 @@ export default defineComponent({
       $store.dispatch("authentication/SET_PAGE_TYPE_ACTION", "login");
     };
 
-    const submit = () => {
-      $store.dispatch("authentication/SEND_REGISTRATION_FORM", form);
+    const submit = async () => {
+      let data = await $store.dispatch(
+        "authentication/SEND_REGISTRATION_FORM",
+        form
+      );
+      modal.value = true;
+    };
+
+    const close = () => {
+      modal.value = false;
+    };
+
+    const resend = () => {
+      // alert("Resend");
+      modal.value = false;
     };
 
     return {
       form,
       page,
       submit,
+      resend,
+      modal,
+      close,
+      icon
     };
   },
 });

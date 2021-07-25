@@ -15,29 +15,28 @@
     />
     <q-card
       class="login-form q-pa-sm q-pr-xl q-pl-xl"
-      v-bind:style="$q.platform.is.mobile ? { width: '80%' } : { width: '20%' }"
+      v-bind:class="$q.platform.is.mobile ? 'col-xs-12 col-sm-12 col-md-6' : 'col-xs-12' "
       key="1"
     >
-      <!-- <q-img src="/statics/images/pharmacy.jpg"></q-img> -->
-
       <q-card-section>
-        <q-avatar size="74px">
-          <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-        </q-avatar>
+        <!-- <q-avatar size="74px"> -->
+          <img :src="icon" />
+        <!-- </q-avatar> -->
       </q-card-section>
       <q-card-section>
         <div class="row no-wrap items-center">
-          <div class="col text-h4 ellipsis green-text text-bold">Log in</div>
+          <div class="col text-h5 ellipsis green-text text-bold">Log in</div>
         </div>
       </q-card-section>
       <q-card-section>
-        <q-form class="q-gutter-lg">
+        <q-form class="q-gutter-lg" @submit="submit">
           <q-input
             type="email"
             v-model="form.email"
             label="Email"
-            lazy-rules
+            lazy-rules="ondemand"
             outlined
+            :rules="[(val) => !!val || '* Required']"
           >
             <template v-slot:prepend>
               <q-icon name="mail_outline" color="light-green-4" />
@@ -48,8 +47,9 @@
             type="password"
             v-model="form.password"
             label="Password"
-            lazy-rules
+            lazy-rules="ondemand"
             outlined
+            :rules="[(val) => !!val || '* Required']"
           >
             <template v-slot:prepend>
               <q-icon name="lock_outline" color="light-green-4" />
@@ -68,10 +68,10 @@
           <div>
             <q-btn
               label="Login"
-              type="button"
+              type="submit"
               color="light-green-5"
               unelevated
-              @click="submit"
+              class="q-pa-sm"
             />
 
             <a
@@ -98,6 +98,7 @@
 <script>
 import { defineComponent, reactive } from "vue";
 import { useStore } from "vuex";
+import icon from "src/assets/cart60x60.png";
 
 export default defineComponent({
   setup() {
@@ -119,6 +120,7 @@ export default defineComponent({
       form,
       page,
       submit,
+      icon
     };
   },
 });

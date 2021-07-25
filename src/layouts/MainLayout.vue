@@ -26,3 +26,11 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.q-page-container {
+  /* background-image: require('src/assets/Background.jpg'); */
+  background-image: url('src/assets/Background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+</style>
