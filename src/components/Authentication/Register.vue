@@ -165,7 +165,6 @@ export default defineComponent({
     };
 
     const resend = () => {
-      // alert("Resend");
       modal.value = false;
     };
 
