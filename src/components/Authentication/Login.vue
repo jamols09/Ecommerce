@@ -14,14 +14,15 @@
       key="0"
     />
     <q-card
-      class="login-form q-pa-sm q-pr-xl q-pl-xl"
-      v-bind:class="$q.platform.is.mobile ? 'col-xs-12 col-sm-12 col-md-6' : 'col-xs-12' "
+      v-bind:class="
+        $q.platform.is.mobile
+          ? 'q-pa-sm q-px-md mobile'
+          : 'q-pa-sm q-px-md desktop'
+      "
       key="1"
     >
       <q-card-section>
-        <!-- <q-avatar size="74px"> -->
-          <img :src="icon" />
-        <!-- </q-avatar> -->
+        <img :src="icon" />
       </q-card-section>
       <q-card-section>
         <div class="row no-wrap items-center">
@@ -29,7 +30,7 @@
         </div>
       </q-card-section>
       <q-card-section>
-        <q-form class="q-gutter-lg" @submit="submit">
+        <q-form class="q-gutter-md" @submit="submit">
           <q-input
             type="email"
             v-model="form.email"
@@ -120,7 +121,7 @@ export default defineComponent({
       form,
       page,
       submit,
-      icon
+      icon,
     };
   },
 });
@@ -132,5 +133,39 @@ a {
 }
 .green-text {
   color: rgb(146 157 99);
+}
+/* Custom, iPhone Retina */
+@media only screen and (min-width: 320px) {
+  .desktop {
+    width: 100%;
+  }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width: 480px) {
+  .desktop {
+    width: 80%;
+  }
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {
+  .desktop {
+    width: 45%;
+  }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 992px) {
+  .desktop {
+    width: 40%;
+  }
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1200px) {
+  .desktop {
+    width: 20%;
+  }
 }
 </style>
