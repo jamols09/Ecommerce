@@ -2,10 +2,16 @@
 const routes = [
   {
     path: '/',
+    name: 'Auth',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Authentication/Authentication.vue') },
-    ]
+      { path: '/', component: () => import('pages/Authentication/Authentication.vue') },
+    ],
+  },
+  {
+    path: '/dev',
+    name: 'MainMenu',
+    component: () => import('layouts/AdminLayout.vue'),
   },
 
   // Always leave this as last one,
