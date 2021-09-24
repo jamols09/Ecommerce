@@ -6,6 +6,7 @@ import { carouselConfig, ckEditorConfig } from '/@src/defaults/'
 import useNotyf from '/@src/composable/useNotyf'
 import usePreviewImages from '/@src/composable/usePreviewImages'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 
 pageTitle.value = 'Create Basic Item'
 
