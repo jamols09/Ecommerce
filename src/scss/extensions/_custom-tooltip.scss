@@ -1,0 +1,14 @@
+.vue-custom-tooltip {
+  &.is-primary {
+    color: var(--primary);
+  }
+  &.is-secondary {
+    color: var(--secondary);
+  }
+  &.light-text {
+    color: var(--light-text);
+  }
+  &.title-grey {
+    color: var(--title-grey);
+  }
+}

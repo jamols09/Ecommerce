@@ -1,0 +1,80 @@
+/*! _fixed-button.scss | Vuero | Css ninja 2020-2021 */
+
+/*
+    1. Fixed Button
+    2. Fixed Button Dark mode 
+    3. Media Queries
+*/
+
+/* ==========================================================================
+1. Fixed Button
+========================================================================== */
+
+.fixed-buttons {
+  position: fixed;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: 186px;
+  background: var(--fade-grey);
+  border: 1px solid darken(--primary, 3%);
+  border-radius: 8px;
+  transform: translateY(120px);
+  transition: all 0.3s;
+  z-index: 5;
+
+  &.is-active {
+    // transform: translateY(0);
+    transform: translate(23%, 0);
+  }
+
+  .fixed-buttons-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+
+    .button {
+      min-width: 130px;
+      margin: 0 4px;
+      border-radius: 5px;
+    }
+  }
+}
+
+/* ==========================================================================
+  2. Fixed Button Dark Mode
+  ========================================================================== */
+
+.is-dark {
+  .fixed-buttons {
+    background: var(--dark-sidebar-light-1);
+    border-color: var(--dark-sidebar-light-1);
+
+    .button {
+      &.is-light {
+        background: lighten(--dark-sidebar, 4%);
+        border-color: lighten(--dark-sidebar, 12%);
+        color: --dark-dark-text;
+
+        &:hover {
+          color: --accent;
+          border-color: --accent;
+        }
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+3. Media Queries
+========================================================================== */
+
+@media only screen and (max-width: 750px) {
+  .fixed-buttons {
+    &.is-active {
+      transform: translate(1px, 0);
+    }
+  }
+}

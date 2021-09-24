@@ -1,0 +1,172 @@
+/* ==========================================================================
+Inventory Options UI Elements
+========================================================================== */
+
+/*
+    1. Inventory Options Page; 1 Set
+    2. Inventory Options Page; 2 Sets
+    3. Inventory Options Page; 3 Sets
+    4. Dark Mode Inventory Options
+    5. Media Queries
+*/
+
+/* ==========================================================================
+1. Inventory Options Page; 1 Set
+========================================================================== */
+
+.inventory-options-page-wrapper {
+  &.option-set-3,
+  &.option-set-2,
+  &.option-set-1 {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 540px;
+    min-height: 560px;
+    margin: 0 auto;
+
+    .wrapper-outer {
+      @include vuero-s-card();
+
+      display: flex;
+      padding: 0;
+      border: 0;
+
+      .set-3-wrapper,
+      .set-2-wrapper,
+      .set-1-wrapper {
+        width: 100%;
+
+        .set-inner {
+          height: 100%;
+
+          .content {
+            @include vuero-s-card();
+
+            padding: 40px;
+            height: 100%;
+            text-align: center;
+
+            .logo,
+            .description,
+            .title,
+            .buttons {
+              margin: 0 auto;
+
+              img {
+                display: block;
+                width: 100%;
+                max-width: 220px;
+                margin: 0 auto 8px auto;
+              }
+            }
+
+            .title {
+              h4 {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+
+            .description {
+              max-width: 300px;
+              height: 50px;
+            }
+
+            .buttons {
+              display: flex;
+
+              .button {
+                max-width: 200px;
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+2. Inventory Options Page; 2 Sets
+========================================================================== */
+
+.inventory-options-page-wrapper {
+  &.option-set-2 {
+    max-width: 840px;
+
+    .wrapper-outer {
+      .set-1-wrapper {
+        .set-inner {
+          .content {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+        }
+      }
+      .set-2-wrapper {
+        .set-inner {
+          .content {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+3. Inventory Options Page; 3 Sets (unfinished)
+========================================================================== */
+
+.inventory-options-page-wrapper {
+  &.option-set-3 {
+    max-width: 1260px;
+  }
+}
+
+/* ==========================================================================
+4. Dark Mode Inventory Options
+========================================================================== */
+
+.is-dark {
+  .inventory-options-page-wrapper {
+    &.option-set-3,
+    &.option-set-2,
+    &.option-set-1 {
+      .wrapper-outer {
+        @include vuero-card--dark();
+        .set-1-wrapper,
+        .set-2-wrapper,
+        .set-1-wrapper {
+          .set-inner {
+            .content {
+              @include vuero-card--dark();
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+5. Media Queries
+========================================================================== */
+
+@media only screen and (max-width: 750px) {
+  .inventory-options-page-wrapper {
+    &.option-set-3,
+    &.option-set-2,
+    &.option-set-1 {
+      .wrapper-outer {
+        display: inline-block;
+        max-width: 470px;
+      }
+    }
+  }
+}

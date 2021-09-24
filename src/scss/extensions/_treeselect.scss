@@ -1,0 +1,20 @@
+.vue-treeselect__control {
+  background: #28282b;
+  border: unset;
+}
+.vue-treeselect__menu {
+  background: #3b3b41;
+}
+.vue-treeselect__option {
+  color: #039be5;
+}
+.vue-treeselect div,
+.vue-treeselect span {
+  color: #aaaab3;
+}
+.vue-treeselect--disabled .vue-treeselect__control {
+  background-color: #3b3b41;
+}
+.vue-treeselect__multi-value-item {
+  background: #3b3b41;
+}

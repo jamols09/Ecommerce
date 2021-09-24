@@ -129,3 +129,7 @@ package-lock.json
 public/video/hands.mp4
 public/video/hands.ogv
 public/video/hands.webm
+bulma-css-vars.config.js
+commitlint.config.js
+components.d.ts
+components-global.d.ts
