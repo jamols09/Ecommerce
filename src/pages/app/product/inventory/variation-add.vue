@@ -2,12 +2,12 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { VariantCategory } from '../../../../models/product/'
 import { ckEditorConfig } from '/@src/defaults/'
 import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import useItemAttribute from '/@src/composable/useItemAttribute'
+import type { VariantCategory } from '/@src/models/product/'
 
 pageTitle.value = 'Create Item Variation'
 
@@ -49,8 +49,8 @@ const changeTab = async () => {
   isLoadingTable.value = true //loading
   await sleep()
   notyf.success('Table generated.')
-  isOpenModal.value = false //close modal
   isLoadingTable.value = false //stop loading
+  isOpenModal.value = false //close modal
   selectedTab.value = 'table' //set tab destination
 }
 const showModal = (e: boolean) => {
@@ -102,7 +102,7 @@ const create = async () => {
                       <!-- Name -->
                       <div class="column is-6">
                         <V-Field>
-                          <label>Name</label>
+                          <label>Name *</label>
                           <V-Control>
                             <input
                               v-model="productVariantName"
@@ -159,9 +159,9 @@ const create = async () => {
                       </div>
                       <div class="column is-6"></div>
                       <div class="column is-6">
-                        <V-Action grey class="mr-4" @click="addAttribute"
-                          >New Attribute</V-Action
-                        >
+                        <V-Action grey class="mr-4" @click="addAttribute">
+                          New Attribute
+                        </V-Action>
                         <V-Action
                           grey
                           :disabled="isAllowGenerate"
@@ -279,6 +279,9 @@ const create = async () => {
                               <th scope="col" style="width: 180px">Price</th>
                               <th scope="col" style="width: 180px">Qty</th>
                               <th scope="col" style="width: 180px">SKU</th>
+                              <th scope="col" style="width: 180px">
+                                Auto Generated Name
+                              </th>
                               <th scope="col">Images</th>
                             </tr>
                           </thead>
@@ -323,6 +326,13 @@ const create = async () => {
                                 <input
                                   v-model="productQty"
                                   type="number"
+                                  class="input is-info-focus"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  v-model="productSku"
+                                  type="text"
                                   class="input is-info-focus"
                                 />
                               </td>
@@ -381,6 +391,13 @@ const create = async () => {
                                 <Multiselect
                                   v-model="variantValue"
                                   :options="options"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  v-model="productSku"
+                                  type="text"
+                                  class="input is-info-focus"
                                 />
                               </td>
                               <td>
