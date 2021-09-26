@@ -3,36 +3,59 @@ import { ref, computed, watchEffect, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import {
-  PromoType,
-  PromoRepeatOptions,
   TreeOptions,
-  StartEndDate,
-} from '/@src/models/promo/'
+  PromoRecurring,
+  PromoOptionsArray,
+} from '/@src/models/promo'
 pageTitle.value = 'Create Repeating Promo'
 
 const route = useRoute()
-const promo_name = ref<string>('')
-const promo_description = ref<string>('')
-const promo_type = ref<PromoType>('raw')
-const promo_amount = ref<string>('')
-const promo_quantity = ref<number>(0)
-const promo_required_amount = ref<number>(0)
-const promo_options = ref<string[]>([])
-const promo_repeat_options = ref<PromoRepeatOptions>('every_month')
-const qty_disabled = ref<boolean>(false)
-const date = ref<StartEndDate>({
-  start: new Date(),
-  end: new Date(),
+const isQuantity = ref<boolean>(false)
+const promoOptions = ref<PromoOptionsArray>([])
+const promo = reactive<PromoRecurring>({
+  active: false,
+  unlimited: false,
+  specific: false,
+  name: '',
+  description: '',
+  type: 'raw',
+  amount: 0,
+  quantity: 0,
+  requiredAmount: 0,
+  repeat: 'every_month',
+  date: {
+    start: new Date(),
+    end: new Date(),
+  },
 })
-const uppercase = (): void => {
-  promo_name.value = promo_name.value.toUpperCase()
+
+const uppercaseFunc = (): void => {
+  promo.name = promo.name.toUpperCase()
 }
-const isSpecific = computed((): boolean => {
-  if (promo_options.value.length) {
-    return promo_options.value.includes('specific')
+
+watchEffect(() => {
+  if (promoOptions.value.includes('unlimited')) {
+    isQuantity.value = true
+    promo.quantity = 0
+    promo.unlimited = true
+  } else {
+    promo.unlimited = false
+    isQuantity.value = false
   }
-  return false
+
+  if (promoOptions.value.includes('active')) {
+    promo.active = true
+  } else {
+    promo.active = false
+  }
+
+  if (promoOptions.value.includes('specific')) {
+    promo.specific = true
+  } else {
+    promo.specific = false
+  }
 })
+
 const category = reactive<TreeOptions>({
   options: [
     {
@@ -64,17 +87,10 @@ const tag = reactive<TreeOptions>({
   ],
   value: [],
 })
+
 const headerName = computed((): string => {
   const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
   return name.charAt(0).toUpperCase() + name.slice(1)
-})
-watchEffect(() => {
-  if (promo_options.value.includes('unlimited')) {
-    promo_quantity.value = 0
-    qty_disabled.value = true
-  } else {
-    qty_disabled.value = false
-  }
 })
 </script>
 
@@ -96,19 +112,19 @@ watchEffect(() => {
                 <V-Field>
                   <V-Control>
                     <V-Checkbox
-                      v-model="promo_options"
+                      v-model="promoOptions"
                       value="active"
                       label="Active"
                       color="info"
                     />
                     <V-Checkbox
-                      v-model="promo_options"
+                      v-model="promoOptions"
                       value="unlimited"
                       label="Unlimited"
                       color="info"
                     />
                     <V-Checkbox
-                      v-model="promo_options"
+                      v-model="promoOptions"
                       value="specific"
                       label="With Conditions"
                       color="info"
@@ -121,7 +137,7 @@ watchEffect(() => {
                 <V-Field addons>
                   <V-Control class="has-icons-left">
                     <span class="select">
-                      <select v-model="promo_type">
+                      <select v-model="promo.type">
                         <option value="percent">Percent</option>
                         <option value="raw">Raw</option>
                       </select>
@@ -130,7 +146,7 @@ watchEffect(() => {
                       <i
                         class="fas"
                         :class="
-                          promo_type === 'percent'
+                          promo.type === 'percent'
                             ? 'fa-percentage'
                             : 'fa-asterisk'
                         "
@@ -139,7 +155,7 @@ watchEffect(() => {
                   </V-Control>
                   <V-Control expanded>
                     <input
-                      v-model="promo_amount"
+                      v-model="promo.amount"
                       type="number"
                       class="input is-info-focus"
                       placeholder="Amount"
@@ -152,18 +168,18 @@ watchEffect(() => {
                 <V-Field>
                   <V-Control icon="feather:hash">
                     <input
-                      v-model="promo_quantity"
+                      v-model="promo.quantity"
                       type="number"
                       class="input is-info-focus"
                       placeholder="Quantity"
-                      :disabled="qty_disabled"
+                      :disabled="isQuantity"
                     />
                   </V-Control>
                 </V-Field>
               </div>
               <!-- Start Date & End Date -->
               <v-date-picker
-                v-model="date"
+                v-model="promo.date"
                 is-range
                 color="blue"
                 trim-weeks
@@ -203,7 +219,7 @@ watchEffect(() => {
               </v-date-picker>
               <!-- Start Time -->
               <v-date-picker
-                v-model="date.start"
+                v-model="promo.date.start"
                 class="column is-6"
                 color="blue"
                 mode="time"
@@ -224,7 +240,7 @@ watchEffect(() => {
               </v-date-picker>
               <!-- End Time -->
               <v-date-picker
-                v-model="date.end"
+                v-model="promo.date.end"
                 class="column is-6"
                 color="blue"
                 mode="time"
@@ -249,10 +265,10 @@ watchEffect(() => {
                   <label>Name</label>
                   <V-Control>
                     <input
-                      v-model="promo_name"
+                      v-model="promo.name"
                       type="text"
                       class="input is-info-focus"
-                      @keyup="uppercase"
+                      @keyup="uppercaseFunc"
                     />
                   </V-Control>
                 </V-Field>
@@ -263,7 +279,7 @@ watchEffect(() => {
                   <label>Description</label>
                   <V-Control>
                     <textarea
-                      v-model="promo_description"
+                      v-model="promo.description"
                       class="textarea is-info-focus"
                       rows="4"
                     ></textarea>
@@ -274,21 +290,21 @@ watchEffect(() => {
               <div class="column is-12 p-0">
                 <V-Control>
                   <V-Radio
-                    v-model="promo_repeat_options"
+                    v-model="promo.repeat"
                     value="every_week"
                     label="Repeat every week"
                     name="outlined_squared_radio"
                     color="info"
                   />
                   <V-Radio
-                    v-model="promo_repeat_options"
+                    v-model="promo.repeat"
                     value="every_month"
                     label="Repeat every month"
                     name="outlined_squared_radio"
                     color="info"
                   />
                   <V-Radio
-                    v-model="promo_repeat_options"
+                    v-model="promo.repeat"
                     value="every_year"
                     label="Repeat every year"
                     name="outlined_squared_radio"
@@ -298,11 +314,11 @@ watchEffect(() => {
               </div>
               <!-- Required Amount -->
               <div class="column is-6">
-                <V-Field v-show="isSpecific">
+                <V-Field v-show="promo.specific">
                   <label>Required Amount</label>
                   <V-Control icon="ph:asterisk-bold">
                     <input
-                      v-model="promo_required_amount"
+                      v-model="promo.requiredAmount"
                       type="number"
                       class="input is-info-focus"
                     />
@@ -311,10 +327,10 @@ watchEffect(() => {
               </div>
               <!-- Branch Options -->
               <div class="column is-6">
-                <V-Field v-show="isSpecific">
-                  <label style="text-decoration: line-through"
-                    >Promo Condition - Branch</label
-                  >
+                <V-Field v-show="promo.specific">
+                  <label style="text-decoration: line-through">
+                    Promo Condition - Branch
+                  </label>
                   <V-Control>
                     <Treeselect
                       v-model="branch.value"
@@ -328,7 +344,7 @@ watchEffect(() => {
               </div>
               <!-- Tags Options -->
               <div class="column is-6">
-                <V-Field v-show="isSpecific">
+                <V-Field v-show="promo.specific">
                   <label>Promo Condition - Tags</label>
                   <V-Control>
                     <Treeselect
@@ -342,7 +358,7 @@ watchEffect(() => {
               </div>
               <!-- Category Options -->
               <div class="column is-6">
-                <V-Field v-show="isSpecific">
+                <V-Field v-show="promo.specific">
                   <label>Promo Condition - Category</label>
                   <V-Control>
                     <Treeselect
