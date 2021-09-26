@@ -2,14 +2,24 @@
 import { ref, computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { ImageData } from 'src/models/people/'
+import { ImageData, People, StatusArray } from '../../../../models/people'
 
 pageTitle.value = 'Create Employee'
 
 const route = useRoute()
-const birthdate = ref(null)
-const isActive = ref([])
-const isVerified = ref([])
+const statusOptions = ref<StatusArray>([])
+const employee = reactive<People>({
+  active: false,
+  verified: false,
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  birthdate: new Date(),
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+})
 
 const role = reactive({
   options: [
@@ -70,15 +80,15 @@ const headerName = computed((): string => {
                 <V-Field>
                   <V-Control>
                     <V-Checkbox
-                      v-model="isActive"
-                      value="isActive"
+                      v-model="statusOptions"
+                      value="active"
                       label="Active"
                       color="info"
                     />
 
                     <V-Checkbox
-                      v-model="isVerified"
-                      value="isVerified"
+                      v-model="statusOptions"
+                      value="verified"
                       label="Verified"
                       color="info"
                       :disabled="true"
@@ -142,7 +152,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>First Name</label>
                   <V-Control icon="feather:user">
-                    <input type="text" class="input is-info-focus" />
+                    <input
+                      v-model="employee.firstName"
+                      type="text"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
@@ -151,7 +165,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Middle Name</label>
                   <V-Control icon="feather:user">
-                    <input type="text" class="input is-info-focus" />
+                    <input
+                      v-model="employee.middleName"
+                      type="text"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
@@ -160,13 +178,21 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Last Name</label>
                   <V-Control icon="feather:user">
-                    <input type="text" class="input is-info-focus" />
+                    <input
+                      v-model="employee.lastName"
+                      type="text"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
               <!-- Birthdate -->
               <div class="column is-4">
-                <v-date-picker v-model="birthdate" color="info" trim-weeks>
+                <v-date-picker
+                  v-model="employee.birthdate"
+                  color="info"
+                  trim-weeks
+                >
                   <template #default="{ inputValue, inputEvents }">
                     <V-Field>
                       <label>Birthdate</label>
@@ -197,7 +223,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Username</label>
                   <V-Control icon="feather:user">
-                    <input type="text" class="input is-info-focus" />
+                    <input
+                      v-model="employee.username"
+                      type="text"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
@@ -206,7 +236,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Email</label>
                   <V-Control icon="feather:at-sign">
-                    <input type="text" class="input is-info-focus" />
+                    <input
+                      v-model="employee.email"
+                      type="text"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
@@ -215,7 +249,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Password</label>
                   <V-Control icon="feather:lock">
-                    <input type="password" class="input is-info-focus" />
+                    <input
+                      v-model="employee.password"
+                      type="password"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
@@ -224,7 +262,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Confirm Password</label>
                   <V-Control icon="feather:lock">
-                    <input type="password" class="input is-info-focus" />
+                    <input
+                      v-model="employee.confirmPassword"
+                      type="password"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
