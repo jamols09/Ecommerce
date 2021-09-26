@@ -2,17 +2,13 @@
 import { ref, computed, watchEffect, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import {
-  TreeOptions,
-  PromoRecurring,
-  PromoOptionsArray,
-} from '/@src/models/promo'
+import { TreeOptions, Promo, PromoOptionsArray } from '/@src/models/promo'
 pageTitle.value = 'Create Repeating Promo'
 
 const route = useRoute()
 const isQuantity = ref<boolean>(false)
 const promoOptions = ref<PromoOptionsArray>([])
-const promo = reactive<PromoRecurring>({
+const promo = reactive<Promo>({
   active: false,
   unlimited: false,
   specific: false,
@@ -30,7 +26,7 @@ const promo = reactive<PromoRecurring>({
 })
 
 const uppercaseFunc = (): void => {
-  promo.name = promo.name.toUpperCase()
+  if (promo.name?.length) promo.name = promo.name.toUpperCase()
 }
 
 watchEffect(() => {
