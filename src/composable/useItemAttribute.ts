@@ -1,7 +1,7 @@
 import { ref, computed, reactive } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
 import type { AccountType } from '../models/user/'
-import type { FieldsData } from '../models/product/'
+import type { FieldsData } from '../models/product'
 
 const notyf = useNotyf()
 const accountType = ref<AccountType>('advance')
