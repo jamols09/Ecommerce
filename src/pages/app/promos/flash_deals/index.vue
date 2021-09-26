@@ -1,40 +1,27 @@
 <script setup lang="ts">
-import { ref, computed, reactive, Ref } from 'vue'
+import { ref, computed, reactive, Ref, watchEffect } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { TreeOptions, PromoType, StartEndDate } from '/@src/models/promo/promo'
+import { TreeOptions, FlashOptionsArray, Promo } from '../../../../models/promo'
 pageTitle.value = 'Flash Deals'
 
-const promo_amount: Ref<number | undefined> = ref()
-const flash_type: Ref<PromoType> = ref('raw')
-const flash_options: Ref<string[]> = ref([])
-const isSpecific = computed((): boolean => {
-  if (flash_options.value.length) {
-    return flash_options.value.includes('specific')
+const flashOptions = ref<FlashOptionsArray>([])
+const promo = reactive<Promo>({
+  active: false,
+  amount: 0,
+  specific: false,
+  date: {
+    start: new Date(),
+    end: new Date(),
+  },
+})
+
+watchEffect(() => {
+  if (flashOptions.value.includes('specific')) {
+    promo.specific = true
+  } else {
+    promo.specific = false
   }
-  return false
 })
-
-const date = ref<StartEndDate>({
-  start: new Date(),
-  end: new Date(),
-})
-
-// Typescript Sample
-// const category = reactive<{ options: object[], value: object[] }>({
-//   options: [
-//     {
-//       id: 'a',
-//       label: 'a',
-//       children: [
-//         { id: 'aa', label: 'aa' },
-//         { id: 'ab', label: 'ab' },
-//       ],
-//     },
-//     { id: 'b', label: 'b' },
-//     { id: 'c', label: 'c' },
-//   ],
-//   value: []
-// })
 
 const category = reactive<TreeOptions>({
   options: [
@@ -96,13 +83,13 @@ const item = reactive<TreeOptions>({
                 <V-Field>
                   <V-Control>
                     <V-Checkbox
-                      v-model="flash_options"
+                      v-model="flashOptions"
                       value="active"
                       label="Active"
                       color="info"
                     />
                     <V-Checkbox
-                      v-model="flash_options"
+                      v-model="flashOptions"
                       value="specific"
                       label="With Conditions"
                       color="info"
@@ -115,7 +102,7 @@ const item = reactive<TreeOptions>({
                 <V-Field addons>
                   <V-Control class="has-icons-left">
                     <span class="select">
-                      <select v-model="flash_type">
+                      <select v-model="promo.type">
                         <option value="percent">Percent</option>
                         <option value="raw">Raw</option>
                       </select>
@@ -124,7 +111,7 @@ const item = reactive<TreeOptions>({
                       <i
                         class="fas"
                         :class="
-                          flash_type === 'percent'
+                          promo.type === 'percent'
                             ? 'fa-percentage'
                             : 'fa-asterisk'
                         "
@@ -133,7 +120,7 @@ const item = reactive<TreeOptions>({
                   </V-Control>
                   <V-Control expanded>
                     <input
-                      v-model="promo_amount"
+                      v-model="promo.amount"
                       type="number"
                       class="input is-info-focus"
                       placeholder="Amount"
@@ -143,7 +130,7 @@ const item = reactive<TreeOptions>({
               </div>
               <!-- Start Date & End Date -->
               <v-date-picker
-                v-model="date"
+                v-model="promo.date"
                 is-range
                 color="blue"
                 trim-weeks
@@ -182,7 +169,7 @@ const item = reactive<TreeOptions>({
               </v-date-picker>
               <!-- Start Time -->
               <v-date-picker
-                v-model="date.start"
+                v-model="promo.date.start"
                 class="column is-6"
                 color="blue"
                 mode="time"
@@ -203,7 +190,7 @@ const item = reactive<TreeOptions>({
               </v-date-picker>
               <!--  End Time  -->
               <v-date-picker
-                v-model="date.end"
+                v-model="promo.date.end"
                 class="column is-6"
                 color="blue"
                 mode="time"
@@ -224,7 +211,7 @@ const item = reactive<TreeOptions>({
               </v-date-picker>
               <!-- Branch Options -->
               <div class="column is-6">
-                <V-Field v-show="isSpecific">
+                <V-Field v-show="promo.specific">
                   <label>Flash Condition - Branch</label>
                   <V-Control>
                     <Treeselect
@@ -238,7 +225,7 @@ const item = reactive<TreeOptions>({
               </div>
               <!-- Tags Options -->
               <div class="column is-6">
-                <V-Field v-show="isSpecific">
+                <V-Field v-show="promo.specific">
                   <label>Flash Condition - Tags</label>
                   <V-Control>
                     <Treeselect
@@ -252,7 +239,7 @@ const item = reactive<TreeOptions>({
               </div>
               <!-- Category Options -->
               <div class="column is-6">
-                <V-Field v-show="isSpecific">
+                <V-Field v-show="promo.specific">
                   <label>Flash Condition - Category</label>
                   <V-Control>
                     <Treeselect
@@ -266,7 +253,7 @@ const item = reactive<TreeOptions>({
               </div>
               <!-- Items Options -->
               <div class="column is-6">
-                <V-Field v-show="isSpecific">
+                <V-Field v-show="promo.specific">
                   <label>Flash Condition - Item</label>
                   <V-Control>
                     <Treeselect

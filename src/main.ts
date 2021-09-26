@@ -13,10 +13,6 @@
 
 import { createApp } from './app'
 
-import VueCustomTooltip, {
-  TooltipOptions,
-} from '@adamdehaven/vue-custom-tooltip'
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 /**
  * We create our app and mount it when it is ready
  *
@@ -29,10 +25,8 @@ createApp({
     const VueMultiselect = (await import('@vueform/multiselect')).default
     const VueSlider = (await import('@vueform/slider')).default
     const VueTippy = (await import('vue-tippy')).default
-
-    /**
-     * Put here the newly added plugins
-     */
+    const VueCustomTooltip = (await import('@adamdehaven/vue-custom-tooltip'))
+      .default
     const Treeselect = (await import('vue3-treeselect')).default
     const VueCKEditor = (await import('@ckeditor/ckeditor5-vue')).default
 
@@ -57,10 +51,6 @@ createApp({
     })
     app.use(VueCKEditor)
 
-    app.component('Carousel', Carousel) //carousel
-    app.component('Slide', Slide) //carousel
-    app.component('Pagination', Pagination) //carousel
-    app.component('Navigation', Navigation) //carousel
     app.component('Treeselect', Treeselect)
     app.component(VueMultiselect.name, VueMultiselect)
     app.component(VueSlider.name, VueSlider)

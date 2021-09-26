@@ -2,12 +2,12 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { VariantCategory } from '../../../../models/product/'
 import { ckEditorConfig } from '/@src/defaults/'
 import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import useItemAttribute from '/@src/composable/useItemAttribute'
+import type { VariantCategory } from '/@src/models/product/'
 
 pageTitle.value = 'Create Item Variation'
 
@@ -49,8 +49,8 @@ const changeTab = async () => {
   isLoadingTable.value = true //loading
   await sleep()
   notyf.success('Table generated.')
-  isOpenModal.value = false //close modal
   isLoadingTable.value = false //stop loading
+  isOpenModal.value = false //close modal
   selectedTab.value = 'table' //set tab destination
 }
 const showModal = (e: boolean) => {
@@ -81,7 +81,7 @@ const create = async () => {
           <div class="form-section is-grey">
             <div class="columns is-multiline">
               <div class="column is-full">
-                <V-Tabs
+                <VTabs
                   :selected="selectedTab"
                   :tabs="[
                     { label: 'Info', value: 'info', icon: 'octicon:info-16' },
@@ -101,42 +101,42 @@ const create = async () => {
                     >
                       <!-- Name -->
                       <div class="column is-6">
-                        <V-Field>
-                          <label>Name</label>
-                          <V-Control>
+                        <VField>
+                          <label>Name *</label>
+                          <VControl>
                             <input
                               v-model="productVariantName"
                               type="text"
                               class="input is-info-focus"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- SKU -->
                       <div class="column is-6">
-                        <V-Field>
+                        <VField>
                           <label>Stock Keep Unit (SKU)</label>
-                          <V-Control>
+                          <VControl>
                             <input
                               disabled
                               type="text"
                               class="input is-info-focus"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- Description -->
                       <div class="column is-full">
-                        <V-Field>
+                        <VField>
                           <label>Description</label>
-                          <V-Control>
+                          <VControl>
                             <ckeditor
                               v-model="productDescription"
                               :editor="ClassicEditor"
                               :config="ckEditorConfig"
                             ></ckeditor>
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                     </div>
                     <div
@@ -145,29 +145,30 @@ const create = async () => {
                     >
                       <!-- Category -->
                       <div class="column is-6">
-                        <V-Field>
+                        <VField>
                           <label>Category</label>
-                          <V-Control>
+                          <VControl>
                             <Treeselect
                               v-model="productVariantCategory.value"
                               :multiple="false"
                               :options="productVariantCategory.options"
                               :limit="2"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <div class="column is-6"></div>
                       <div class="column is-6">
-                        <V-Action grey class="mr-4" @click="addAttribute"
-                          >New Attribute</V-Action
-                        >
-                        <V-Action
+                        <VAction grey class="mr-4" @click="addAttribute">
+                          New Attribute
+                        </VAction>
+                        <VAction
                           grey
                           :disabled="isAllowGenerate"
                           @click="showModal(true)"
-                          >Generate Table</V-Action
                         >
+                          Generate Table
+                        </VAction>
                       </div>
                       <div class="column is-6"></div>
                       <template
@@ -176,8 +177,8 @@ const create = async () => {
                       >
                         <!-- Variant Title -->
                         <div class="column is-6">
-                          <V-Field>
-                            <V-Control>
+                          <VField>
+                            <VControl>
                               <input
                                 v-model="dynamicField[index].attribute"
                                 type="text"
@@ -185,13 +186,13 @@ const create = async () => {
                                 placeholder="Size, Taste, etc.."
                                 @change="capitalText(index)"
                               />
-                            </V-Control>
-                          </V-Field>
+                            </VControl>
+                          </VField>
                         </div>
                         <!-- Variant Attribute -->
                         <div class="column is-5">
-                          <V-Field>
-                            <V-Control>
+                          <VField>
+                            <VControl>
                               <div class="input-tag-wrapper">
                                 <div
                                   v-for="(tag, tagIdx) in field.value"
@@ -213,13 +214,13 @@ const create = async () => {
                                   @blur="addTag(index)"
                                 />
                               </div>
-                            </V-Control>
-                          </V-Field>
+                            </VControl>
+                          </VField>
                         </div>
                         <div class="column auto">
-                          <V-Field>
-                            <V-Buttons>
-                              <V-IconButton
+                          <VField>
+                            <VButtons>
+                              <VIconButton
                                 color="danger"
                                 light
                                 raised
@@ -227,13 +228,13 @@ const create = async () => {
                                 icon="feather:x"
                                 @click="removeAttribute(index)"
                               />
-                            </V-Buttons>
-                          </V-Field>
+                            </VButtons>
+                          </VField>
                         </div>
                       </template>
                       <div class="column is-12">
-                        <V-Field>
-                          <V-Modal
+                        <VField>
+                          <VModal
                             :open="isOpenModal"
                             size="small"
                             actions="center"
@@ -242,22 +243,23 @@ const create = async () => {
                             @close="isOpenModal = false"
                           >
                             <template #content>
-                              <V-PlaceholderSection
+                              <VPlaceholderSection
                                 title="Generate Table ?"
                                 subtitle="The Attributes and Values is fixed once table is generated."
                               />
                             </template>
                             <template #action>
-                              <V-Button
+                              <VButton
                                 color="primary"
                                 raised
                                 :loading="isLoadingTable"
                                 @click="changeTab"
-                                >Confirm</V-Button
                               >
+                                Confirm
+                              </VButton>
                             </template>
-                          </V-Modal>
-                        </V-Field>
+                          </VModal>
+                        </VField>
                       </div>
                     </div>
                     <div
@@ -279,13 +281,16 @@ const create = async () => {
                               <th scope="col" style="width: 180px">Price</th>
                               <th scope="col" style="width: 180px">Qty</th>
                               <th scope="col" style="width: 180px">SKU</th>
+                              <th scope="col" style="width: 180px">
+                                Auto Generated Name
+                              </th>
                               <th scope="col">Images</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
                               <td>
-                                <V-Checkbox
+                                <VCheckbox
                                   v-model="isActive"
                                   value="discountable"
                                   label=" "
@@ -293,7 +298,7 @@ const create = async () => {
                                 />
                               </td>
                               <td>
-                                <V-Checkbox
+                                <VCheckbox
                                   v-model="isDiscountable"
                                   value="discountable"
                                   label=" "
@@ -334,6 +339,13 @@ const create = async () => {
                                 />
                               </td>
                               <td>
+                                <input
+                                  v-model="productSku"
+                                  type="text"
+                                  class="input is-info-focus"
+                                />
+                              </td>
+                              <td>
                                 <div class="file">
                                   <label class="file-label">
                                     <input
@@ -356,7 +368,7 @@ const create = async () => {
                             <!-- 2nd column -->
                             <tr>
                               <td>
-                                <V-Checkbox
+                                <VCheckbox
                                   v-model="isActive"
                                   value="active"
                                   label=" "
@@ -364,7 +376,7 @@ const create = async () => {
                                 />
                               </td>
                               <td>
-                                <V-Checkbox
+                                <VCheckbox
                                   v-model="isDiscountable"
                                   value="discountable"
                                   label=" "
@@ -381,6 +393,13 @@ const create = async () => {
                                 <Multiselect
                                   v-model="variantValue"
                                   :options="options"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  v-model="productSku"
+                                  type="text"
+                                  class="input is-info-focus"
                                 />
                               </td>
                               <td>
@@ -429,7 +448,7 @@ const create = async () => {
                       </div>
                     </div>
                   </template>
-                </V-Tabs>
+                </VTabs>
               </div>
             </div>
           </div>
@@ -439,7 +458,7 @@ const create = async () => {
     <!-- Fixed Save Buttons-->
     <div class="fixed-buttons is-active">
       <div class="fixed-buttons-inner">
-        <button class="is-info is-elevated button v-button">Save</button>
+        <button class="is-info is-elevated button VButton">Save</button>
       </div>
     </div>
   </div>

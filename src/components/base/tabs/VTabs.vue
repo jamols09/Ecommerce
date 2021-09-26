@@ -23,8 +23,11 @@ const props = withDefaults(defineProps<VTabsProps>(), {
   align: undefined,
 })
 
-const activeValue = ref(props.selected)
+const emit = defineEmits(['clickedTab'])
+// const activeValue = ref(props.selected)
+const activeValue = computed(() => props.selected)
 const sliderClass = computed(() => {
+  console.log(props.slider)
   if (!props.slider) {
     return ''
   }
@@ -74,7 +77,7 @@ const sliderClass = computed(() => {
             :key="key"
             :class="[activeValue === tab.value && 'is-active']"
           >
-            <a @click="activeValue = tab.value">
+            <a @click="emit('clickedTab', tab.value)">
               <VIcon v-if="tab.icon" :icon="tab.icon" />
               <span>{{ tab.label }}</span>
             </a>

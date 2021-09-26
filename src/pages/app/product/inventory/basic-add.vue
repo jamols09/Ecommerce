@@ -6,6 +6,7 @@ import { carouselConfig, ckEditorConfig } from '/@src/defaults/'
 import useNotyf from '/@src/composable/useNotyf'
 import usePreviewImages from '/@src/composable/usePreviewImages'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 
 pageTitle.value = 'Create Basic Item'
 
@@ -58,7 +59,7 @@ const create = async () => {
             <div class="columns is-multiline">
               <!-- Tabs -->
               <div class="column is-full">
-                <V-Tabs
+                <VTabs
                   :selected="selectedTab"
                   :tabs="[
                     { label: 'Info', value: 'info', icon: 'octicon:info-16' },
@@ -73,7 +74,7 @@ const create = async () => {
                       icon: 'si-glyph:tag-price',
                     },
                   ]"
-                  @clickedTab="selectedTab = $event"
+                  @clicked-tab="selectedTab = $event"
                 >
                   <template #tab="{ activeValue }">
                     <div
@@ -85,7 +86,7 @@ const create = async () => {
                         class="column is-two-thirds has-text-centered"
                         style="margin: auto"
                       >
-                        <V-Field>
+                        <VField>
                           <Carousel
                             v-if="images && images.length"
                             :settings="carouselConfig"
@@ -119,11 +120,11 @@ const create = async () => {
                               <Navigation />
                             </template>
                           </Carousel>
-                        </V-Field>
+                        </VField>
                       </div>
                       <div class="column is-full">
-                        <V-Field grouped>
-                          <V-Control>
+                        <VField grouped>
+                          <VControl>
                             <div class="file is-info">
                               <label class="file-label">
                                 <input
@@ -142,47 +143,47 @@ const create = async () => {
                                 </span>
                               </label>
                             </div>
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- Name -->
                       <div class="column is-6">
-                        <V-Field>
-                          <label>Name</label>
-                          <V-Control>
+                        <VField>
+                          <label>Name *</label>
+                          <VControl>
                             <input
                               v-model="productName"
                               type="text"
                               class="input is-info-focus"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- SKU -->
                       <div class="column is-6">
-                        <V-Field>
+                        <VField>
                           <label>Stock Keep Unit (SKU)</label>
-                          <V-Control>
+                          <VControl>
                             <input
                               v-model="productSku"
                               type="text"
                               class="input is-info-focus"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- Description -->
                       <div class="column is-full">
-                        <V-Field>
+                        <VField>
                           <label>Description</label>
-                          <V-Control>
+                          <VControl>
                             <ckeditor
                               v-model="editorData"
                               :editor="ClassicEditor"
                               :config="ckEditorConfig"
                             ></ckeditor>
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                     </div>
                     <div
@@ -191,15 +192,15 @@ const create = async () => {
                     >
                       <!-- Options -->
                       <div class="column is-full">
-                        <V-Field>
-                          <V-Control>
-                            <V-Checkbox
+                        <VField>
+                          <VControl>
+                            <VCheckbox
                               v-model="option"
                               value="active"
                               label="Active"
                               color="info"
                             />
-                            <V-Checkbox
+                            <VCheckbox
                               v-model="option"
                               value="display_qty"
                               label="Display Quantity"
@@ -215,25 +216,25 @@ const create = async () => {
                             >
                               <b>?</b>
                             </VueTooltip>
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- Quantity -->
                       <div class="column is-6">
-                        <V-Field>
+                        <VField>
                           <label>Quantity</label>
-                          <V-Control>
+                          <VControl>
                             <input
                               v-model="productQuantity"
                               type="number"
                               class="input is-info-focus"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- Quantity Warn -->
                       <div class="column is-6">
-                        <V-Field>
+                        <VField>
                           <label>
                             Quantity Warn
                             <VueTooltip
@@ -247,32 +248,32 @@ const create = async () => {
                               <b>?</b>
                             </VueTooltip>
                           </label>
-                          <V-Control>
+                          <VControl>
                             <input
                               v-model="productQuantityWarn"
                               type="number"
                               class="input is-info-focus"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- Category -->
                       <div class="column is-6">
-                        <V-Field>
+                        <VField>
                           <label>Category</label>
-                          <V-Control>
+                          <VControl>
                             <Treeselect
                               v-model="productCategory.value"
                               :multiple="false"
                               :options="productCategory.options"
                               :limit="2"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- Tags -->
                       <div class="column is-6">
-                        <V-Field>
+                        <VField>
                           <label>
                             Tags
                             <VueTooltip
@@ -286,15 +287,15 @@ const create = async () => {
                               <b>?</b>
                             </VueTooltip>
                           </label>
-                          <V-Control>
+                          <VControl>
                             <Treeselect
                               v-model="productTag.value"
                               :multiple="true"
                               :options="productTag.options"
                               :limit="2"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                     </div>
                     <div
@@ -303,9 +304,9 @@ const create = async () => {
                     >
                       <!-- Discountable -->
                       <div class="column is-full">
-                        <V-Field>
-                          <V-Control>
-                            <V-Checkbox
+                        <VField>
+                          <VControl>
+                            <VCheckbox
                               v-model="option"
                               value="active"
                               label="Discountable"
@@ -321,25 +322,25 @@ const create = async () => {
                             >
                               <b>?</b>
                             </VueTooltip>
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                       <!-- Price -->
                       <div class="column is-6">
-                        <V-Field>
+                        <VField>
                           <label>Price</label>
-                          <V-Control>
+                          <VControl>
                             <input
                               v-model="productPrice"
                               type="number"
                               class="input is-info-focus"
                             />
-                          </V-Control>
-                        </V-Field>
+                          </VControl>
+                        </VField>
                       </div>
                     </div>
                   </template>
-                </V-Tabs>
+                </VTabs>
               </div>
             </div>
           </div>
