@@ -2,9 +2,9 @@
 const props = withDefaults(
   defineProps<{ debugst?: any; debugnd?: any; debugrd?: any }>(),
   {
-    debugst: undefined,
-    debugnd: undefined,
-    debugrd: undefined,
+    debugst: null,
+    debugnd: null,
+    debugrd: null,
   }
 )
 </script>
