@@ -1,4 +1,4 @@
-// Creat Order Tabs
+// Create Order Tabs
 export type OrderTabs = 'customer' | 'item' | 'computation'
 
 // Customer info
