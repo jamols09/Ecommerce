@@ -1,7 +1,9 @@
-// Create Order Tabs
+/***************************
+ * ORDER TYPES DECLARATION *
+ ***************************/
+
 export type OrderTabs = 'customer' | 'item' | 'computation'
 
-// Customer info
 export interface CustomerInfo {
   firstName: string
   middleName?: string
@@ -16,10 +18,9 @@ export interface CustomerInfo {
   telephone?: string
   postal?: number | null
 }
-
-// Item Attr
 export interface OrderItems {
   code: string
   quantity: number
 }
+
 export type OrderItemsArray = OrderItems[]

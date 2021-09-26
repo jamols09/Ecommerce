@@ -57,15 +57,15 @@ const isLoadingCalc = ref(false)
 const orderItem = reactive<OrderItemsArray>([])
 const isAdd = computed(() => itemTree.value === null)
 const isGenerateComp = computed(() => orderItem.length < 1)
-const addItemFunc = () => {
+const onAddItem = () => {
   itemTree.value !== null
     ? orderItem.push({ code: itemTree.value, quantity: 1 })
     : false
 }
-const removeItemFunc = async (e: number) => {
+const onRemoveItem = async (e: number) => {
   orderItem.splice(e, 1)
 }
-const generateComputation = async () => {
+const onGenerateComputation = async () => {
   isLoadingCalc.value = true
   await sleep()
   isLoadingCalc.value = false
@@ -367,7 +367,7 @@ const generateComputation = async () => {
                                 grey
                                 class="mr-4"
                                 :disabled="isAdd"
-                                @click="addItemFunc"
+                                @click="onAddItem"
                               >
                                 Add
                               </VButton>
@@ -376,7 +376,7 @@ const generateComputation = async () => {
                                 class="mr-4"
                                 :disabled="isGenerateComp"
                                 :loading="isLoadingCalc"
-                                @click="generateComputation"
+                                @click="onGenerateComputation"
                               >
                                 Generate
                               </VButton>
@@ -422,7 +422,7 @@ const generateComputation = async () => {
                                   raised
                                   circle
                                   icon="feather:x"
-                                  @click="removeItemFunc(index)"
+                                  @click="onRemoveItem(index)"
                                 />
                               </VButtons>
                             </VField>
