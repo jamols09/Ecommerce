@@ -1,27 +1,25 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import { Branch } from '/@src/models/branch'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 pageTitle.value = 'Create Branch'
 
-type GeoLocation = {
-  longitude: number | undefined
-  latitude: number | undefined
-}
-
 const branchOptions = ref<string[]>([])
-const branchName = ref('')
-const branchCode = ref('')
-const branchCountry = ref('')
-const branchRegionState = ref('')
-const branchCity = ref('')
-const branchAddressLine1 = ref('')
-const branchAddressLine2 = ref('')
-const branchPostal = ref('')
-const branchTelephone = ref('')
-const branchGeo = ref<GeoLocation>({
-  longitude: undefined,
-  latitude: undefined,
+const branch = reactive<Branch>({
+  name: '',
+  code: '',
+  country: '',
+  regionState: '',
+  city: '',
+  addressLine1: '',
+  addressLine2: '',
+  postal: null,
+  telephone: null,
+  geolocation: {
+    longitude: null,
+    latitude: null,
+  },
 })
 
 const route = useRoute()
@@ -84,7 +82,7 @@ const headerName = computed((): string => {
                   <label>Name</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchName"
+                      v-model="branch.name"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -104,7 +102,7 @@ const headerName = computed((): string => {
                   >
                   <V-Control icon="mdi:code-braces">
                     <input
-                      v-model="branchCode"
+                      v-model="branch.code"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -128,7 +126,7 @@ const headerName = computed((): string => {
                   <label>Country</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchCountry"
+                      v-model="branch.country"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -141,7 +139,7 @@ const headerName = computed((): string => {
                   <label>Region / State</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchRegionState"
+                      v-model="branch.regionState"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -154,7 +152,7 @@ const headerName = computed((): string => {
                   <label>City</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchCity"
+                      v-model="branch.city"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -174,7 +172,7 @@ const headerName = computed((): string => {
                   >
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchAddressLine1"
+                      v-model="branch.addressLine1"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -194,7 +192,7 @@ const headerName = computed((): string => {
                   >
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchAddressLine2"
+                      v-model="branch.addressLine2"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -207,7 +205,7 @@ const headerName = computed((): string => {
                   <label>Postal / Zip</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchPostal"
+                      v-model="branch.postal"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -220,7 +218,7 @@ const headerName = computed((): string => {
                   <label>Longitude</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchGeo.longitude"
+                      v-model="branch.geolocation.longitude"
                       type="number"
                       class="input is-info-focus"
                     />
@@ -233,7 +231,7 @@ const headerName = computed((): string => {
                   <label>Longitude</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchGeo.latitude"
+                      v-model="branch.geolocation.latitude"
                       type="number"
                       class="input is-info-focus"
                     />
@@ -258,7 +256,7 @@ const headerName = computed((): string => {
                   <label>Telephone</label>
                   <V-Control icon="ion:ios-telephone-outline">
                     <input
-                      v-model="branchTelephone"
+                      v-model="branch.telephone"
                       type="text"
                       class="input is-info-focus"
                     />
