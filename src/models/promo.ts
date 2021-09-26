@@ -20,7 +20,7 @@ export interface DateTimeFrame {
   start: Date
   end: Date
 }
-export interface PromoRecurring {
+export interface Promo {
   active: boolean
   unlimited: boolean
   specific: boolean
