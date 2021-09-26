@@ -7,6 +7,7 @@ import type { Ref } from 'vue'
 export type PromoType = 'raw' | 'percent'
 export type PromoRepeatOptions = 'every_week' | 'every_month' | 'every_year'
 export type PromoOptions = 'active' | 'unlimited' | 'specific'
+export type FlashOptions = 'active' | 'specific'
 
 export type TreeOptions = {
   options: object[]
@@ -22,15 +23,17 @@ export interface DateTimeFrame {
 }
 export interface Promo {
   active: boolean
-  unlimited: boolean
-  specific: boolean
-  name: string
+  unlimited?: boolean
+  specific?: boolean
+  name?: string
   description?: string
-  type: PromoType
+  type?: PromoType
   amount: number
-  quantity: number
+  quantity?: number
   requiredAmount?: number
-  repeat: PromoRepeatOptions
+  repeat?: PromoRepeatOptions
   date: DateTimeFrame
 }
+
 export type PromoOptionsArray = PromoOptions[]
+export type FlashOptionsArray = FlashOptions[]
