@@ -7,7 +7,7 @@ import { TreeOptions, Promo, PromoOptionsArray } from '../../../../models/promo'
 pageTitle.value = 'Create Limited Promo'
 
 const route = useRoute()
-const isQuantity = ref<boolean>(false)
+const isQuantity = ref(false)
 const promoOptions = ref<PromoOptionsArray>([])
 const promo = reactive<Promo>({
   active: false,
@@ -26,10 +26,6 @@ const promo = reactive<Promo>({
   },
 })
 
-const uppercase = (): void => {
-  promo.name = promo.name.toUpperCase()
-}
-
 watchEffect(() => {
   if (promoOptions.value.includes('unlimited')) {
     isQuantity.value = true
@@ -40,17 +36,15 @@ watchEffect(() => {
     isQuantity.value = false
   }
 
-  if (promoOptions.value.includes('active')) {
-    promo.active = true
-  } else {
-    promo.active = false
-  }
-
-  if (promoOptions.value.includes('specific')) {
-    promo.specific = true
-  } else {
-    promo.specific = false
-  }
+  promoOptions.value.includes('active')
+    ? (promo.active = true)
+    : (promo.active = false)
+  promoOptions.value.includes('specific')
+    ? (promo.specific = true)
+    : (promo.specific = false)
+  promo.name?.length !== 0
+    ? (promo.name = promo.name?.toUpperCase())
+    : promo.name
 })
 
 const category = reactive<TreeOptions>({
@@ -265,7 +259,6 @@ const headerName = computed(() => {
                       v-model="promo.name"
                       type="text"
                       class="input is-info-focus"
-                      @keyup="uppercase"
                     />
                   </V-Control>
                 </V-Field>
