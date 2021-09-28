@@ -35,4 +35,12 @@ export interface Category {
   options: CategoryOptions[]
   value: string | number | null
 }
+
+export interface ProductVariant {
+  discountable: boolean
+  active: boolean
+  name: string
+  description: string
+}
+
 export type ProductOptionsArray = ProductOptions[]
