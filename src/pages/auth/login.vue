@@ -56,9 +56,8 @@ useHead({
             type="checkbox"
             :checked="!isDark"
             @change="
-              (event: Event) => {
-                const el = event.target as HTMLInputElement
-                isDark = el.checked
+              (event) => {
+                isDark = !event.target.checked
               }
             "
           />
