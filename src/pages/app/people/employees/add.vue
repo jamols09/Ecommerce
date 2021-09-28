@@ -23,10 +23,10 @@ const employee = reactive<People>({
 
 const role = reactive({
   options: [
-    { id: '0', label: 'Basic' },
-    { id: '1', label: 'Admin' },
+    { id: 'basic', label: 'Basic' },
+    { id: 'admin', label: 'Admin' },
   ],
-  value: ['0'],
+  value: ['basic'],
 })
 
 const imageData = reactive<ImageData>({
