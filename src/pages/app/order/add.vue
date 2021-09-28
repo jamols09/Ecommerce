@@ -316,9 +316,7 @@ const onGenerateComputation = async () => {
                         <div class="column is-6">
                           <VField>
                             <label> Mobile </label>
-                            <VControl
-                              icon="ic:baseline-drive-file-rename-outline"
-                            >
+                            <VControl icon="ph:device-mobile">
                               <input
                                 v-model="customer.mobile"
                                 type="number"
@@ -331,9 +329,7 @@ const onGenerateComputation = async () => {
                         <div class="column is-6">
                           <VField>
                             <label> Telephone </label>
-                            <VControl
-                              icon="ic:baseline-drive-file-rename-outline"
-                            >
+                            <VControl icon="ion:ios-telephone-outline">
                               <input
                                 v-model="customer.telephone"
                                 type="text"

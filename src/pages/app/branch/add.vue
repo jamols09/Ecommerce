@@ -16,6 +16,7 @@ const branch = reactive<Branch>({
   addressLine2: '',
   postal: null,
   telephone: null,
+  mobile: null,
   geolocation: {
     longitude: null,
     latitude: null,
@@ -257,6 +258,18 @@ const headerName = computed((): string => {
                   <V-Control icon="ion:ios-telephone-outline">
                     <input
                       v-model="branch.telephone"
+                      type="text"
+                      class="input is-info-focus"
+                    />
+                  </V-Control>
+                </V-Field>
+              </div>
+              <div class="column is-6">
+                <V-Field>
+                  <label>Mobile</label>
+                  <V-Control icon="ph:device-mobile">
+                    <input
+                      v-model="branch.mobile"
                       type="text"
                       class="input is-info-focus"
                     />
