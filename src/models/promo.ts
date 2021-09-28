@@ -9,11 +9,11 @@ export type PromoRepeatOptions = 'every_week' | 'every_month' | 'every_year'
 export type PromoOptions = 'active' | 'unlimited' | 'specific'
 export type FlashOptions = 'active' | 'specific'
 
-export type TreeOptions = {
+export interface TreeOptions {
   options: object[]
   value: object[]
 }
-export type StartEndDate = {
+export interface StartEndDate {
   start: Date
   end: Date
 }

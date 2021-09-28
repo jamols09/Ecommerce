@@ -17,5 +17,6 @@ export interface Branch {
   addressLine2?: string | null
   postal: number | null
   telephone: string | null
+  mobile: string | null
   geolocation: GeoLocation
 }
