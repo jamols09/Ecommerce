@@ -1,13 +1,13 @@
 import { ref, computed, reactive } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
 import type { AccountType } from '../models/user/'
-import type { FieldsData } from '../models/product'
+import type { DynamicFieldsAray } from '../models/product'
 
 const notyf = useNotyf()
 const accountType = ref<AccountType>('advance')
 
 export default function useItemAttribute() {
-  const dynamicField = reactive<FieldsData[]>([
+  const dynamicField = reactive<DynamicFieldsAray>([
     {
       attribute: '',
       value: [],

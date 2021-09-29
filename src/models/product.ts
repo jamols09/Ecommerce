@@ -4,43 +4,61 @@
 
 export type InventoryTabs = 'info' | 'specs' | 'pricing'
 export type ProductOptions = 'active' | 'displayQuantity' | 'discountable'
-export type CategoryOptions = {
-  id: number | string
-  label: string
-}
+export type WeightUnit = 'kg' | 'g' | null
+export type DimensionUnit = 'inch' | 'cm' | null
+export type DynamicFieldsAray = Array<DynamicField>
+export type ProductOptionsArray = Array<ProductOptions>
 
-export interface FieldsData {
+interface DynamicField {
   attribute: string
-  value: string[]
+  value: Array<String>
   input: string
 }
-export interface VariantCategory {
-  options: object[]
+interface Weight {
+  unit: WeightUnit
+  amount: number
+}
+interface Dimension {
+  unit: DimensionUnit
+  length: number
+  width: number
+  height: number
+}
+export interface Options {
+  id: string | number
+  label: string
+  children?: Array<Object>
+}
+export interface TagsDropdown {
+  options: Array<Options>
   value: string | null
+}
+export interface CategoryDropdown {
+  options: Array<Options>
+  value: string | number | null
+}
+export interface DimensionDropdown {
+  options: Array<Options>
+  value: DimensionUnit
+}
+export interface WeightDropdown {
+  options: Array<Options>
+  value: WeightUnit
 }
 export interface Product {
   active: boolean
   discountable: boolean
   displayQuantity: boolean
-  name: string
-  sku: string
   quantity: number
   quantityWarn: number
   price: number
-  description: string | null
-  category?: string
-  tag?: Array<string>
-}
-export interface Category {
-  options: CategoryOptions[]
-  value: string | number | null
-}
-
-export interface ProductVariant {
-  discountable: boolean
-  active: boolean
   name: string
-  description: string
+  sku: string
+  codeName: string
+  category?: string
+  description: string | null
+  tag?: Array<String>
+  weight: Weight
+  dimension: Dimension
+  branch: number
 }
-
-export type ProductOptionsArray = ProductOptions[]

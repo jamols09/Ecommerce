@@ -2,21 +2,29 @@
  * BRANCH TYPES DECLARATION *
  ****************************/
 
-export interface GeoLocation {
+interface GeoLocation {
   longitude: number | null
   latitude: number | null
 }
 
-export interface Branch {
-  name: string
-  code: string
+interface Address {
   country: string
   regionState: string
   city: string
   addressLine1: string
   addressLine2?: string | null
   postal: number | null
+  geolocation: GeoLocation
+}
+
+interface Contact {
   telephone: string | null
   mobile: string | null
-  geolocation: GeoLocation
+}
+
+export interface Branch {
+  name: string
+  code: string
+  address: Address
+  contact: Contact
 }
