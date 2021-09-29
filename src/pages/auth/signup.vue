@@ -41,10 +41,8 @@ useHead({
           <input
             type="checkbox"
             :checked="!isDark"
-            @change="
-              (event) => {
-                isDark = !event.target.checked
-              }
+            @change="(e: Event) =>
+              (isDark = !(<HTMLInputElement>e.target).checked)
             "
           />
           <span></span>
