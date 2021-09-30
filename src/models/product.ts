@@ -24,18 +24,23 @@ interface Dimension {
   width: number
   height: number
 }
+interface Branch {
+  _id: number
+  quantity: number
+}
 export interface Options {
-  id: string | number
+  id?: string | number
   label: string
+  value?: string | number
   children?: Array<Object>
 }
 export interface TagsDropdown {
   options: Array<Options>
-  value: string | null
+  value: null | Array<String>
 }
-export interface CategoryDropdown {
+export interface GeneralDropdown {
   options: Array<Options>
-  value: string | number | null
+  value: null | Array<String> | Array<Number>
 }
 export interface DimensionDropdown {
   options: Array<Options>
@@ -55,10 +60,10 @@ export interface Product {
   name: string
   sku: string
   codeName: string
-  category?: string
   description: string | null
-  tag?: Array<String>
   weight: Weight
   dimension: Dimension
-  branch: number
+  category?: string
+  tag?: Array<String>
+  branch: Array<Branch>
 }
