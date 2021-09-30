@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
-import { AccountType } from '../models/user/user'
+import { AccountType } from '../models/user/index'
 
 const notyf = useNotyf()
 const accountType = ref<AccountType>('regular') //should be changed value should be based on api call

@@ -16,11 +16,12 @@ const promo = reactive<Promo>({
 })
 
 watchEffect(() => {
-  if (flashOptions.value.includes('specific')) {
-    promo.specific = true
-  } else {
-    promo.specific = false
-  }
+  flashOptions.value.includes('active')
+    ? (promo.active = true)
+    : (promo.active = false)
+  flashOptions.value.includes('specific')
+    ? (promo.specific = true)
+    : (promo.specific = false)
 })
 
 const category = reactive<TreeOptions>({

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { carouselConfig, ckEditorConfig } from '/@src/defaults/'
@@ -7,31 +7,109 @@ import useNotyf from '/@src/composable/useNotyf'
 import usePreviewImages from '/@src/composable/usePreviewImages'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import type {
+  GeneralDropdown,
+  DimensionDropdown,
+  InventoryTabs,
+  Product,
+  ProductOptionsArray,
+  TagsDropdown,
+  WeightDropdown,
+} from '/@src/models/product'
 
 pageTitle.value = 'Create Basic Item'
 
 const { images, uploadImages } = usePreviewImages()
-
 const router = useRouter()
 const notyf = useNotyf()
-const isLoading = ref<boolean>(false)
-const option = ref<string[]>([])
-const productName = ref<string>('')
-const productSku = ref<string>('')
-const productQuantity = ref<number | undefined>(0)
-const productQuantityWarn = ref<number | undefined>(0)
-const productPrice = ref<number | undefined>(0)
-const editorData = ref(`Insert short description here.`)
-const selectedTab = ref('info')
+const isLoading = ref(false)
+const selectedTab = ref<InventoryTabs>('info')
+const productOptions = ref<ProductOptionsArray>([])
+const bgColor = ref('#323236')
 
-const productCategory = reactive<{ options: object; value: string | null }>({
-  options: [{ id: 0, label: 'Category 1' }],
-  value: null,
+const product = reactive<Product>({
+  active: false,
+  discountable: false,
+  displayQuantity: false,
+  sku: '',
+  name: '',
+  codeName: '',
+  quantity: 0,
+  quantityWarn: 0,
+  price: 0,
+  description: 'Insert short description here.',
+  tag: [],
+  weight: {
+    unit: null,
+    amount: 0,
+  },
+  dimension: {
+    unit: null,
+    length: 0,
+    width: 0,
+    height: 0,
+  },
+  branch: [],
 })
-const productTag = reactive<{ options: object; value: string | null }>({
-  options: [{ id: 0, label: 'Tag 1' }],
-  value: null,
+
+const dimension = reactive<DimensionDropdown>({
+  options: [
+    { id: 'inch', label: 'Inch' },
+    { id: 'cm', label: 'Centimeter' },
+  ],
+  value: 'cm',
 })
+const weight = reactive<WeightDropdown>({
+  options: [
+    { id: 'g', label: 'Gram' },
+    { id: 'kg', label: 'Kilogram' },
+  ],
+  value: 'g',
+})
+const branch = reactive<GeneralDropdown>({
+  options: [
+    { value: '12340', label: 'Davao Branch' },
+    { value: '1241', label: 'Cebu Branch' },
+    { value: '12141', label: 'La3ng Branch' },
+    { value: '133', label: 'Nabs Branch' },
+    { value: '33141', label: 'L1nang Branch' },
+    { value: '13', label: 'Na1s Branch' },
+    { value: '-1', label: 'All' },
+  ],
+  value: [],
+})
+const category = reactive<GeneralDropdown>({
+  options: [
+    {
+      id: 'a',
+      label: 'a',
+      children: [
+        { id: 'aa', label: 'aa' },
+        { id: 'ab', label: 'ab' },
+      ],
+    },
+    { id: 'b', label: 'b' },
+    { id: 'c', label: 'c' },
+  ],
+  value: [],
+})
+const tag = reactive<TagsDropdown>({
+  options: [
+    { value: 'tag1', label: 'Tag1' },
+    { value: 'tag2', label: 'Tag2' },
+    { value: 'tag3', label: 'Tag3' },
+  ],
+  value: [],
+})
+
+const branchFunc = (e: any) => {
+  e == '-1' && branch.value?.length
+    ? (branch.value = branch.value.slice(-1))
+    : false
+  e !== '-1' && branch.value?.indexOf('-1') === 0
+    ? branch.value?.splice(branch.value.indexOf('-1'), 1)
+    : false
+}
 
 const create = async () => {
   isLoading.value = true
@@ -50,7 +128,7 @@ const create = async () => {
         <div class="form-header">
           <div class="form-header-inner">
             <div class="left">
-              <h3>Basic Item</h3>
+              <h3>Basic Item {{ branch.value }}</h3>
             </div>
           </div>
         </div>
@@ -91,7 +169,7 @@ const create = async () => {
                             v-if="images && images.length"
                             :settings="carouselConfig"
                           >
-                            <slide v-for="data in images" :key="data">
+                            <Slide v-for="data in images" :key="data">
                               <div class="carousel__item">
                                 <img
                                   v-if="images"
@@ -99,19 +177,24 @@ const create = async () => {
                                   :src="data"
                                 />
                               </div>
-                            </slide>
+                            </Slide>
                             <template #addons>
                               <Navigation />
                             </template>
                           </Carousel>
                           <Carousel v-else>
                             <Slide v-for="data in 1" :key="data">
-                              <div class="carousel__item static">
+                              <div
+                                class="carousel__item static"
+                                :style="{ backgroundColor: bgColor }"
+                              >
                                 <span>
                                   Preview
                                   <br />
                                   <span>
-                                    <p style="font-size: 1rem">(draggable)</p>
+                                    <p style="font-size: 1rem">
+                                      (Portrait Recommended)
+                                    </p>
                                   </span>
                                 </span>
                               </div>
@@ -152,7 +235,7 @@ const create = async () => {
                           <label>Name *</label>
                           <VControl>
                             <input
-                              v-model="productName"
+                              v-model="product.name"
                               type="text"
                               class="input is-info-focus"
                             />
@@ -165,7 +248,7 @@ const create = async () => {
                           <label>Stock Keep Unit (SKU)</label>
                           <VControl>
                             <input
-                              v-model="productSku"
+                              v-model="product.sku"
                               type="text"
                               class="input is-info-focus"
                             />
@@ -178,7 +261,7 @@ const create = async () => {
                           <label>Description</label>
                           <VControl>
                             <ckeditor
-                              v-model="editorData"
+                              v-model="product.description"
                               :editor="ClassicEditor"
                               :config="ckEditorConfig"
                             ></ckeditor>
@@ -195,14 +278,14 @@ const create = async () => {
                         <VField>
                           <VControl>
                             <VCheckbox
-                              v-model="option"
+                              v-model="productOptions"
                               value="active"
                               label="Active"
                               color="info"
                             />
                             <VCheckbox
-                              v-model="option"
-                              value="display_qty"
+                              v-model="productOptions"
+                              value="displayQuantity"
                               label="Display Quantity"
                               color="info"
                             />
@@ -219,13 +302,31 @@ const create = async () => {
                           </VControl>
                         </VField>
                       </div>
+                      <!-- Branch -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Branch</label>
+                          <VControl>
+                            <Multiselect
+                              v-model="branch.value"
+                              mode="tags"
+                              :close-on-select="false"
+                              :create-tag="false"
+                              :searchable="true"
+                              :options="branch.options"
+                              @select="branchFunc($event)"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <div class="column is-6"></div>
                       <!-- Quantity -->
                       <div class="column is-6">
                         <VField>
                           <label>Quantity</label>
                           <VControl>
                             <input
-                              v-model="productQuantity"
+                              v-model="product.quantity"
                               type="number"
                               class="input is-info-focus"
                             />
@@ -250,7 +351,7 @@ const create = async () => {
                           </label>
                           <VControl>
                             <input
-                              v-model="productQuantityWarn"
+                              v-model="product.quantityWarn"
                               type="number"
                               class="input is-info-focus"
                             />
@@ -263,9 +364,9 @@ const create = async () => {
                           <label>Category</label>
                           <VControl>
                             <Treeselect
-                              v-model="productCategory.value"
+                              v-model="category.value"
                               :multiple="false"
-                              :options="productCategory.options"
+                              :options="category.options"
                               :limit="2"
                             />
                           </VControl>
@@ -288,11 +389,110 @@ const create = async () => {
                             </VueTooltip>
                           </label>
                           <VControl>
+                            <Multiselect
+                              v-model="tag.value"
+                              mode="tags"
+                              :close-on-select="false"
+                              :create-tag="true"
+                              :searchable="true"
+                              :options="tag.options"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+
+                      <div class="column is-full">
+                        <VField>
+                          <VControl>
+                            <div class="fieldset-heading my-3">
+                              <h4
+                                class="has-text-weight-semibold"
+                                style="font-family: Montserrat, sans-serif"
+                              >
+                                Measurements
+                              </h4>
+                            </div>
+                          </VControl>
+                        </VField>
+                      </div>
+                      <!-- Weight Unit -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Weight Unit</label>
+                          <VControl>
                             <Treeselect
-                              v-model="productTag.value"
-                              :multiple="true"
-                              :options="productTag.options"
+                              v-model="product.weight.unit"
+                              :multiple="false"
+                              :options="weight.options"
                               :limit="2"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <!-- Weight Amount -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Weight Amount</label>
+                          <VControl>
+                            <input
+                              v-model="product.weight.amount"
+                              type="number"
+                              class="input is-info-focus"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <!-- Dimension Unit -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Dimension Unit</label>
+                          <VControl>
+                            <Treeselect
+                              v-model="dimension.value"
+                              :multiple="false"
+                              :options="dimension.options"
+                              :limit="2"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <!-- Length -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Length</label>
+                          <VControl>
+                            <input
+                              v-model="product.dimension.length"
+                              type="number"
+                              class="input is-info-focus"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <div class="column is-6"></div>
+                      <!-- Width -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Width</label>
+                          <VControl>
+                            <input
+                              v-model="product.dimension.width"
+                              type="number"
+                              class="input is-info-focus"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <div class="column is-6"></div>
+                      <!-- Height -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Height</label>
+                          <VControl>
+                            <input
+                              v-model="product.dimension.height"
+                              type="number"
+                              class="input is-info-focus"
                             />
                           </VControl>
                         </VField>
@@ -307,8 +507,8 @@ const create = async () => {
                         <VField>
                           <VControl>
                             <VCheckbox
-                              v-model="option"
-                              value="active"
+                              v-model="productOptions"
+                              value="discountable"
                               label="Discountable"
                               color="info"
                             />
@@ -331,7 +531,7 @@ const create = async () => {
                           <label>Price</label>
                           <VControl>
                             <input
-                              v-model="productPrice"
+                              v-model="product.price"
                               type="number"
                               class="input is-info-focus"
                             />
@@ -377,7 +577,7 @@ const create = async () => {
 
 .carousel {
   .carousel_images {
-    height: 325px;
+    max-height: 800px;
     margin: 15px;
     border-radius: 6px;
   }
@@ -386,8 +586,7 @@ const create = async () => {
 
     .carousel__item {
       min-height: 300px;
-      max-height: 350px;
-      background-color: #323236;
+      max-height: 800px;
       color: white;
       font-size: 20px;
       border-radius: 6px;
@@ -396,7 +595,7 @@ const create = async () => {
       align-items: center;
 
       &.static {
-        width: 100%;
+        width: 50%;
       }
     }
   }
@@ -405,6 +604,30 @@ const create = async () => {
   .carousel__next {
     box-sizing: content-box;
     border: 5px solid white;
+  }
+}
+
+@media (max-width: 930px) {
+  .carousel {
+    .carousel__slide {
+      .carousel__item {
+        &.static {
+          width: 80%;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    .carousel__slide {
+      .carousel__item {
+        &.static {
+          width: 90%;
+        }
+      }
+    }
   }
 }
 </style>

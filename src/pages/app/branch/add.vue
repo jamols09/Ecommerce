@@ -1,27 +1,30 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import { Branch } from '/@src/models/branch'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 pageTitle.value = 'Create Branch'
 
-type GeoLocation = {
-  longitude: number | undefined
-  latitude: number | undefined
-}
-
 const branchOptions = ref<string[]>([])
-const branchName = ref('')
-const branchCode = ref('')
-const branchCountry = ref('')
-const branchRegionState = ref('')
-const branchCity = ref('')
-const branchAddressLine1 = ref('')
-const branchAddressLine2 = ref('')
-const branchPostal = ref('')
-const branchTelephone = ref('')
-const branchGeo = ref<GeoLocation>({
-  longitude: undefined,
-  latitude: undefined,
+const branch = reactive<Branch>({
+  name: '',
+  code: '',
+  contact: {
+    telephone: null,
+    mobile: null,
+  },
+  address: {
+    country: '',
+    regionState: '',
+    city: '',
+    addressLine1: '',
+    addressLine2: '',
+    postal: null,
+    geolocation: {
+      longitude: null,
+      latitude: null,
+    },
+  },
 })
 
 const route = useRoute()
@@ -84,7 +87,7 @@ const headerName = computed((): string => {
                   <label>Name</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchName"
+                      v-model="branch.name"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -104,7 +107,7 @@ const headerName = computed((): string => {
                   >
                   <V-Control icon="mdi:code-braces">
                     <input
-                      v-model="branchCode"
+                      v-model="branch.code"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -128,7 +131,7 @@ const headerName = computed((): string => {
                   <label>Country</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchCountry"
+                      v-model="branch.address.country"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -141,7 +144,7 @@ const headerName = computed((): string => {
                   <label>Region / State</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchRegionState"
+                      v-model="branch.address.regionState"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -154,7 +157,7 @@ const headerName = computed((): string => {
                   <label>City</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchCity"
+                      v-model="branch.address.city"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -174,7 +177,7 @@ const headerName = computed((): string => {
                   >
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchAddressLine1"
+                      v-model="branch.address.addressLine1"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -194,7 +197,7 @@ const headerName = computed((): string => {
                   >
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchAddressLine2"
+                      v-model="branch.address.addressLine2"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -207,7 +210,7 @@ const headerName = computed((): string => {
                   <label>Postal / Zip</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchPostal"
+                      v-model="branch.address.postal"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -220,7 +223,7 @@ const headerName = computed((): string => {
                   <label>Longitude</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchGeo.longitude"
+                      v-model="branch.address.geolocation.longitude"
                       type="number"
                       class="input is-info-focus"
                     />
@@ -233,7 +236,7 @@ const headerName = computed((): string => {
                   <label>Longitude</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="branchGeo.latitude"
+                      v-model="branch.address.geolocation.latitude"
                       type="number"
                       class="input is-info-focus"
                     />
@@ -258,7 +261,19 @@ const headerName = computed((): string => {
                   <label>Telephone</label>
                   <V-Control icon="ion:ios-telephone-outline">
                     <input
-                      v-model="branchTelephone"
+                      v-model="branch.contact.telephone"
+                      type="text"
+                      class="input is-info-focus"
+                    />
+                  </V-Control>
+                </V-Field>
+              </div>
+              <div class="column is-6">
+                <V-Field>
+                  <label>Mobile</label>
+                  <V-Control icon="ph:device-mobile">
+                    <input
+                      v-model="branch.contact.mobile"
                       type="text"
                       class="input is-info-focus"
                     />

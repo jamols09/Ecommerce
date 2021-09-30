@@ -7,15 +7,15 @@ import sleep from '/@src/utils/sleep'
 pageTitle.value = 'Create Inventory'
 
 const router = useRouter()
-const isLoadingInv = ref<boolean>(false)
-const isLoadingVar = ref<boolean>(false)
+const isLoadingInv = ref(false)
+const isLoadingVar = ref(false)
 
-const redirect = async (e: string) => {
+const onRedirect = async (e: string) => {
   isLoadingInv.value = e === 'basic' ? true : false
   isLoadingVar.value = e === 'variation' ? true : false
 
   await sleep()
-  console.log(router.getRoutes())
+
   router.push({
     name: `app-product-inventory-${e}-add`,
   })
@@ -57,7 +57,7 @@ const redirect = async (e: string) => {
                     color="info"
                     :loading="isLoadingInv"
                     raised
-                    @click="redirect('basic')"
+                    @click="onRedirect('basic')"
                     >Create</V-Button
                   >
                 </div>
@@ -93,7 +93,7 @@ const redirect = async (e: string) => {
                     color="info"
                     :loading="isLoadingVar"
                     raised
-                    @click="redirect('variation')"
+                    @click="onRedirect('variation')"
                     >Create</V-Button
                   >
                 </div>

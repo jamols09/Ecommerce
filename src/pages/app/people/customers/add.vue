@@ -1,17 +1,34 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, reactive, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import { People, StatusArray } from '/@src/models/people'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 
 pageTitle.value = 'Create Customer'
 
 const route = useRoute()
-const isActive = ref([])
-const isVerified = ref([])
-const firstname = ref('')
-const middlename = ref('')
-const lastname = ref('')
-const birthdate = ref('')
+const statusOptions = ref<StatusArray>([])
+const customer = reactive<People>({
+  active: false,
+  verified: false,
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  birthdate: new Date(),
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+})
+
+watchEffect(() => {
+  statusOptions.value.includes('active')
+    ? (customer.active = true)
+    : (customer.active = false)
+  statusOptions.value.includes('verified')
+    ? (customer.verified = true)
+    : (customer.verified = false)
+})
 
 const headerName = computed((): string => {
   const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
@@ -78,27 +95,20 @@ const headerName = computed((): string => {
             </div>
           </div>
           <div class="form-section is-grey">
-            <!-- 
-              <div class="demo-code-wrapper">
-                <div class="demo-state">
-                  <pre> {{isActive}} </pre>
-                </div>
-              </div>
-            -->
             <!-- Is Active -->
             <div class="columns is-multiline">
               <div class="column is-12">
                 <V-Field>
                   <V-Control>
                     <V-Checkbox
-                      v-model="isActive"
+                      v-model="statusOptions"
                       value="active"
                       label="Active"
                       color="info"
                     />
                     <V-Checkbox
-                      v-model="isVerified"
-                      value="isVerified"
+                      v-model="statusOptions"
+                      value="verified"
                       label="Verified"
                       color="info"
                       :disabled="true"
@@ -134,7 +144,7 @@ const headerName = computed((): string => {
                   <label>First Name</label>
                   <V-Control icon="feather:user">
                     <input
-                      v-model="firstname"
+                      v-model="customer.firstName"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -147,7 +157,7 @@ const headerName = computed((): string => {
                   <label>Middle Name</label>
                   <V-Control icon="feather:user">
                     <input
-                      v-model="middlename"
+                      v-model="customer.middleName"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -160,7 +170,7 @@ const headerName = computed((): string => {
                   <label>Last Name</label>
                   <V-Control icon="feather:user">
                     <input
-                      v-model="lastname"
+                      v-model="customer.lastName"
                       type="text"
                       class="input is-info-focus"
                     />
@@ -169,7 +179,11 @@ const headerName = computed((): string => {
               </div>
               <!-- Birthdate -->
               <div class="column is-6">
-                <v-date-picker v-model="birthdate" color="info" trim-weeks>
+                <v-date-picker
+                  v-model="customer.birthdate"
+                  color="info"
+                  trim-weeks
+                >
                   <template #default="{ inputValue, inputEvents }">
                     <V-Field>
                       <label>Birthdate</label>
@@ -200,7 +214,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Username</label>
                   <V-Control icon="feather:user">
-                    <input type="text" class="input is-info-focus" />
+                    <input
+                      v-model="customer.username"
+                      type="text"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
@@ -209,7 +227,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Email</label>
                   <V-Control icon="feather:at-sign">
-                    <input type="text" class="input is-info-focus" />
+                    <input
+                      v-model="customer.email"
+                      type="text"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
@@ -218,7 +240,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Password</label>
                   <V-Control icon="feather:lock">
-                    <input type="password" class="input is-info-focus" />
+                    <input
+                      v-model="customer.password"
+                      type="password"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>
@@ -227,7 +253,11 @@ const headerName = computed((): string => {
                 <V-Field>
                   <label>Confirm Password</label>
                   <V-Control icon="feather:lock">
-                    <input type="password" class="input is-info-focus" />
+                    <input
+                      v-model="customer.confirmPassword"
+                      type="password"
+                      class="input is-info-focus"
+                    />
                   </V-Control>
                 </V-Field>
               </div>

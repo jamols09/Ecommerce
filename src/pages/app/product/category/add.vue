@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { Category } from '/@src/models/product'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 
 pageTitle.value = 'Create Category'
 
 const route = useRoute()
 
-const categoryName = ref('')
-const categoryParent = reactive<{ options: object; value: string | null }>({
+const name = ref('')
+const categoryParent = reactive<Category>({
   options: [
     { id: '0', label: 'Category Parent 1' },
     { id: '1', label: 'Category Parent 2' },
@@ -41,7 +42,7 @@ const headerName = computed((): string => {
                   <label>Name</label>
                   <V-Control icon="ic:baseline-drive-file-rename-outline">
                     <input
-                      v-model="categoryName"
+                      v-model="name"
                       type="text"
                       class="input is-info-focus"
                     />
