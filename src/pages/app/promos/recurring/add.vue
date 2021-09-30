@@ -6,7 +6,7 @@ import { TreeOptions, Promo, PromoOptionsArray } from '/@src/models/promo'
 pageTitle.value = 'Create Repeating Promo'
 
 const route = useRoute()
-const isQuantity = ref<boolean>(false)
+const isQuantity = ref(false)
 const promoOptions = ref<PromoOptionsArray>([])
 const promo = reactive<Promo>({
   active: false,
