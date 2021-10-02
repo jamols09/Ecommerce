@@ -4,7 +4,6 @@ import { AccountType } from '../models/users'
 
 const notyf = useNotyf()
 const accountType = ref<AccountType>(0) //should be changed value should be based on api call
-console.log(accountType.value)
 const imageFileArr = ref<Array<File>>([])
 
 export default function usePreviewImages() {
@@ -37,7 +36,9 @@ export default function usePreviewImages() {
     )
     if (typeof account.value === 'number') {
       notyf.error(
-        `${account.value} accounts can only upload ${number.value} image per product`
+        `${AccountType[account.value]} accounts can only upload ${
+          number.value
+        } image per product`
       )
       files = null
     } else {
