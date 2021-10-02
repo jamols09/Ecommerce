@@ -1,10 +1,10 @@
 import { ref, computed, reactive } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
-import type { AccountType } from '../models/user/'
+import type { AccountType } from '../models/users'
 import type { DynamicFieldsAray } from '../models/product'
 
 const notyf = useNotyf()
-const accountType = ref<AccountType>('advance')
+const accountType = ref<AccountType>(0)
 
 export default function useItemAttribute() {
   const dynamicField = reactive<DynamicFieldsAray>([
@@ -40,20 +40,16 @@ export default function useItemAttribute() {
 
   const addAttribute = () => {
     const account = computed(() =>
-      accountType.value === 'regular' && dynamicField.length >= 1
-        ? 'regular'
-        : accountType.value === 'advance' && dynamicField.length >= 3
-        ? 'advance'
+      accountType.value === 1 && dynamicField.length >= 1
+        ? 1
+        : accountType.value === 2 && dynamicField.length >= 3
+        ? 2
         : undefined
     )
     const number = computed(() =>
-      accountType.value === 'regular'
-        ? 1
-        : accountType.value === 'advance'
-        ? 3
-        : undefined
+      accountType.value === 1 ? 1 : accountType.value === 2 ? 3 : undefined
     )
-    if (account.value) {
+    if (typeof account.value === 'number') {
       notyf.error(
         `${account.value} accounts can only add ${number.value} attribute per product`
       )
