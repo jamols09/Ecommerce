@@ -92,7 +92,7 @@ const create = async () => {
                     },
                     { label: 'Table', value: 'table', icon: 'mdi:form-select' },
                   ]"
-                  @clickedTab="selectedTab = $event"
+                  @clicked-tab="selectedTab = $event"
                 >
                   <template #tab="{ activeValue }">
                     <div
