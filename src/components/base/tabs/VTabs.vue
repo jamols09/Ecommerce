@@ -27,7 +27,6 @@ const emit = defineEmits(['clickedTab'])
 // const activeValue = ref(props.selected)
 const activeValue = computed(() => props.selected)
 const sliderClass = computed(() => {
-  console.log(props.slider)
   if (!props.slider) {
     return ''
   }
@@ -88,9 +87,12 @@ const sliderClass = computed(() => {
     </div>
 
     <div class="tab-content is-active">
-      <transition :name="props.slow ? 'fade-slow' : 'fade-fast'" mode="out-in">
+      <transition-group
+        :name="props.slow ? 'fade-slow' : 'fade-fast'"
+        mode="out-in"
+      >
         <slot name="tab" :activeValue="activeValue"></slot>
-      </transition>
+      </transition-group>
     </div>
   </div>
 </template>
