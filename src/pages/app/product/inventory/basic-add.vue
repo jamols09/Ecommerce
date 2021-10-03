@@ -3,19 +3,29 @@ import { ref, reactive, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { carouselConfig, ckEditorConfig } from '/@src/defaults/'
-import useNotyf from '/@src/composable/useNotyf'
-import usePreviewImages from '/@src/composable/usePreviewImages'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import type {
-  GeneralDropdown,
-  DimensionDropdown,
   InventoryTabs,
   Product,
   ProductOptionsArray,
-  TagsDropdown,
-  WeightDropdown,
 } from '/@src/models/product'
+import {
+  branch,
+  color,
+  material,
+  size,
+  tag,
+  department,
+  category,
+  dimension,
+  weight,
+} from '/@src/static/product'
+import useNotyf from '/@src/composable/useNotyf'
+import usePreviewImages from '/@src/composable/usePreviewImages'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+
+import { Form, Field } from 'vee-validate'
+import { ProductInfoSchema } from '/@src/schema/ProductSchema'
 
 pageTitle.value = 'Create Basic Item'
 
@@ -25,20 +35,21 @@ const notyf = useNotyf()
 const isLoading = ref(false)
 const selectedTab = ref<InventoryTabs>('info')
 const productOptions = ref<ProductOptionsArray>([])
-const bgColor = ref('#323236')
 
 const product = reactive<Product>({
+  image: [],
+  sku: '',
+  name: null,
+  department: null,
+  description: 'Insert short description here.',
   active: false,
   discountable: false,
   displayQuantity: false,
-  sku: '',
-  name: '',
-  codeName: '',
   quantity: 0,
   quantityWarn: 0,
   price: 0,
-  description: 'Insert short description here.',
   tag: [],
+  gender: null,
   weight: {
     unit: null,
     amount: 0,
@@ -49,57 +60,6 @@ const product = reactive<Product>({
     width: 0,
     height: 0,
   },
-  branch: [],
-})
-
-const dimension = reactive<DimensionDropdown>({
-  options: [
-    { id: 'inch', label: 'Inch' },
-    { id: 'cm', label: 'Centimeter' },
-  ],
-  value: 'cm',
-})
-const weight = reactive<WeightDropdown>({
-  options: [
-    { id: 'g', label: 'Gram' },
-    { id: 'kg', label: 'Kilogram' },
-  ],
-  value: 'g',
-})
-const branch = reactive<GeneralDropdown>({
-  options: [
-    { value: '12340', label: 'Davao Branch' },
-    { value: '1241', label: 'Cebu Branch' },
-    { value: '12141', label: 'La3ng Branch' },
-    { value: '133', label: 'Nabs Branch' },
-    { value: '33141', label: 'L1nang Branch' },
-    { value: '13', label: 'Na1s Branch' },
-    { value: '-1', label: 'All' },
-  ],
-  value: [],
-})
-const category = reactive<GeneralDropdown>({
-  options: [
-    {
-      id: 'a',
-      label: 'a',
-      children: [
-        { id: 'aa', label: 'aa' },
-        { id: 'ab', label: 'ab' },
-      ],
-    },
-    { id: 'b', label: 'b' },
-    { id: 'c', label: 'c' },
-  ],
-  value: [],
-})
-const tag = reactive<TagsDropdown>({
-  options: [
-    { value: 'tag1', label: 'Tag1' },
-    { value: 'tag2', label: 'Tag2' },
-    { value: 'tag3', label: 'Tag3' },
-  ],
-  value: [],
 })
 
 const branchFunc = (e: any) => {
@@ -109,6 +69,19 @@ const branchFunc = (e: any) => {
   e !== '-1' && branch.value?.indexOf('-1') === 0
     ? branch.value?.splice(branch.value.indexOf('-1'), 1)
     : false
+}
+const colorFunc = (e: any) => {
+  color.value ? ((color.value.length = 0), color.value.push(e)) : false
+}
+const materialFunc = (e: any) => {
+  material.value ? ((material.value.length = 0), material.value.push(e)) : false
+}
+const sizeFunc = (e: any) => {
+  size.value ? ((size.value.length = 0), size.value.push(e)) : false
+}
+
+const infoFunc = async (infoInputs: any) => {
+  console.log(infoInputs)
 }
 
 const create = async () => {
@@ -128,7 +101,7 @@ const create = async () => {
         <div class="form-header">
           <div class="form-header-inner">
             <div class="left">
-              <h3>Basic Item {{ branch.value }}</h3>
+              <h3>Basic Item</h3>
             </div>
           </div>
         </div>
@@ -155,120 +128,213 @@ const create = async () => {
                   @clicked-tab="selectedTab = $event"
                 >
                   <template #tab="{ activeValue }">
-                    <div
-                      v-if="activeValue === 'info'"
-                      class="columns is-multiline"
-                    >
+                    <!-- Tab 1 -->
+                    <div v-if="activeValue === 'info'">
                       <!-- Image Preview -->
-                      <div
-                        class="column is-two-thirds has-text-centered"
-                        style="margin: auto"
-                      >
-                        <VField>
-                          <Carousel
-                            v-if="images && images.length"
-                            :settings="carouselConfig"
-                          >
-                            <Slide v-for="data in images" :key="data">
-                              <div class="carousel__item">
-                                <img
-                                  v-if="images"
-                                  class="carousel_images"
-                                  :src="data"
-                                />
-                              </div>
-                            </Slide>
-                            <template #addons>
-                              <Navigation />
-                            </template>
-                          </Carousel>
-                          <Carousel v-else>
-                            <Slide v-for="data in 1" :key="data">
-                              <div
-                                class="carousel__item static"
-                                :style="{ backgroundColor: bgColor }"
-                              >
-                                <span>
-                                  Preview
-                                  <br />
+                      <div class="columns">
+                        <div class="column is-12" style="margin: auto">
+                          <VField>
+                            <Carousel
+                              v-if="images && images.length"
+                              :settings="carouselConfig"
+                            >
+                              <Slide v-for="data in images" :key="data">
+                                <div class="carousel__item">
+                                  <img
+                                    v-if="images"
+                                    class="carousel_images"
+                                    :src="data"
+                                  />
+                                </div>
+                              </Slide>
+                              <template #addons>
+                                <Navigation />
+                              </template>
+                            </Carousel>
+                            <Carousel v-else>
+                              <Slide v-for="data in 1" :key="data">
+                                <div
+                                  class="carousel__item static"
+                                  style="background-color: #323236"
+                                >
                                   <span>
-                                    <p style="font-size: 1rem">
-                                      (Portrait Recommended)
-                                    </p>
+                                    Preview
+                                    <br />
+                                    <span>
+                                      <p style="font-size: 1rem">
+                                        (Portrait Recommended)
+                                      </p>
+                                    </span>
                                   </span>
-                                </span>
+                                </div>
+                              </Slide>
+                              <template #addons>
+                                <Navigation />
+                              </template>
+                            </Carousel>
+                          </VField>
+                        </div>
+                      </div>
+
+                      <div class="columns">
+                        <!-- File Upload -->
+
+                        <div class="column is-12">
+                          <VField grouped>
+                            <VControl>
+                              <div class="file is-info">
+                                <label class="file-label">
+                                  <input
+                                    class="file-input"
+                                    type="file"
+                                    name="resume"
+                                    accept="image/x-png, image/gif, image/jpeg"
+                                    multiple
+                                    @change="uploadImages"
+                                  />
+                                  <span class="file-cta">
+                                    <span class="file-icon">
+                                      <i class="fas fa-cloud-upload-alt"></i>
+                                    </span>
+                                    <span class="file-label">Upload image</span>
+                                  </span>
+                                </label>
                               </div>
-                            </Slide>
-                            <template #addons>
-                              <Navigation />
-                            </template>
-                          </Carousel>
-                        </VField>
+                            </VControl>
+                          </VField>
+                        </div>
                       </div>
-                      <div class="column is-full">
-                        <VField grouped>
-                          <VControl>
-                            <div class="file is-info">
-                              <label class="file-label">
-                                <input
-                                  class="file-input"
-                                  type="file"
-                                  name="resume"
-                                  accept="image/x-png, image/gif, image/jpeg"
-                                  multiple
-                                  @change="uploadImages"
-                                />
-                                <span class="file-cta">
-                                  <span class="file-icon">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                  </span>
-                                  <span class="file-label">Upload image</span>
-                                </span>
-                              </label>
+                      <Form
+                        :validation-schema="ProductInfoSchema"
+                        @submit="infoFunc"
+                      >
+                        <div class="columns">
+                          <!-- Department -->
+                          <Field
+                            v-slot="{ field, errorMessage }"
+                            :validate-on-input="false"
+                            name="department"
+                          >
+                            <div class="column is-6">
+                              <VField>
+                                <label>Department *</label>
+                                <VControl>
+                                  <Multiselect
+                                    v-bind="field"
+                                    :options="department.options"
+                                  />
+                                  <p v-if="errorMessage" class="help is-danger">
+                                    <b>{{ errorMessage }}</b>
+                                  </p>
+                                </VControl>
+                              </VField>
                             </div>
-                          </VControl>
-                        </VField>
-                      </div>
-                      <!-- Name -->
-                      <div class="column is-6">
+                          </Field>
+                          <div class="column is-6"></div>
+                        </div>
+
+                        <div class="columns">
+                          <!-- Name -->
+                          <Field
+                            v-slot="{ field, errorMessage }"
+                            :validate-on-input="false"
+                            name="name"
+                          >
+                            <div class="column is-6">
+                              <VField>
+                                <label>Name *</label>
+                                <VControl>
+                                  <input
+                                    v-bind="field"
+                                    type="text"
+                                    class="input is-info-focus"
+                                  />
+                                  <p v-if="errorMessage" class="help is-danger">
+                                    <b>{{ errorMessage }}</b>
+                                  </p>
+                                </VControl>
+                              </VField>
+                            </div>
+                          </Field>
+
+                          <!-- SKU -->
+                          <Field
+                            v-slot="{ field, errorMessage }"
+                            :validate-on-input="false"
+                            name="sku"
+                          >
+                            <div class="column is-6">
+                              <VField>
+                                <label>
+                                  Stock Keep Unit (SKU)
+                                  <VueTooltip
+                                    label="Auto generated when empty."
+                                    abbreviation
+                                    :multiline="true"
+                                    size="is-small"
+                                    class="light-text mr-3"
+                                    position="is-bottom"
+                                  >
+                                    <b>?</b>
+                                  </VueTooltip>
+                                </label>
+                                <VControl>
+                                  <input
+                                    v-bind="field"
+                                    type="text"
+                                    class="input is-info-focus"
+                                  />
+                                  <p v-if="errorMessage" class="help is-danger">
+                                    <b>{{ errorMessage }}</b>
+                                  </p>
+                                </VControl>
+                              </VField>
+                            </div>
+                          </Field>
+                        </div>
+
+                        <div class="columns">
+                          <!-- Description -->
+                          <Field
+                            v-slot="{ field, errorMessage }"
+                            :validate-on-value-update="false"
+                            name="description"
+                          >
+                            <div class="column is-full">
+                              <VField>
+                                <label>Description</label>
+                                <VControl>
+                                  <ckeditor
+                                    v-bind="field"
+                                    :editor="ClassicEditor"
+                                    :config="ckEditorConfig"
+                                  >
+                                  </ckeditor>
+                                  <p v-if="errorMessage" class="help is-danger">
+                                    <b>{{ errorMessage }}</b>
+                                  </p>
+                                </VControl>
+                              </VField>
+                            </div>
+                          </Field>
+                        </div>
                         <VField>
-                          <label>Name *</label>
-                          <VControl>
-                            <input
-                              v-model="product.name"
-                              type="text"
-                              class="input is-info-focus"
-                            />
+                          <VControl class="login">
+                            <VButton
+                              type="submit"
+                              color="info"
+                              bold
+                              fullwidth
+                              raised
+                            >
+                              Yawa
+                            </VButton>
                           </VControl>
                         </VField>
-                      </div>
-                      <!-- SKU -->
-                      <div class="column is-6">
-                        <VField>
-                          <label>Stock Keep Unit (SKU)</label>
-                          <VControl>
-                            <input
-                              v-model="product.sku"
-                              type="text"
-                              class="input is-info-focus"
-                            />
-                          </VControl>
-                        </VField>
-                      </div>
-                      <!-- Description -->
-                      <div class="column is-full">
-                        <VField>
-                          <label>Description</label>
-                          <VControl>
-                            <ckeditor
-                              v-model="product.description"
-                              :editor="ClassicEditor"
-                              :config="ckEditorConfig"
-                            ></ckeditor>
-                          </VControl>
-                        </VField>
-                      </div>
+                      </Form>
                     </div>
+
+                    <!-- Tab 2 -->
                     <div
                       v-else-if="activeValue === 'specs'"
                       class="columns is-multiline"
@@ -400,7 +466,70 @@ const create = async () => {
                           </VControl>
                         </VField>
                       </div>
-
+                      <!-- Attributes -->
+                      <div class="column is-full">
+                        <VField>
+                          <VControl>
+                            <div class="fieldset-heading my-3">
+                              <h4
+                                class="has-text-weight-semibold"
+                                style="font-family: Montserrat, sans-serif"
+                              >
+                                Attributes
+                              </h4>
+                            </div>
+                          </VControl>
+                        </VField>
+                      </div>
+                      <!-- Color -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Color</label>
+                          <VControl>
+                            <Multiselect
+                              v-model="color.value"
+                              :options="color.options"
+                              mode="tags"
+                              :searchable="true"
+                              :create-tag="true"
+                              @select="colorFunc($event)"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <!-- Size -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Size</label>
+                          <VControl>
+                            <Multiselect
+                              v-model="size.value"
+                              mode="tags"
+                              :options="size.options"
+                              :searchable="true"
+                              :create-tag="true"
+                              @select="sizeFunc($event)"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <!-- Material -->
+                      <div class="column is-6">
+                        <VField>
+                          <label>Material</label>
+                          <VControl>
+                            <Multiselect
+                              v-model="material.value"
+                              mode="tags"
+                              :options="material.options"
+                              :searchable="true"
+                              :create-tag="true"
+                              @select="materialFunc($event)"
+                            />
+                          </VControl>
+                        </VField>
+                      </div>
+                      <!-- Measurements -->
                       <div class="column is-full">
                         <VField>
                           <VControl>
@@ -420,11 +549,9 @@ const create = async () => {
                         <VField>
                           <label>Weight Unit</label>
                           <VControl>
-                            <Treeselect
+                            <Multiselect
                               v-model="product.weight.unit"
-                              :multiple="false"
                               :options="weight.options"
-                              :limit="2"
                             />
                           </VControl>
                         </VField>
@@ -447,11 +574,9 @@ const create = async () => {
                         <VField>
                           <label>Dimension Unit</label>
                           <VControl>
-                            <Treeselect
-                              v-model="dimension.value"
-                              :multiple="false"
+                            <Multiselect
+                              v-model="product.dimension.unit"
                               :options="dimension.options"
-                              :limit="2"
                             />
                           </VControl>
                         </VField>
@@ -498,6 +623,7 @@ const create = async () => {
                         </VField>
                       </div>
                     </div>
+                    <!-- Tab 3 -->
                     <div
                       v-else-if="activeValue === 'pricing'"
                       class="columns is-multiline"
@@ -548,11 +674,13 @@ const create = async () => {
       </div>
     </div>
     <!-- Fixed Save Buttons-->
-    <div class="fixed-buttons is-active">
+    <!-- <div class="fixed-buttons is-active">
       <div class="fixed-buttons-inner">
-        <button class="is-info is-elevated button v-button">Save</button>
+        <button class="is-info is-elevated button v-button" @click="infoFunc">
+          Save
+        </button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
