@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { ref, reactive, watchEffect } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { carouselConfig, ckEditorConfig } from '/@src/defaults/'
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import { ckEditorConfig } from '/@src/defaults/'
 import type {
   InventoryTabs,
   Product,
@@ -26,6 +25,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 import { Form, Field } from 'vee-validate'
 import { ProductInfoSchema } from '/@src/schema/ProductSchema'
+import ProductCarousel from '/@src/components/partials-custom/carousel/ProductCarousel.vue'
 
 pageTitle.value = 'Create Basic Item'
 
@@ -81,7 +81,7 @@ const sizeFunc = (e: any) => {
 }
 
 const infoFunc = async (infoInputs: any) => {
-  console.log(infoInputs)
+  console.table(infoInputs)
 }
 
 const create = async () => {
@@ -132,53 +132,11 @@ const create = async () => {
                     <div v-if="activeValue === 'info'">
                       <!-- Image Preview -->
                       <div class="columns">
-                        <div class="column is-12" style="margin: auto">
-                          <VField>
-                            <Carousel
-                              v-if="images && images.length"
-                              :settings="carouselConfig"
-                            >
-                              <Slide v-for="data in images" :key="data">
-                                <div class="carousel__item">
-                                  <img
-                                    v-if="images"
-                                    class="carousel_images"
-                                    :src="data"
-                                  />
-                                </div>
-                              </Slide>
-                              <template #addons>
-                                <Navigation />
-                              </template>
-                            </Carousel>
-                            <Carousel v-else>
-                              <Slide v-for="data in 1" :key="data">
-                                <div
-                                  class="carousel__item static"
-                                  style="background-color: #323236"
-                                >
-                                  <span>
-                                    Preview
-                                    <br />
-                                    <span>
-                                      <p style="font-size: 1rem">
-                                        (Portrait Recommended)
-                                      </p>
-                                    </span>
-                                  </span>
-                                </div>
-                              </Slide>
-                              <template #addons>
-                                <Navigation />
-                              </template>
-                            </Carousel>
-                          </VField>
-                        </div>
+                        <ProductCarousel :images="images" />
                       </div>
 
                       <div class="columns">
                         <!-- File Upload -->
-
                         <div class="column is-12">
                           <VField grouped>
                             <VControl>
@@ -204,6 +162,7 @@ const create = async () => {
                           </VField>
                         </div>
                       </div>
+
                       <Form
                         :validation-schema="ProductInfoSchema"
                         @submit="infoFunc"
@@ -699,62 +658,6 @@ const create = async () => {
   .form-body {
     .form-section {
       min-height: 400px;
-    }
-  }
-}
-
-.carousel {
-  .carousel_images {
-    max-height: 800px;
-    margin: 15px;
-    border-radius: 6px;
-  }
-  .carousel__slide {
-    padding: 10px;
-
-    .carousel__item {
-      min-height: 300px;
-      max-height: 800px;
-      color: white;
-      font-size: 20px;
-      border-radius: 6px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &.static {
-        width: 50%;
-      }
-    }
-  }
-
-  .carousel__prev,
-  .carousel__next {
-    box-sizing: content-box;
-    border: 5px solid white;
-  }
-}
-
-@media (max-width: 930px) {
-  .carousel {
-    .carousel__slide {
-      .carousel__item {
-        &.static {
-          width: 80%;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .carousel {
-    .carousel__slide {
-      .carousel__item {
-        &.static {
-          width: 90%;
-        }
-      }
     }
   }
 }
