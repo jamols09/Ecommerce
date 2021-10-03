@@ -2,7 +2,7 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { ckEditorConfig } from '/@src/defaults/'
+import { ckEditorConfig } from '/@src/configs/'
 import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
