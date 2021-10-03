@@ -9,7 +9,6 @@ interface ImageProps {
 const props = withDefaults(defineProps<ImageProps>(), {
   images: undefined,
 })
-console.table(props.images)
 </script>
 <template>
   <div class="column is-12" style="margin: auto">
@@ -51,7 +50,7 @@ console.table(props.images)
 @import '../../../scss/pages/generic/_forms.scss';
 .carousel {
   .carousel_images {
-    max-height: 800px;
+    max-height: 650px;
     margin: 15px;
     border-radius: 6px;
   }
@@ -60,7 +59,7 @@ console.table(props.images)
 
     .carousel__item {
       min-height: 300px;
-      max-height: 800px;
+      max-height: 650px;
       color: white;
       font-size: 20px;
       border-radius: 6px;
