@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ImgHTMLAttributes } from 'vue'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
-import { carouselConfig } from '/@src/defaults/'
+import { carouselConfig } from '/@src/configs/'
 
 interface ImageProps {
   images: Array<string> | null
