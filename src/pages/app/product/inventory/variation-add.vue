@@ -7,7 +7,7 @@ import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import useItemAttribute from '/@src/composable/useItemAttribute'
-import type { GeneralDropdown } from '../../../../models/product'
+import type { GeneralDropdown } from '/@src/models/product'
 
 pageTitle.value = 'Create Item Variation'
 
