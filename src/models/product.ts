@@ -59,14 +59,13 @@ export interface Product {
   quantityWarn: number
   price: number
   image: Array<string>
-  name: string
-  sku: string
-  codeName: string
+  name: string | null
+  sku: string | null
   description: string | null
   weight: Weight
   dimension: Dimension
   category?: string
   tag?: Array<String>
   gender: GenderOptions
-  department: string
+  department: string | null
 }
