@@ -24,7 +24,6 @@ export default function usePreviewImages() {
         ? 2
         : undefined
     )
-    console.log('account', account.value)
     const number = computed(() =>
       accountType.value === 0
         ? 1
