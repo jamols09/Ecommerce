@@ -1,5 +1,11 @@
 import { reactive } from 'vue'
 
+/**
+ * Config's directory is plugin's default value
+ * is declared to be used accross components.
+ * Plugin's config should not be redeclared.
+ */
+
 //Carousel
 export const carouselConfig = reactive({
   itemsToShow: 1,

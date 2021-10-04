@@ -2,7 +2,10 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { ckEditorConfig } from '/@src/defaults/'
+import { ckEditorConfig } from '/@src/configs/'
+import useNotyf from '/@src/composable/useNotyf'
+import usePreviewImages from '/@src/composable/usePreviewImages'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import type {
   InventoryTabs,
   Product,
@@ -19,17 +22,13 @@ import {
   dimension,
   weight,
 } from '/@src/static/product'
-import useNotyf from '/@src/composable/useNotyf'
-import usePreviewImages from '/@src/composable/usePreviewImages'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 import { Form, Field } from 'vee-validate'
 import { ProductInfoSchema } from '/@src/schema/ProductSchema'
-import ProductCarousel from '/@src/components/partials-custom/carousel/ProductCarousel.vue'
+import BasicTabInfo from '/@src/components/children/product/basic/BasicTabInfo.vue'
 
 pageTitle.value = 'Create Basic Item'
 
-const { images, uploadImages } = usePreviewImages()
 const router = useRouter()
 const notyf = useNotyf()
 const isLoading = ref(false)
@@ -130,167 +129,7 @@ const create = async () => {
                   <template #tab="{ activeValue }">
                     <!-- Tab 1 -->
                     <div v-if="activeValue === 'info'">
-                      <!-- Image Preview -->
-                      <div class="columns">
-                        <ProductCarousel :images="images" />
-                      </div>
-
-                      <div class="columns">
-                        <!-- File Upload -->
-                        <div class="column is-12">
-                          <VField grouped>
-                            <VControl>
-                              <div class="file is-info">
-                                <label class="file-label">
-                                  <input
-                                    class="file-input"
-                                    type="file"
-                                    name="resume"
-                                    accept="image/x-png, image/gif, image/jpeg"
-                                    multiple
-                                    @change="uploadImages"
-                                  />
-                                  <span class="file-cta">
-                                    <span class="file-icon">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                    </span>
-                                    <span class="file-label">Upload image</span>
-                                  </span>
-                                </label>
-                              </div>
-                            </VControl>
-                          </VField>
-                        </div>
-                      </div>
-
-                      <Form
-                        :validation-schema="ProductInfoSchema"
-                        @submit="infoFunc"
-                      >
-                        <div class="columns">
-                          <!-- Department -->
-                          <Field
-                            v-slot="{ field, errorMessage }"
-                            :validate-on-input="false"
-                            name="department"
-                          >
-                            <div class="column is-6">
-                              <VField>
-                                <label>Department *</label>
-                                <VControl>
-                                  <Multiselect
-                                    v-bind="field"
-                                    :options="department.options"
-                                  />
-                                  <p v-if="errorMessage" class="help is-danger">
-                                    <b>{{ errorMessage }}</b>
-                                  </p>
-                                </VControl>
-                              </VField>
-                            </div>
-                          </Field>
-                          <div class="column is-6"></div>
-                        </div>
-
-                        <div class="columns">
-                          <!-- Name -->
-                          <Field
-                            v-slot="{ field, errorMessage }"
-                            :validate-on-input="false"
-                            name="name"
-                          >
-                            <div class="column is-6">
-                              <VField>
-                                <label>Name *</label>
-                                <VControl>
-                                  <input
-                                    v-bind="field"
-                                    type="text"
-                                    class="input is-info-focus"
-                                  />
-                                  <p v-if="errorMessage" class="help is-danger">
-                                    <b>{{ errorMessage }}</b>
-                                  </p>
-                                </VControl>
-                              </VField>
-                            </div>
-                          </Field>
-
-                          <!-- SKU -->
-                          <Field
-                            v-slot="{ field, errorMessage }"
-                            :validate-on-input="false"
-                            name="sku"
-                          >
-                            <div class="column is-6">
-                              <VField>
-                                <label>
-                                  Stock Keep Unit (SKU)
-                                  <VueTooltip
-                                    label="Auto generated when empty."
-                                    abbreviation
-                                    :multiline="true"
-                                    size="is-small"
-                                    class="light-text mr-3"
-                                    position="is-bottom"
-                                  >
-                                    <b>?</b>
-                                  </VueTooltip>
-                                </label>
-                                <VControl>
-                                  <input
-                                    v-bind="field"
-                                    type="text"
-                                    class="input is-info-focus"
-                                  />
-                                  <p v-if="errorMessage" class="help is-danger">
-                                    <b>{{ errorMessage }}</b>
-                                  </p>
-                                </VControl>
-                              </VField>
-                            </div>
-                          </Field>
-                        </div>
-
-                        <div class="columns">
-                          <!-- Description -->
-                          <Field
-                            v-slot="{ field, errorMessage }"
-                            :validate-on-value-update="false"
-                            name="description"
-                          >
-                            <div class="column is-full">
-                              <VField>
-                                <label>Description</label>
-                                <VControl>
-                                  <ckeditor
-                                    v-bind="field"
-                                    :editor="ClassicEditor"
-                                    :config="ckEditorConfig"
-                                  >
-                                  </ckeditor>
-                                  <p v-if="errorMessage" class="help is-danger">
-                                    <b>{{ errorMessage }}</b>
-                                  </p>
-                                </VControl>
-                              </VField>
-                            </div>
-                          </Field>
-                        </div>
-                        <VField>
-                          <VControl class="login">
-                            <VButton
-                              type="submit"
-                              color="info"
-                              bold
-                              fullwidth
-                              raised
-                            >
-                              Yawa
-                            </VButton>
-                          </VControl>
-                        </VField>
-                      </Form>
+                      <BasicTabInfo />
                     </div>
 
                     <!-- Tab 2 -->
