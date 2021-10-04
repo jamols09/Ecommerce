@@ -4,23 +4,36 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { ProductInfoSchema } from '/@src/schema/ProductSchema'
 import { ckEditorConfig } from '/@src/configs/'
 import { department } from '/@src/static/product'
-import {
-  Form as ValidationForm,
-  Field as ValidationField,
-  ErrorMessage,
-} from 'vee-validate'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import { carouselConfig } from '/@src/configs/'
 import { useProductStore } from '/@src/state/products/'
+import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
+import { onMounted } from 'vue-demi'
+import { ref } from 'vue'
 
 const { images, uploadImageFunc } = usePreviewImages()
 const product = useProductStore()
+const stateImage = ref<Array<string>>([])
 const stateValue = product.getTabInfo
 
 const infoFunc = async (input: any) => {
-  product.fillTabInfo({ ...input })
-  console.table(product.getTabInfo)
+  // Convert uploaded image to blob and save it on state
+  stateImage.value.length = 0
+  input.images.forEach((e: any) => {
+    stateImage.value.push(URL.createObjectURL(e))
+  })
+  product.fillTabInfo({
+    name: input.name,
+    sku: input.sku,
+    department: input.department,
+    description: input.description,
+    images: stateImage.value,
+  })
 }
+
+onMounted(() => {
+  stateValue.images.length > 0 ? (images.value = stateValue.images) : false
+})
 </script>
 
 <template>
@@ -46,7 +59,7 @@ const infoFunc = async (input: any) => {
               style="background-color: #323236"
             >
               <span>
-                Preview {{ product.getTabInfo }}
+                Preview
                 <br />
                 <span>
                   <p style="font-size: 1rem">(Portrait Recommended)</p>
@@ -62,39 +75,45 @@ const infoFunc = async (input: any) => {
     </div>
   </div>
 
-  <div class="columns">
-    <!-- File Upload -->
-    <div class="column is-12">
-      <VField grouped>
-        <VControl>
-          <div class="file is-info">
-            <label class="file-label">
-              <input
-                class="file-input"
-                type="file"
-                name="resume"
-                accept="image/x-png, image/gif, image/jpeg"
-                multiple
-                @change="uploadImageFunc"
-              />
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-cloud-upload-alt"></i>
+  <ValidationForm
+    v-slot="{ errors }"
+    :validation-schema="ProductInfoSchema"
+    @submit="infoFunc"
+  >
+    <div class="columns">
+      <!-- File Upload -->
+      <div class="column is-12">
+        <VField grouped>
+          <VControl>
+            <div class="file is-info">
+              <label class="file-label">
+                <ValidationField
+                  name="images"
+                  class="file-input"
+                  type="file"
+                  rules="image|required"
+                  multiple
+                  @change="uploadImageFunc"
+                />
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                  </span>
+                  <span class="file-label">Upload image</span>
                 </span>
-                <span class="file-label">Upload image</span>
-              </span>
-            </label>
-          </div>
-        </VControl>
-      </VField>
+              </label>
+            </div>
+            <p v-if="errors.images" class="help is-danger">
+              <b>{{ errors.images }}</b>
+            </p>
+          </VControl>
+        </VField>
+      </div>
     </div>
-  </div>
 
-  <ValidationForm :validation-schema="ProductInfoSchema" @submit="infoFunc">
     <div class="columns">
       <!-- Department -->
       <ValidationField
-        v-slot="{ errorMessage }"
         v-model="stateValue.department"
         :validate-on-input="false"
         name="department"
@@ -107,8 +126,8 @@ const infoFunc = async (input: any) => {
                 v-model="stateValue.department"
                 :options="department.options"
               />
-              <p v-if="errorMessage" class="help is-danger">
-                <b>{{ errorMessage }}</b>
+              <p v-if="errors.department" class="help is-danger">
+                <b>{{ errors.department }}</b>
               </p>
             </VControl>
           </VField>
@@ -120,7 +139,7 @@ const infoFunc = async (input: any) => {
     <div class="columns">
       <!-- Name -->
       <ValidationField
-        v-slot="{ field, errorMessage }"
+        v-slot="{ field }"
         v-model="stateValue.name"
         :validate-on-input="false"
         name="name"
@@ -130,8 +149,8 @@ const infoFunc = async (input: any) => {
             <label>Name *</label>
             <VControl>
               <input v-bind="field" type="text" class="input is-info-focus" />
-              <p v-if="errorMessage" class="help is-danger">
-                <b>{{ errorMessage }}</b>
+              <p v-if="errors.name" class="help is-danger">
+                <b>{{ errors.name }}</b>
               </p>
             </VControl>
           </VField>
@@ -140,7 +159,7 @@ const infoFunc = async (input: any) => {
 
       <!-- SKU -->
       <ValidationField
-        v-slot="{ field, errorMessage }"
+        v-slot="{ field }"
         v-model="stateValue.sku"
         :validate-on-input="false"
         name="sku"
@@ -162,8 +181,8 @@ const infoFunc = async (input: any) => {
             </label>
             <VControl>
               <input v-bind="field" type="text" class="input is-info-focus" />
-              <p v-if="errorMessage" class="help is-danger">
-                <b>{{ errorMessage }}</b>
+              <p v-if="errors.sku" class="help is-danger">
+                <b>{{ errors.sku }}</b>
               </p>
             </VControl>
           </VField>
@@ -174,7 +193,6 @@ const infoFunc = async (input: any) => {
     <div class="columns">
       <!-- Description -->
       <ValidationField
-        v-slot="{ errorMessage }"
         v-model="stateValue.description"
         :validate-on-value-update="false"
         name="description"
@@ -189,8 +207,8 @@ const infoFunc = async (input: any) => {
                 :config="ckEditorConfig"
               >
               </ckeditor>
-              <p v-if="errorMessage" class="help is-danger">
-                <b>{{ errorMessage }}</b>
+              <p v-if="errors.description" class="help is-danger">
+                <b>{{ errors.description }}</b>
               </p>
             </VControl>
           </VField>

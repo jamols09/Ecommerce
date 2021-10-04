@@ -5,7 +5,7 @@ const ProductSchema = yup.object().shape({
   sku: yup.string(),
   department: yup.string().nullable().required('Please select department'),
   description: yup.string().required('Product description is required'),
-  file: yup.string().required(),
+  images: yup.mixed().required('Please select an image'),
 
   active: yup.boolean().default(true),
   discountable: yup.boolean(),
@@ -20,4 +20,5 @@ export const ProductInfoSchema = ProductSchema.pick([
   'sku',
   'description',
   'department',
+  'images',
 ])
