@@ -23,8 +23,6 @@ import {
   weight,
 } from '/@src/static/product'
 
-import { Form, Field } from 'vee-validate'
-import { ProductInfoSchema } from '/@src/schema/ProductSchema'
 import BasicTabInfo from '/@src/components/children/product/basic/BasicTabInfo.vue'
 
 pageTitle.value = 'Create Basic Item'
