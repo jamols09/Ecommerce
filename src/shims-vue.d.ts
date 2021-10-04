@@ -18,3 +18,4 @@ declare module 'vue-accessible-color-picker'
 
 declare module 'vue3-treeselect'
 declare module '@adamdehaven/vue-custom-tooltip'
+declare module '@vee-validate/rules'
