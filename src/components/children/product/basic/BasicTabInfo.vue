@@ -10,18 +10,24 @@ import { useProductStore } from '/@src/state/products/'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { onMounted } from 'vue-demi'
 import { ref } from 'vue'
+import sleep from '/@src/utils/sleep'
+import useNotyf from '/@src/composable/useNotyf'
 
-const { images, uploadImageFunc } = usePreviewImages()
+const notyf = useNotyf()
+const { images, onUploadImg } = usePreviewImages()
 const product = useProductStore()
 const stateImage = ref<Array<string>>([])
 const stateValue = product.getTabInfo
+const isSubmitting = ref(false)
 
-const infoFunc = async (input: any) => {
+const onUpdate = async (input: any) => {
+  isSubmitting.value = true
   // Convert uploaded image to blob and save it on state
   stateImage.value.length = 0
   input.images.forEach((e: any) => {
     stateImage.value.push(URL.createObjectURL(e))
   })
+  //Save data to state
   product.fillTabInfo({
     name: input.name,
     sku: input.sku,
@@ -29,8 +35,11 @@ const infoFunc = async (input: any) => {
     description: input.description,
     images: stateImage.value,
   })
-}
 
+  await sleep()
+  isSubmitting.value = false
+  notyf.success('Product updated')
+}
 onMounted(() => {
   stateValue.images.length > 0 ? (images.value = stateValue.images) : false
 })
@@ -78,7 +87,7 @@ onMounted(() => {
   <ValidationForm
     v-slot="{ errors }"
     :validation-schema="ProductInfoSchema"
-    @submit="infoFunc"
+    @submit="onUpdate"
   >
     <div class="columns">
       <!-- File Upload -->
@@ -93,7 +102,7 @@ onMounted(() => {
                   type="file"
                   rules="image|required"
                   multiple
-                  @change="uploadImageFunc"
+                  @change="onUploadImg"
                 />
                 <span class="file-cta">
                   <span class="file-icon">
@@ -216,8 +225,15 @@ onMounted(() => {
       </ValidationField>
     </div>
     <VField>
-      <VControl class="login">
-        <VButton type="submit" color="info" bold fullwidth raised>
+      <VControl>
+        <VButton
+          type="submit"
+          color="info"
+          :loading="isSubmitting"
+          bold
+          fullwidth
+          raised
+        >
           Yawa
         </VButton>
       </VControl>
