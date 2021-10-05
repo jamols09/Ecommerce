@@ -17,8 +17,8 @@ const notyf = useNotyf()
 const { images, onUploadImg } = usePreviewImages()
 const product = useProductStore()
 const stateImage = ref<Array<string>>([])
-const stateValue = product.getTabInfo
 const isSubmitting = ref(false)
+const stateValue = product.GET_TAB_INFO
 
 const onUpdate = async (input: any) => {
   isSubmitting.value = true
@@ -27,8 +27,8 @@ const onUpdate = async (input: any) => {
   input.images.forEach((e: any) => {
     stateImage.value.push(URL.createObjectURL(e))
   })
-  //Save data to state
-  product.fillTabInfo({
+  // Save data to state
+  product.FILL_TAB_INFO({
     name: input.name,
     sku: input.sku,
     department: input.department,
@@ -234,7 +234,7 @@ onMounted(() => {
           fullwidth
           raised
         >
-          Yawa
+          Update
         </VButton>
       </VControl>
     </VField>
