@@ -41,7 +41,7 @@ export interface TagsDropdown {
 }
 export interface GeneralDropdown {
   options: Array<Options>
-  value: Array<String> | null
+  value: Array<string> | null
 }
 export interface DimensionDropdown {
   options: Array<Options>
