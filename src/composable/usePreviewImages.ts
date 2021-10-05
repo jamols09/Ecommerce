@@ -9,7 +9,7 @@ const imageFileArr = ref<Array<File>>([])
 export default function usePreviewImages() {
   const images = ref<Array<string>>([])
 
-  const uploadImageFunc = (e: Event) => {
+  const onUploadImg = (e: Event) => {
     const target = <HTMLInputElement>e.target
     let files = target.files
 
@@ -51,6 +51,6 @@ export default function usePreviewImages() {
 
   return {
     images,
-    uploadImageFunc,
+    onUploadImg,
   }
 }
