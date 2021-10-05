@@ -11,7 +11,7 @@ export const dimension = reactive<DimensionDropdown>({
     { value: 'inch', label: 'Inch' },
     { value: 'cm', label: 'Centimeter' },
   ],
-  value: 'cm',
+  value: null,
 })
 export const weight = reactive<WeightDropdown>({
   options: [
@@ -39,7 +39,7 @@ export const branch = reactive<GeneralDropdown>({
     { value: '13', label: 'Na1s Branch' },
     { value: '-1', label: 'All' },
   ],
-  value: [],
+  value: null,
 })
 export const category = reactive<GeneralDropdown>({
   options: [
