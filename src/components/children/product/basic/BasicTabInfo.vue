@@ -38,7 +38,7 @@ const onUpdate = async (input: any) => {
 
   await sleep()
   isSubmitting.value = false
-  notyf.success('Product updated')
+  notyf.success('Done')
 }
 onMounted(() => {
   stateValue.images.length > 0 ? (images.value = stateValue.images) : false
@@ -142,7 +142,26 @@ onMounted(() => {
           </VField>
         </div>
       </ValidationField>
-      <div class="column is-6"></div>
+      <ValidationField
+        v-model="stateValue.department"
+        :validate-on-input="false"
+        name="department"
+      >
+        <div class="column is-6">
+          <VField>
+            <label>Brand</label>
+            <VControl>
+              <Multiselect
+                v-model="stateValue.department"
+                :options="department.options"
+              />
+              <p v-if="errors.department" class="help is-danger">
+                <b>{{ errors.department }}</b>
+              </p>
+            </VControl>
+          </VField>
+        </div>
+      </ValidationField>
     </div>
 
     <div class="columns">

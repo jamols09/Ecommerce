@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import {
   branch,
   tag,
@@ -10,40 +10,16 @@ import {
   material,
   size,
 } from '/@src/static/product'
-import { Product, ProductOptionsArray } from '/@src/models/product'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { ProductSpecsSchema } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/products/'
+import useNotyf from '/@src/composable/useNotyf'
+import sleep from '/@src/utils/sleep'
 
-const product1 = reactive<Product>({
-  image: [],
-  sku: '',
-  name: null,
-  department: null,
-  description: 'Insert short description here.',
-  active: false,
-  discountable: false,
-  displayQuantity: false,
-  quantity: 0,
-  quantityWarn: 0,
-  price: 0,
-  tag: [],
-  gender: null,
-  weight: {
-    unit: null,
-    amount: 0,
-  },
-  dimension: {
-    unit: null,
-    length: 0,
-    width: 0,
-    height: 0,
-  },
-})
-
-const productOptions = ref<ProductOptionsArray>([])
+const notyf = useNotyf()
 const product = useProductStore()
 const isSubmitting = ref(false)
+const options = ref<Array<string>>([])
 const stateValue = product.GET_TAB_SPECS
 
 const onUpdateBranch = (e: any) => {
@@ -55,17 +31,31 @@ const onUpdateBranch = (e: any) => {
     : false
 }
 const onUpdateColor = (e: any) => {
-  color.value ? ((color.value.length = 0), color.value.push(e)) : false
+  if (color.options.find((a) => a.label === e || a.value === e)) return
+  color.options.push({
+    value: e,
+    label: e.charAt(0).toUpperCase() + e.slice(1),
+  })
 }
 const onUpdateMat = (e: any) => {
-  material.value ? ((material.value.length = 0), material.value.push(e)) : false
+  if (material.options.find((a) => a.label === e || a.value === e)) return
+  material.options.push({
+    value: e,
+    label: e.charAt(0).toUpperCase() + e.slice(1),
+  })
 }
 const onCheckSize = (e: any) => {
-  size.value ? ((size.value.length = 0), size.value.push(e)) : false
+  if (size.options.find((a) => a.label === e || a.value === e)) return
+  size.options.push({
+    value: e,
+    label: e.charAt(0).toUpperCase() + e.slice(1),
+  })
 }
 const onUpdate = async (inputs: any) => {
+  isSubmitting.value = true
   // Save data to state
   product.FILL_TAB_SPECS({
+    options: inputs.options,
     branches: inputs.branches,
     quantity: inputs.quantity,
     quantityWarn: inputs.quantityWarn,
@@ -76,24 +66,25 @@ const onUpdate = async (inputs: any) => {
     weightUnit: inputs.weightUnit,
     weightAmount: inputs.weightAmount,
     dimensionUnit: inputs.dimensionUnit,
+    dimensionLength: inputs.dimensionLength,
+    dimensionHeight: inputs.dimensionHeight,
+    dimensionWidth: inputs.dimensionWidth,
   })
-  console.log(product.GET_TAB_SPECS)
-}
 
+  await sleep()
+  isSubmitting.value = false
+  notyf.success('Updated')
+}
+onMounted(() => {
+  options.value = stateValue.options
+})
 watchEffect(() => {
-  branch.value && branch.value?.length > 0 ? false : (branch.value = null)
-  size.value && size.value.length > 0 ? false : (size.value = null)
-  color.value && color.value.length > 0 ? false : (color.value = null)
   tag.value && tag.value.length > 0 ? false : (tag.value = null)
   size.value && size.value.length > 0 ? false : (size.value = null)
+  color.value && color.value.length > 0 ? false : (color.value = null)
+  branch.value && branch.value?.length > 0 ? false : (branch.value = null)
   material.value && material.value.length > 0 ? false : (material.value = null)
 })
-
-// onMounted(() => {})
-
-function onMounted(arg0: () => void) {
-  throw new Error('Function not implemented.')
-}
 </script>
 
 <template>
@@ -107,28 +98,30 @@ function onMounted(arg0: () => void) {
       <div class="column is-12">
         <VField>
           <VControl>
-            <VCheckbox
-              v-model="productOptions"
-              value="active"
-              label="Active"
-              color="info"
-            />
-            <VCheckbox
-              v-model="productOptions"
-              value="displayQuantity"
-              label="Display Quantity"
-              color="info"
-            />
-            <VueTooltip
-              label="Display quantity on page"
-              abbreviation
-              :multiline="true"
-              size="is-small"
-              class="light-text mr-3"
-              position="is-bottom"
+            <ValidationField
+              v-model="options"
+              :validate-on-input="false"
+              name="options"
             >
-              <b>?</b>
-            </VueTooltip>
+              <VCheckbox
+                v-model="options"
+                value="active"
+                label="Active"
+                color="info"
+              />
+            </ValidationField>
+            <ValidationField
+              v-model="options"
+              :validate-on-input="false"
+              name="options"
+            >
+              <VCheckbox
+                v-model="options"
+                value="displayQuantity"
+                label="Display Quantity"
+                color="info"
+              />
+            </ValidationField>
           </VControl>
         </VField>
       </div>
@@ -240,38 +233,6 @@ function onMounted(arg0: () => void) {
         :validate-on-input="false"
         name="tags"
       > -->
-      <!-- Tags -->
-      <!-- <div class="column is-6">
-          <VField>
-            <label>
-              Tags
-              <VueTooltip
-                label="Search improvement."
-                abbreviation
-                :multiline="true"
-                size="is-small"
-                class="light-text mr-3"
-                position="is-bottom"
-              >
-                <b>?</b>
-              </VueTooltip>
-            </label>
-            <VControl>
-              <Multiselect
-                v-model="tag.value"
-                mode="tags"
-                :close-on-select="false"
-                :create-tag="true"
-                :searchable="true"
-                :options="tag.options"
-              />
-              <p v-if="errors.tags" class="help is-danger">
-                <b>{{ errors.tags }}</b>
-              </p>
-            </VControl>
-          </VField>
-        </div>
-      </ValidationField> -->
     </div>
 
     <div class="columns">
@@ -317,7 +278,6 @@ function onMounted(arg0: () => void) {
             <VControl>
               <Multiselect
                 v-model="color.value"
-                mode="tags"
                 :options="color.options"
                 :searchable="true"
                 :create-tag="true"
@@ -355,7 +315,6 @@ function onMounted(arg0: () => void) {
             <VControl>
               <Multiselect
                 v-model="size.value"
-                mode="tags"
                 :options="size.options"
                 :searchable="true"
                 :create-tag="true"
@@ -376,11 +335,22 @@ function onMounted(arg0: () => void) {
         <!-- Material -->
         <div class="column is-6">
           <VField>
-            <label>Material</label>
+            <label>
+              Material
+              <VueTooltip
+                label="Type and press enter to add material"
+                abbreviation
+                :multiline="true"
+                size="is-small"
+                class="light-text mr-3"
+                position="is-bottom"
+              >
+                <b>?</b>
+              </VueTooltip></label
+            >
             <VControl>
               <Multiselect
                 v-model="material.value"
-                mode="tags"
                 :options="material.options"
                 :searchable="true"
                 :create-tag="true"
@@ -554,3 +524,34 @@ function onMounted(arg0: () => void) {
     </VField>
   </ValidationForm>
 </template>
+<style scoped>
+.input-tag-wrapper {
+  background-color: rgb(40 40 43);
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 1;
+  border-radius: 6px;
+}
+.input-tags {
+  align-items: center;
+  padding: 3px 2px;
+  margin: 2px 3px;
+  color: white;
+  justify-content: center;
+
+  span {
+    &.tag-text {
+      margin: auto 2px;
+      padding: auto 2px;
+    }
+  }
+  &:hover {
+    cursor: pointer;
+    background-color: #3b3b41;
+    border-radius: 3px;
+  }
+  .tag-icons {
+    cursor: pointer;
+  }
+}
+</style>
