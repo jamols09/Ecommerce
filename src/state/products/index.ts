@@ -21,6 +21,8 @@ interface Product {
   dimensionLength: number
   dimensionHeight: number
   dimensionWidth: number
+
+  price: number
 }
 
 export const useProductStore = defineStore('product', {
@@ -46,6 +48,8 @@ export const useProductStore = defineStore('product', {
       dimensionLength: 0,
       dimensionHeight: 0,
       dimensionWidth: 0,
+
+      price: 0,
     } as Product),
 
   getters: {
@@ -73,6 +77,11 @@ export const useProductStore = defineStore('product', {
       dimensionHeight: state.dimensionHeight,
       dimensionWidth: state.dimensionWidth,
     }),
+
+    GET_TAB_PRICE: (state) => ({
+      options: state.options,
+      price: state.price,
+    }),
   },
 
   actions: {
@@ -99,6 +108,11 @@ export const useProductStore = defineStore('product', {
         (this.dimensionHeight = data.dimensionHeight),
         (this.dimensionLength = data.dimensionLength),
         (this.dimensionWidth = data.dimensionLength)
+    },
+
+    FILL_TAB_PRICE(data: any) {
+      this.price = data.price
+      this.options = data.options
     },
   },
 })
