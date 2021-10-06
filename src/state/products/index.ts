@@ -7,6 +7,7 @@ interface Product {
   description: string
   images: Array<string>
 
+  options: Array<string>
   branches: Array<string>
   quantity: number
   quantityWarn: number
@@ -31,6 +32,8 @@ export const useProductStore = defineStore('product', {
       description: '',
       images: [],
       branches: [],
+
+      options: [],
       quantity: 0,
       quantityWarn: 0,
       tags: [],
@@ -55,6 +58,7 @@ export const useProductStore = defineStore('product', {
     }),
 
     GET_TAB_SPECS: (state) => ({
+      options: state.options,
       branches: state.branches,
       quantity: state.quantity,
       quantityWarn: state.quantityWarn,
@@ -81,7 +85,8 @@ export const useProductStore = defineStore('product', {
     },
 
     FILL_TAB_SPECS(data: any) {
-      ;(this.branches = data.branches),
+      ;(this.options = data.options),
+        (this.branches = data.branches),
         (this.quantity = data.quantity),
         (this.quantityWarn = data.quantityWarn),
         (this.tags = data.tags),
