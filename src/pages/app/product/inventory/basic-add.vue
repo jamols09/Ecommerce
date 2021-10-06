@@ -8,7 +8,6 @@ import type {
   Product,
   ProductOptionsArray,
 } from '/@src/models/product'
-import BasicTabInfo from '/@src/components/children/product/basic/BasicTabInfo.vue'
 
 pageTitle.value = 'Create Basic Item'
 
@@ -98,46 +97,8 @@ const create = async () => {
                       <BasicTabSpecification />
                     </div>
                     <!-- Tab 3 -->
-                    <div
-                      v-else-if="activeValue === 'pricing'"
-                      class="columns is-multiline"
-                    >
-                      <!-- Discountable -->
-                      <div class="column is-full">
-                        <VField>
-                          <VControl>
-                            <VCheckbox
-                              v-model="productOptions"
-                              value="discountable"
-                              label="Discountable"
-                              color="info"
-                            />
-                            <VueTooltip
-                              label="Allow product to be discounted"
-                              abbreviation
-                              :multiline="true"
-                              size="is-small"
-                              class="light-text mr-3"
-                              position="is-bottom"
-                            >
-                              <b>?</b>
-                            </VueTooltip>
-                          </VControl>
-                        </VField>
-                      </div>
-                      <!-- Price -->
-                      <div class="column is-6">
-                        <VField>
-                          <label>Price</label>
-                          <VControl>
-                            <input
-                              v-model="product.price"
-                              type="number"
-                              class="input is-info-focus"
-                            />
-                          </VControl>
-                        </VField>
-                      </div>
+                    <div v-else-if="activeValue === 'pricing'">
+                      <BasicTabPricing />
                     </div>
                   </template>
                 </VTabs>
