@@ -23,9 +23,10 @@ export const weight = reactive<WeightDropdown>({
 export const department = reactive<GeneralDropdown>({
   options: [
     { value: 'food', label: 'Food' },
+    { value: 'other', label: 'Other' },
     { value: 'clothe', label: 'Clothe' },
     { value: 'accessories', label: 'Accessory' },
-    { value: 'other', label: 'Other' },
+    { value: 'hardware', label: 'Hardware' },
   ],
   value: null,
 })
@@ -57,11 +58,7 @@ export const category = reactive<GeneralDropdown>({
   value: null,
 })
 export const tag = reactive<TagsDropdown>({
-  options: [
-    { value: 'tag1', label: 'Tag1' },
-    { value: 'tag2', label: 'Tag2' },
-    { value: 'tag3', label: 'Tag3' },
-  ],
+  options: [],
   value: [],
 })
 export const color = reactive<GeneralDropdown>({
@@ -69,11 +66,16 @@ export const color = reactive<GeneralDropdown>({
     { value: 'red', label: 'Red' },
     { value: 'blue', label: 'Blue' },
     { value: 'gray', label: 'Gray' },
+    { value: 'pink', label: 'Pink' },
+    { value: 'green', label: 'Green' },
+    { value: 'brown', label: 'Brown' },
     { value: 'white', label: 'White' },
     { value: 'black', label: 'Black' },
-    { value: 'pink', label: 'Pink' },
+    { value: 'orange', label: 'Orange' },
+    { value: 'purple', label: 'Purple' },
+    { value: 'yellow', label: 'Yellow' },
   ],
-  value: null,
+  value: [],
 })
 export const size = reactive<GeneralDropdown>({
   options: [],
