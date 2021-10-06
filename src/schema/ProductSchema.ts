@@ -25,8 +25,7 @@ const ProductSchema = yup.object().shape({
   dimensionHeight: yup.number().typeError('Empty field not allowed'),
   dimensionWidth: yup.number().typeError('Empty field not allowed'),
 
-  price: yup.number(),
-  discountable: yup.boolean(),
+  price: yup.number().typeError('Empty field not allowed'),
 })
 
 export const ProductInfoSchema = ProductSchema.pick([
@@ -51,3 +50,5 @@ export const ProductSpecsSchema = ProductSchema.pick([
   'dimensionHeight',
   'dimensionWidth',
 ])
+
+export const ProductPricingSchema = ProductSchema.pick(['price'])
