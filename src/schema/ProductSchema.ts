@@ -7,6 +7,7 @@ const ProductSchema = yup.object().shape({
   description: yup.string().required('Product description is required'),
   images: yup.mixed().required('Please select an image'),
 
+  options: yup.array().of(yup.string()),
   branches: yup
     .array()
     .of(yup.string())
@@ -24,8 +25,6 @@ const ProductSchema = yup.object().shape({
   dimensionHeight: yup.number().typeError('Empty field not allowed'),
   dimensionWidth: yup.number().typeError('Empty field not allowed'),
 
-  active: yup.boolean().default(true),
-  displayQuantity: yup.boolean(),
   price: yup.number(),
   discountable: yup.boolean(),
 })
