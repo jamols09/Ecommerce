@@ -88,18 +88,13 @@ const create = async () => {
                 >
                   <template #tab="{ activeValue }">
                     <!-- Tab 1 -->
-                    <div v-if="activeValue === 'info'">
-                      <BasicTabInfo />
-                    </div>
-
+                    <BasicTabInfo v-if="activeValue === 'info'" />
                     <!-- Tab 2 -->
-                    <div v-else-if="activeValue === 'specs'">
-                      <BasicTabSpecification />
-                    </div>
+                    <BasicTabSpecification
+                      v-else-if="activeValue === 'specs'"
+                    />
                     <!-- Tab 3 -->
-                    <div v-else-if="activeValue === 'pricing'">
-                      <BasicTabPricing />
-                    </div>
+                    <BasicTabPricing v-else-if="activeValue === 'pricing'" />
                   </template>
                 </VTabs>
               </div>
@@ -108,14 +103,6 @@ const create = async () => {
         </div>
       </div>
     </div>
-    <!-- Fixed Save Buttons-->
-    <!-- <div class="fixed-buttons is-active">
-      <div class="fixed-buttons-inner">
-        <button class="is-info is-elevated button v-button" @click="infoFunc">
-          Save
-        </button>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -133,7 +120,7 @@ const create = async () => {
 
   .form-body {
     .form-section {
-      min-height: 400px;
+      // min-height: 400px;
     }
   }
 }

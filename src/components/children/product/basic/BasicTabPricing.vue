@@ -82,17 +82,17 @@ onMounted(() => {
         </div>
       </ValidationField>
     </div>
-    <VField>
-      <VControl>
+    <VField class="fixed-buttons is-active">
+      <VControl class="fixed-buttons-inner">
         <VButton
           type="submit"
-          color="info"
+          color="primary"
           :loading="isSubmitting"
           bold
           fullwidth
           raised
         >
-          Update
+          Save & Submit
         </VButton>
       </VControl>
     </VField>

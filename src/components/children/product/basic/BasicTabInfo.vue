@@ -46,49 +46,49 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- Image Preview -->
-  <div class="columns">
-    <div class="column is-12" style="margin: auto">
-      <VField>
-        <Carousel v-if="images?.length" :settings="carouselConfig">
-          <Slide v-for="(data, index) in images" :key="index">
-            <div class="carousel__item">
-              <img class="carousel_images" :src="data" />
-            </div>
-          </Slide>
-          <template #addons>
-            <Navigation />
-          </template>
-        </Carousel>
-
-        <Carousel v-else>
-          <Slide v-for="data in 1" :key="data">
-            <div
-              class="carousel__item static"
-              style="background-color: #323236"
-            >
-              <span>
-                Preview
-                <br />
-                <span>
-                  <p style="font-size: 1rem">(Portrait Recommended)</p>
-                </span>
-              </span>
-            </div>
-          </Slide>
-          <template #addons>
-            <Navigation />
-          </template>
-        </Carousel>
-      </VField>
-    </div>
-  </div>
-
   <ValidationForm
     v-slot="{ errors }"
     :validation-schema="ProductInfoSchema"
     @submit="onUpdate"
   >
+    <!-- Image Preview -->
+    <div class="columns">
+      <div class="column is-12" style="margin: auto">
+        <VField>
+          <Carousel v-if="images?.length" :settings="carouselConfig">
+            <Slide v-for="(data, index) in images" :key="index">
+              <div class="carousel__item">
+                <img class="carousel_images" :src="data" />
+              </div>
+            </Slide>
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+
+          <Carousel v-else>
+            <Slide v-for="data in 1" :key="data">
+              <div
+                class="carousel__item static"
+                style="background-color: #323236"
+              >
+                <span>
+                  Preview
+                  <br />
+                  <span>
+                    <p style="font-size: 1rem">(Portrait Recommended)</p>
+                  </span>
+                </span>
+              </div>
+            </Slide>
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </VField>
+      </div>
+    </div>
+
     <div class="columns">
       <!-- File Upload -->
       <div class="column is-12">
@@ -243,8 +243,8 @@ onMounted(() => {
         </div>
       </ValidationField>
     </div>
-    <VField>
-      <VControl>
+    <VField class="fixed-buttons is-active">
+      <VControl class="fixed-buttons-inner">
         <VButton
           type="submit"
           color="info"

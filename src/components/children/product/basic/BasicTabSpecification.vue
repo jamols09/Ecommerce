@@ -508,8 +508,8 @@ watchEffect(() => {
       </ValidationField>
     </div>
 
-    <VField>
-      <VControl>
+    <VField class="fixed-buttons is-active">
+      <VControl class="fixed-buttons-inner">
         <VButton
           type="submit"
           color="info"
