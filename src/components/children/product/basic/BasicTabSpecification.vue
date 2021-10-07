@@ -73,7 +73,7 @@ const onUpdate = async (inputs: any) => {
 
   await sleep()
   isSubmitting.value = false
-  notyf.success('Updated')
+  notyf.success('Product updated')
 }
 onMounted(() => {
   options.value = stateValue.options

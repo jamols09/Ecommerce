@@ -38,7 +38,7 @@ const onUpdate = async (input: any) => {
 
   await sleep()
   isSubmitting.value = false
-  notyf.success('Done')
+  notyf.success('Product updated')
 }
 onMounted(() => {
   stateValue.images.length > 0 ? (images.value = stateValue.images) : false
