@@ -10,7 +10,6 @@ const product = useProductStore()
 const isSubmitting = ref(false)
 const isUpdating = ref(false)
 const options = ref<Array<string>>([])
-const stateValue = product.GET_TAB_PRICE
 
 const onUpdate = async (inputs: any) => {
   product.FILL_TAB_PRICE({
@@ -21,7 +20,18 @@ const onUpdate = async (inputs: any) => {
   notyf.success('Product updated')
 }
 const onSubmit = async () => {
-  notyf.success(`Product <b><u>${product.name}</u></b> created !`)
+  //Check required fields
+  if (
+    product.images.length > 0 ||
+    product.department.length > 0 ||
+    product.name.length > 0 ||
+    product.description.length > 0 ||
+    product.branches.length > 0
+  ) {
+    notyf.success(`Product <b><u>${product.name}</u></b> created!`)
+  } else {
+    notyf.error('Please fill up required fields.')
+  }
 }
 onMounted(() => {
   options.value = product.options
@@ -69,7 +79,7 @@ onMounted(() => {
     <div class="columns">
       <ValidationField
         v-slot="{ field }"
-        v-model="stateValue.price"
+        v-model="product.price"
         :validate-on-input="false"
         name="price"
       >

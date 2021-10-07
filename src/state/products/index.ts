@@ -6,6 +6,7 @@ interface Product {
   department: string
   description: string
   images: Array<string>
+  brand: string
 
   options: Array<string>
   branches: Array<string>
@@ -34,6 +35,7 @@ export const useProductStore = defineStore('product', {
       description: '',
       images: [],
       branches: [],
+      brand: '',
 
       options: [],
       quantity: 0,
@@ -59,6 +61,7 @@ export const useProductStore = defineStore('product', {
       department: state.department,
       description: state.description,
       images: state.images,
+      brand: state.brand,
     }),
 
     GET_TAB_SPECS: (state) => ({
@@ -90,7 +93,8 @@ export const useProductStore = defineStore('product', {
         (this.name = data.name),
         (this.department = data.department),
         (this.description = data.description),
-        (this.images = data.images)
+        (this.images = data.images),
+        (this.brand = data.brand)
     },
 
     FILL_TAB_SPECS(data: any) {

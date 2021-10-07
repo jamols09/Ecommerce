@@ -34,6 +34,7 @@ const onUpdate = async (input: any) => {
     department: input.department,
     description: input.description,
     images: stateImage.value,
+    brand: input.brand,
   })
 
   await sleep()
@@ -90,12 +91,12 @@ onMounted(() => {
     </div>
 
     <div class="columns">
-      <!-- File Upload -->
       <div class="column is-12">
         <VField grouped>
           <VControl>
             <div class="file is-info">
               <label class="file-label">
+                <!-- File Upload -->
                 <ValidationField
                   name="images"
                   class="file-input"
@@ -142,21 +143,23 @@ onMounted(() => {
           </VField>
         </div>
       </ValidationField>
+
+      <!-- Brand -->
       <ValidationField
-        v-model="stateValue.department"
+        v-model="stateValue.brand"
         :validate-on-input="false"
-        name="department"
+        name="brand"
       >
         <div class="column is-6">
           <VField>
             <label>Brand</label>
             <VControl>
               <Multiselect
-                v-model="stateValue.department"
+                v-model="stateValue.brand"
                 :options="department.options"
               />
-              <p v-if="errors.department" class="help is-danger">
-                <b>{{ errors.department }}</b>
+              <p v-if="errors.brand" class="help is-danger">
+                <b>{{ errors.brand }}</b>
               </p>
             </VControl>
           </VField>
