@@ -9,8 +9,6 @@ const notyf = useNotyf()
 const product = useProductStore()
 const isSubmitting = ref(false)
 const isUpdating = ref(false)
-const isOpenModal = ref(false)
-const isLoadingTable = ref(false)
 const options = ref<Array<string>>([])
 const stateValue = product.GET_TAB_PRICE
 
