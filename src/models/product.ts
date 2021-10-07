@@ -3,9 +3,10 @@
  ****************************************/
 
 export type InventoryTabs = 'info' | 'specs' | 'pricing'
-export type ProductOptions = 'active' | 'displayQuantity' | 'discountable'
 export type WeightUnit = 'kg' | 'g' | null
 export type DimensionUnit = 'inch' | 'cm' | null
+export type GenderOptions = 'm' | 'f' | 'u' | null
+export type ProductOptions = 'active' | 'displayQuantity' | 'discountable'
 export type DynamicFieldsAray = Array<DynamicField>
 export type ProductOptionsArray = Array<ProductOptions>
 
@@ -40,7 +41,7 @@ export interface TagsDropdown {
 }
 export interface GeneralDropdown {
   options: Array<Options>
-  value: null | Array<String> | Array<Number>
+  value: Array<string> | null
 }
 export interface DimensionDropdown {
   options: Array<Options>
@@ -57,13 +58,14 @@ export interface Product {
   quantity: number
   quantityWarn: number
   price: number
-  name: string
-  sku: string
-  codeName: string
+  image: Array<string>
+  name: string | null
+  sku: string | null
   description: string | null
   weight: Weight
   dimension: Dimension
   category?: string
   tag?: Array<String>
-  branch: Array<Branch>
+  gender: GenderOptions
+  department: string | null
 }

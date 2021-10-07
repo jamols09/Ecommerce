@@ -12,6 +12,7 @@
  */
 
 import { createApp } from './app'
+import { createPinia } from 'pinia'
 
 /**
  * We create our app and mount it when it is ready
@@ -50,6 +51,7 @@ createApp({
       fontWeight: 500,
     })
     app.use(VueCKEditor)
+    app.use(createPinia())
 
     app.component('Treeselect', Treeselect)
     app.component(VueMultiselect.name, VueMultiselect)

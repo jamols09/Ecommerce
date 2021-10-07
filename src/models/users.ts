@@ -1,3 +1,10 @@
+export enum AccountType {
+  'FREE',
+  'REGULAR',
+  'ADVANCE',
+  'PREMIUM',
+}
+
 export interface UserPopover {
   id: number
   avatar?: string

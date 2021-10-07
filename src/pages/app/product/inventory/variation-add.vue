@@ -2,12 +2,12 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { ckEditorConfig } from '/@src/defaults/'
+import { ckEditorConfig } from '/@src/configs/'
 import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import useItemAttribute from '/@src/composable/useItemAttribute'
-import type { VariantCategory } from '../../../../models/product'
+import type { GeneralDropdown } from '/@src/models/product'
 
 pageTitle.value = 'Create Item Variation'
 
@@ -22,8 +22,8 @@ const {
 
 const notyf = useNotyf()
 const router = useRouter()
-const isLoading = ref<boolean>(false)
-const isLoadingTable = ref<boolean>(false)
+const isLoading = ref(false)
+const isLoadingTable = ref(false)
 const isOpenModal = ref(false)
 const productVariantName = ref<string>('')
 const productDescription = ref(`Insert short description here.`)
@@ -31,12 +31,12 @@ const productPrice = ref<number | undefined>()
 const productQty = ref<number | undefined>()
 const productSku = ref<string | undefined>()
 const isDiscountable = ref(['Option 2'])
-const variantValue = ref([])
 const isActive = ref([])
+const variantValue = ref([])
 const selectedTab = ref('info')
 const options = ref(['Batman', 'Robin', 'Joker'])
 
-const productVariantCategory = reactive<VariantCategory>({
+const productVariantCategory = reactive<GeneralDropdown>({
   options: [{ id: 'pants', label: 'Pants' }],
   value: null,
 })
@@ -92,7 +92,7 @@ const create = async () => {
                     },
                     { label: 'Table', value: 'table', icon: 'mdi:form-select' },
                   ]"
-                  @clickedTab="selectedTab = $event"
+                  @clicked-tab="selectedTab = $event"
                 >
                   <template #tab="{ activeValue }">
                     <div

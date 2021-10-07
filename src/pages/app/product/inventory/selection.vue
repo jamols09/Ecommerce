@@ -73,7 +73,6 @@ const onRedirect = async (e: string) => {
                   <img
                     class="dark-image is-larger"
                     src="/@src/assets/illustrations/placeholders/promotion-dark.svg"
-                    alt
                   />
                 </div>
               </div>
@@ -93,9 +92,11 @@ const onRedirect = async (e: string) => {
                     color="info"
                     :loading="isLoadingVar"
                     raised
+                    disabled
                     @click="onRedirect('variation')"
-                    >Create</V-Button
                   >
+                    Coming Soon !
+                  </V-Button>
                 </div>
               </div>
             </div>

@@ -24,8 +24,11 @@
   transition: all 0.3s;
   z-index: 5;
 
+  &.two {
+    max-width: 332px;
+  }
+
   &.is-active {
-    // transform: translateY(0);
     transform: translate(23%, 0);
   }
 
