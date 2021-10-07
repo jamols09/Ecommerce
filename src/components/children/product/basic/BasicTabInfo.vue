@@ -87,7 +87,7 @@ onMounted(() => {
       <div class="column is-12">
         <VField grouped>
           <VControl>
-            <div class="file is-info">
+            <div class="file">
               <label class="file-label">
                 <!-- File Upload -->
                 <ValidationField
