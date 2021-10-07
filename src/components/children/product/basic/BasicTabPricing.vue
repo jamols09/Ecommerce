@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
-import { ProductPricingSchema } from '/@src/schema/ProductSchema'
+import { ProductPricingForm } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/products/'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
+import sleep from '/@src/utils/sleep'
 
 const notyf = useNotyf()
 const product = useProductStore()
@@ -22,13 +23,17 @@ const onUpdate = async (inputs: any) => {
 const onSubmit = async () => {
   //Check required fields
   if (
-    product.images.length > 0 ||
-    product.department.length > 0 ||
-    product.name.length > 0 ||
-    product.description.length > 0 ||
+    product.images.length > 0 &&
+    product.department.length > 0 &&
+    product.name.length > 0 &&
+    product.description.length > 0 &&
     product.branches.length > 0
   ) {
     notyf.success(`Product <b><u>${product.name}</u></b> created!`)
+    product.$dispose()
+    product.$reset()
+    await sleep(1500)
+    location.reload()
   } else {
     notyf.error('Please fill up required fields.')
   }
@@ -40,7 +45,7 @@ onMounted(() => {
 <template>
   <ValidationForm
     v-slot="{ errors }"
-    :validation-schema="ProductPricingSchema"
+    :validation-schema="ProductPricingForm"
     @submit="onUpdate"
   >
     <div class="columns">

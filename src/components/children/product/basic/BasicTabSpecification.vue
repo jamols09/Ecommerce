@@ -11,7 +11,7 @@ import {
   size,
 } from '/@src/static/product'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
-import { ProductSpecsSchema } from '/@src/schema/ProductSchema'
+import { ProductSpecsForm } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/products/'
 import useNotyf from '/@src/composable/useNotyf'
 import sleep from '/@src/utils/sleep'
@@ -90,7 +90,7 @@ watchEffect(() => {
 <template>
   <ValidationForm
     v-slot="{ errors }"
-    :validation-schema="ProductSpecsSchema"
+    :validation-schema="ProductSpecsForm"
     @submit="onUpdate"
   >
     <div class="columns">

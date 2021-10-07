@@ -28,7 +28,7 @@ const ProductSchema = yup.object().shape({
   price: yup.number().typeError('Empty field not allowed'),
 })
 
-export const ProductInfoSchema = ProductSchema.pick([
+export const ProductInfoForm = ProductSchema.pick([
   'name',
   'sku',
   'description',
@@ -36,7 +36,7 @@ export const ProductInfoSchema = ProductSchema.pick([
   'images',
 ])
 
-export const ProductSpecsSchema = ProductSchema.pick([
+export const ProductSpecsForm = ProductSchema.pick([
   'branches',
   'quantity',
   'quantityWarn',
@@ -51,4 +51,4 @@ export const ProductSpecsSchema = ProductSchema.pick([
   'dimensionWidth',
 ])
 
-export const ProductPricingSchema = ProductSchema.pick(['price'])
+export const ProductPricingForm = ProductSchema.pick(['price'])

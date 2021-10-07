@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import usePreviewImages from '/@src/composable/usePreviewImages'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import { ProductInfoSchema } from '/@src/schema/ProductSchema'
+import { ProductInfoForm } from '/@src/schema/ProductSchema'
 import { ckEditorConfig } from '/@src/configs/'
 import { department } from '/@src/static/product'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
@@ -49,7 +49,7 @@ onMounted(() => {
 <template>
   <ValidationForm
     v-slot="{ errors }"
-    :validation-schema="ProductInfoSchema"
+    :validation-schema="ProductInfoForm"
     @submit="onUpdate"
   >
     <!-- Image Preview -->
@@ -246,6 +246,8 @@ onMounted(() => {
         </div>
       </ValidationField>
     </div>
+
+    <!-- Button -->
     <VField class="fixed-buttons is-active">
       <VControl class="fixed-buttons-inner">
         <VButton
