@@ -20,22 +20,15 @@ const stateImage = ref<Array<string>>([])
 const isSubmitting = ref(false)
 const stateValue = product.GET_TAB_INFO
 
-const onUpdate = async (input: any) => {
+const onUpdate = async (inputs: any) => {
   isSubmitting.value = true
   // Convert uploaded image to blob and save it on state
   stateImage.value.length = 0
-  input.images.forEach((e: any) => {
+  inputs.images.forEach((e: any) => {
     stateImage.value.push(URL.createObjectURL(e))
   })
   // Save data to state
-  product.FILL_TAB_INFO({
-    name: input.name,
-    sku: input.sku,
-    department: input.department,
-    description: input.description,
-    images: stateImage.value,
-    brand: input.brand,
-  })
+  product.FILL_TAB_INFO({ ...inputs, images: stateImage.value })
 
   await sleep()
   isSubmitting.value = false

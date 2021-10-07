@@ -13,14 +13,13 @@ const isUpdating = ref(false)
 const options = ref<Array<string>>([])
 
 const onUpdate = async (inputs: any) => {
-  product.FILL_TAB_PRICE({
-    options: inputs.options,
-    price: inputs.price,
-  })
+  isSubmitting.value = true
+  product.FILL_TAB_PRICE(inputs)
   isSubmitting.value = false
   notyf.success('Product updated')
 }
 const onSubmit = async () => {
+  isSubmitting.value = true
   //Check required fields
   if (
     product.images.length > 0 &&
@@ -29,7 +28,7 @@ const onSubmit = async () => {
     product.description.length > 0 &&
     product.branches.length > 0
   ) {
-    notyf.success(`Product <b><u>${product.name}</u></b> created!`)
+    notyf.success(`Product <b><u>${product.name}</u></b> added!`)
     product.$dispose()
     product.$reset()
     await sleep(1500)
@@ -37,6 +36,7 @@ const onSubmit = async () => {
   } else {
     notyf.error('Please fill up required fields.')
   }
+  isSubmitting.value = false
 }
 onMounted(() => {
   options.value = product.options
