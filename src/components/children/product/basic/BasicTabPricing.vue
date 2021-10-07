@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from 'vue'
+import { onMounted, ref } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
 import { ProductPricingSchema } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/products/'
@@ -8,6 +8,9 @@ import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 const notyf = useNotyf()
 const product = useProductStore()
 const isSubmitting = ref(false)
+const isUpdating = ref(false)
+const isOpenModal = ref(false)
+const isLoadingTable = ref(false)
 const options = ref<Array<string>>([])
 const stateValue = product.GET_TAB_PRICE
 
@@ -17,7 +20,10 @@ const onUpdate = async (inputs: any) => {
     price: inputs.price,
   })
   isSubmitting.value = false
-  notyf.success('Updated')
+  notyf.success('Product updated')
+}
+const onSubmit = async () => {
+  notyf.success(`Product <b><u>${product.name}</u></b> created !`)
 }
 onMounted(() => {
   options.value = product.options
@@ -61,6 +67,7 @@ onMounted(() => {
         </VField>
       </div>
     </div>
+
     <div class="columns">
       <ValidationField
         v-slot="{ field }"
@@ -82,17 +89,29 @@ onMounted(() => {
         </div>
       </ValidationField>
     </div>
-    <VField class="fixed-buttons is-active">
+
+    <!-- Button -->
+    <VField class="fixed-buttons is-active two">
       <VControl class="fixed-buttons-inner">
         <VButton
+          color="info"
           type="submit"
+          :loading="isUpdating"
+          bold
+          fullwidth
+          raised
+        >
+          Update
+        </VButton>
+        <VButton
           color="primary"
           :loading="isSubmitting"
           bold
           fullwidth
           raised
+          @click="onSubmit"
         >
-          Save & Submit
+          Submit
         </VButton>
       </VControl>
     </VField>
