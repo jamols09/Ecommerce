@@ -3,11 +3,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import useNotyf from '/@src/composable/useNotyf'
-import type {
-  InventoryTabs,
-  Product,
-  ProductOptionsArray,
-} from '/@src/models/product'
+import type { InventoryTabs } from '/@src/models/product'
 
 pageTitle.value = 'Create Basic Item'
 
@@ -15,33 +11,6 @@ const router = useRouter()
 const notyf = useNotyf()
 const isLoading = ref(false)
 const selectedTab = ref<InventoryTabs>('info')
-const productOptions = ref<ProductOptionsArray>([])
-
-const product = reactive<Product>({
-  image: [],
-  sku: '',
-  name: null,
-  department: null,
-  description: 'Insert short description here.',
-  active: false,
-  discountable: false,
-  displayQuantity: false,
-  quantity: 0,
-  quantityWarn: 0,
-  price: 0,
-  tag: [],
-  gender: null,
-  weight: {
-    unit: null,
-    amount: 0,
-  },
-  dimension: {
-    unit: null,
-    length: 0,
-    width: 0,
-    height: 0,
-  },
-})
 
 const create = async () => {
   isLoading.value = true
