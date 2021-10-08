@@ -550,3 +550,17 @@ Please remember you have purchased a very affordable theme and you did not pay f
 You can find the version history [CHANGELOG.md](./CHANGELOG.md) file inside the Vuero-theme.zip folder or you can check the changelog on the theme's sale page.
 
 Once again, thank you so much for purchasing this theme. As I said at the beginning, we'd be glad to help you if you have any questions related to this theme. No guarantees, but we'll do our best to assist and support you. If you have a more general question relating to Vuero Vue3, you might consider opening a ticket and ask your question in the [Css Ninja support portal](https://support.cssninja.io/).
+
+## !!! Naming Conventions for Code Formalization !!!
+
+- Function
+  When declaring a function name add `on` at the beginning of function name. Example: `onSubmit`
+
+- Variable
+  When declaring an array name it as <b>plural</b>. Example `options`, `addresses`, `items`.
+  When declaring a boolean name add `is` at the beginning of the variable name. Example: `isSubmitting`, `isLoading`, `isCancelled`
+  When naming a variable with primitive type except as mentioned above name it as <b>singular</b>. Example: `name`, `branch`
+  When declaring a variable containing `two` or `more` words use <b>camel Casing</b>. Example: `isSubmitted`, `givenBy`, `lastItem`
+
+- Components
+  When calling a Vue Component containing `two` or `more` words use <b>Pascal Casing</b>. Example: `VTabs`, `CustomComponent`, `MyComponent`
