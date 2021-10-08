@@ -25,7 +25,7 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
   console.log(inputs)
   await sleep()
   isSubmitting.value = true
-  notyf.success(`Branch <b><u> ${inputs.name} </u></b> added.`)
+  notyf.success(`Customer <b><u> ${inputs.firstname} </u></b> added.`)
   isSubmitting.value = false
 }
 </script>
