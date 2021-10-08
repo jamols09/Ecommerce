@@ -344,7 +344,7 @@ const onGenerateComputation = async () => {
                       <div class="columns is-multiline">
                         <div class="column is-12">
                           <VField>
-                            <label> Item Codes </label>
+                            <label> Name - Code </label>
                             <VControl>
                               <Treeselect
                                 v-model="itemTree.value"
