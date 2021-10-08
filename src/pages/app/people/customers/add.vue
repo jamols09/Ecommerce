@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router'
 import { People, StatusArray } from '/@src/models/people'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { CustomerForm } from '/@src/schema/CustomerSchema'
+import sleep from '/@src/utils/sleep'
 
 pageTitle.value = 'Create Customer'
 
@@ -22,7 +23,7 @@ const headerName = computed((): string => {
 
 const onSubmit = async (inputs: typeof CustomerForm) => {
   console.log(inputs)
-  console.log(new Date(Date.now()))
+  await sleep()
   isSubmitting.value = true
   notyf.success(`Branch <b><u> ${inputs.name} </u></b> added.`)
   isSubmitting.value = false
