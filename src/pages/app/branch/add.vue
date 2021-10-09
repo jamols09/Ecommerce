@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { Branch } from '/@src/models/branch'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { BranchForm } from '/@src/schema/BranchSchema'
 import useNotyf from '/@src/composable/useNotyf'
 pageTitle.value = 'Create Branch'
 
+const notyf = useNotyf()
 const route = useRoute()
 const options = ref([])
 const isSubmitting = ref(false)
-const notyf = useNotyf()
 const autofill = ref('')
 const mobile = ref('')
 

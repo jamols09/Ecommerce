@@ -3,13 +3,15 @@ import { onMounted, reactive, ref, watchEffect } from 'vue'
 import { CustomerInfo } from '/@src/models/order'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { OrderCustomerForm } from '/@src/schema/OrderSchema'
+import { useOrderStore } from '/@src/state/piniaState/orderState'
+import useNotyf from '/@src/composable/useNotyf'
 
+const notyf = useNotyf()
 const isUpdating = ref(false)
 const autofill = ref<HTMLInputElement>()
-const address1 = ref('')
+const order = useOrderStore()
 
 let autocomplete: google.maps.places.Autocomplete
-
 const customer = reactive<CustomerInfo>({
   firstName: '',
   middleName: '',
@@ -18,6 +20,7 @@ const customer = reactive<CustomerInfo>({
   stateRegion: '',
   province: '',
   city: '',
+  barangay: '',
   line1: '',
   line2: '',
   mobile: '',
@@ -28,16 +31,16 @@ const customer = reactive<CustomerInfo>({
 //fill inputs fields from google result
 const fillForm = () => {
   let place = autocomplete.getPlace()
+  const street = ref('')
   for (const data of place.address_components as google.maps.GeocoderAddressComponent[]) {
     const componentType = data.types[0]
-    console.log(componentType)
     switch (componentType) {
       case 'street_number': {
-        address1.value = `${data.long_name} ${address1.value}`
+        street.value = `${data.long_name} ${street.value}`
         break
       }
       case 'route': {
-        customer.line1 = address1.value + data.short_name
+        customer.line1 = street.value + data.short_name
         break
       }
       case 'locality': {
@@ -66,8 +69,12 @@ onMounted(() => {
   autocomplete = new google.maps.places.Autocomplete(autofill.value!, options)
   autocomplete.addListener('place_changed', fillForm)
 })
+
 const onUpdate = (inputs: any) => {
   const data = OrderCustomerForm.cast(inputs)
+  order.FILL_CUSTOMER_INFO(data)
+  notyf.success(`Customer order updated.`)
+  console.table(order.GET_CUSTOMER_INFO)
 }
 </script>
 
@@ -271,6 +278,29 @@ const onUpdate = (inputs: any) => {
       </ValidationField>
 
       <ValidationField
+        v-model="customer.barangay"
+        :validate-on-input="false"
+        name="barangay"
+      >
+        <!-- Address line 1 -->
+        <div class="column is-6">
+          <VField>
+            <label>Barangay *</label>
+            <VControl icon="ic:baseline-drive-file-rename-outline">
+              <input
+                v-model="customer.barangay"
+                type="text"
+                class="input is-info-focus"
+              />
+              <p v-if="errors.barangay" class="help is-danger">
+                <b>{{ errors.barangay }}</b>
+              </p>
+            </VControl>
+          </VField>
+        </div>
+      </ValidationField>
+
+      <ValidationField
         v-model="customer.line1"
         :validate-on-input="false"
         name="line1"
@@ -293,28 +323,35 @@ const onUpdate = (inputs: any) => {
         </div>
       </ValidationField>
 
-      <!-- Address line 2 -->
-      <div class="column is-6">
-        <VField>
-          <label>Line 2</label>
-          <VControl icon="ic:baseline-drive-file-rename-outline">
-            <input
-              v-model="customer.line2"
-              type="text"
-              class="input is-info-focus"
-            />
-            <p v-if="errors.line2" class="help is-danger">
-              <b>{{ errors.line2 }}</b>
-            </p>
-          </VControl>
-        </VField>
-      </div>
+      <ValidationField
+        v-model="customer.line2"
+        :validate-on-input="false"
+        name="line2"
+      >
+        <!-- Address line 2 -->
+        <div class="column is-6">
+          <VField>
+            <label>Line 2</label>
+            <VControl icon="ic:baseline-drive-file-rename-outline">
+              <input
+                v-model="customer.line2"
+                type="text"
+                class="input is-info-focus"
+              />
+              <p v-if="errors.line2" class="help is-danger">
+                <b>{{ errors.line2 }}</b>
+              </p>
+            </VControl>
+          </VField>
+        </div>
+      </ValidationField>
 
       <ValidationField
         v-model="customer.postal"
         :validate-on-input="false"
         name="postal"
       >
+        <!-- Postal -->
         <div class="column is-6">
           <VField>
             <label>Postal *</label>
@@ -342,42 +379,55 @@ const onUpdate = (inputs: any) => {
       </h4>
     </div>
     <div class="columns is-multiline">
-      <!-- Mobile -->
-      <div class="column is-6">
-        <VField>
-          <label> Mobile </label>
-          <VControl icon="ph:device-mobile">
-            <VIMaskInput
-              v-model="customer.mobile"
-              class="input"
-              :options="{
-                mask: '{63} 0 000 000 000',
-              }"
-              placeholder="+63 9 000-000-000"
-            />
+      <ValidationField
+        v-model="customer.mobile"
+        :validate-on-input="false"
+        name="mobile"
+      >
+        <!-- Mobile -->
+        <div class="column is-6">
+          <VField>
+            <label> Mobile </label>
+            <VControl icon="ph:device-mobile">
+              <VIMaskInput
+                v-model="customer.mobile"
+                class="input"
+                :options="{
+                  mask: '{63} 0 000 000 000',
+                }"
+                placeholder="+63 9 000-000-000"
+              />
 
-            <p v-if="errors.mobile" class="help is-danger">
-              <b>{{ errors.mobile }}</b>
-            </p>
-          </VControl>
-        </VField>
-      </div>
-      <!-- Telephone -->
-      <div class="column is-6">
-        <VField>
-          <label> Telephone </label>
-          <VControl icon="ion:ios-telephone-outline">
-            <input
-              v-model="customer.telephone"
-              type="text"
-              class="input is-info-focus"
-            />
-            <p v-if="errors.telephone" class="help is-danger">
-              <b>{{ errors.telephone }}</b>
-            </p>
-          </VControl>
-        </VField>
-      </div>
+              <p v-if="errors.mobile" class="help is-danger">
+                <b>{{ errors.mobile }}</b>
+              </p>
+            </VControl>
+          </VField>
+        </div>
+      </ValidationField>
+
+      <ValidationField
+        v-model="customer.telephone"
+        :validate-on-input="false"
+        name="telephone"
+      >
+        <!-- Telephone -->
+        <div class="column is-6">
+          <VField>
+            <label> Telephone </label>
+            <VControl icon="ion:ios-telephone-outline">
+              <input
+                v-model="customer.telephone"
+                type="text"
+                class="input is-info-focus"
+              />
+              <p v-if="errors.telephone" class="help is-danger">
+                <b>{{ errors.telephone }}</b>
+              </p>
+            </VControl>
+          </VField>
+        </div>
+      </ValidationField>
     </div>
 
     <!-- Button -->

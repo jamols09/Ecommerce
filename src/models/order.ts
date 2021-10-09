@@ -12,11 +12,12 @@ export interface CustomerInfo {
   stateRegion: string
   province: string
   city: string
+  barangay: string
   line1: string
   line2?: string
-  mobile?: string
+  mobile: string
   telephone?: string
-  postal?: number | null
+  postal?: string | null
 }
 export interface OrderItems {
   code: string

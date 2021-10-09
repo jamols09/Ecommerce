@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
 
 interface Order {
-  firstname: string
-  middlename: string
-  lastname: string
+  firstName: string
+  middleName: string
+  lastName: string
   country: string
   stateRegion: string
   province: string
   city: string
-  addressLine1: string
-  addressLine2: string
+  barangay: string
+  line1: string
+  line2: string
   postal: number
   mobile: string
   telephone: string
@@ -18,15 +19,16 @@ interface Order {
 export const useOrderStore = defineStore('order', {
   state: () =>
     ({
-      firstname: '',
-      middlename: '',
-      lastname: '',
+      firstName: '',
+      middleName: '',
+      lastName: '',
       country: '',
       stateRegion: '',
       province: '',
       city: '',
-      addressLine1: '',
-      addressLine2: '',
+      barangay: '',
+      line1: '',
+      line2: '',
       postal: 0,
       mobile: '',
       telephone: '',
@@ -34,15 +36,16 @@ export const useOrderStore = defineStore('order', {
 
   getters: {
     GET_CUSTOMER_INFO: (state) => ({
-      firstname: state.firstname,
-      middlename: state.middlename,
-      lastname: state.lastname,
+      firstname: state.firstName,
+      middlename: state.middleName,
+      lastname: state.lastName,
       country: state.country,
       stateRegion: state.stateRegion,
       province: state.province,
+      barangay: state.barangay,
       city: state.city,
-      addressLine1: state.addressLine1,
-      addressLine2: state.addressLine2,
+      line1: state.line1,
+      line2: state.line2,
       postal: 0,
       mobile: state.mobile,
       telephone: state.telephone,
@@ -51,18 +54,19 @@ export const useOrderStore = defineStore('order', {
 
   actions: {
     FILL_CUSTOMER_INFO(data: any) {
-      this.firstname
-      this.middlename
-      this.lastname
-      this.country
-      this.stateRegion
-      this.province
-      this.city
-      this.addressLine1
-      this.addressLine2
-      this.postal
-      this.mobile
-      this.telephone
+      ;(this.firstName = data.firstName),
+        (this.middleName = data.middleName),
+        (this.lastName = data.lastName),
+        (this.country = data.country),
+        (this.stateRegion = data.stateRegion),
+        (this.province = data.province),
+        (this.city = data.city),
+        (this.barangay = data.barangay),
+        (this.line1 = data.line1),
+        (this.line2 = data.line2),
+        (this.postal = data.postal),
+        (this.mobile = data.mobile),
+        (this.telephone = data.telephone)
     },
   },
 })
