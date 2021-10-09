@@ -175,6 +175,20 @@ var {
   }
 }
 
+.has-slimscroll-h {
+  overflow-y: hidden;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 6px !important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+  }
+}
+
 .has-slimscroll-sm {
   &::-webkit-scrollbar {
     width: 3px !important;
