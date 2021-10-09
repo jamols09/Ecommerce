@@ -12,7 +12,7 @@ import {
 } from '/@src/static/product'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { ProductSpecsForm } from '/@src/schema/ProductSchema'
-import { useProductStore } from '/@src/state/products/'
+import { useProductStore } from '/@src/state/piniaState/productState'
 import useNotyf from '/@src/composable/useNotyf'
 import sleep from '/@src/utils/sleep'
 

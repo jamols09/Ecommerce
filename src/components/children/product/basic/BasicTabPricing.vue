@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
 import { ProductPricingForm } from '/@src/schema/ProductSchema'
-import { useProductStore } from '/@src/state/products/'
+import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import sleep from '/@src/utils/sleep'
 
