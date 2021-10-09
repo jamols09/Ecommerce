@@ -1,9 +1,14 @@
 import * as yup from 'yup'
 
+const telError = {
+  message: 'Invalid format',
+  excludeEmptyString: true,
+}
+
 const BranchSchema = yup.object().shape({
   name: yup.string().nullable().required('Branch name is required'),
   code: yup.string().min(4).nullable().notRequired(),
-  telephone: yup.string().nullable().notRequired(),
+  telephone: yup.string().matches(new RegExp('^[0-9- ]{7,14}$'), telError),
   mobile: yup.string().nullable().notRequired(),
   country: yup.string().nullable().required('Coutry is required'),
   regionState: yup
@@ -21,6 +26,7 @@ const BranchSchema = yup.object().shape({
   postal: yup.string().nullable().notRequired(),
   longitude: yup.string().nullable().notRequired(),
   latitude: yup.string().nullable().notRequired(),
+  options: yup.array(yup.string()),
 })
 
 export const BranchForm = BranchSchema.pick([

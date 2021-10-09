@@ -13,6 +13,7 @@ const options = ref([])
 const isSubmitting = ref(false)
 const notyf = useNotyf()
 const autofill = ref('')
+const mobile = ref('')
 
 const branch = reactive<Branch>({
   name: '',
@@ -43,6 +44,8 @@ const headerName = computed((): string => {
 const onSubmit = async (inputs: any) => {
   console.log(inputs)
   isSubmitting.value = true
+  //api call
+  //error
   notyf.success(`Branch <b><u> ${inputs.name} </u></b> added.`)
   isSubmitting.value = false
 }
@@ -131,23 +134,29 @@ const onSubmit = async (inputs: any) => {
                 </div>
                 <!-- Branch Code -->
                 <div class="column is-6">
-                  <V-Field>
-                    <VueTooltip
-                      label="Define the code for branch. Required and must be unique."
-                      abbreviation
-                      :multiline="true"
-                      size="is-small"
-                      class="light-text"
-                      >Code</VueTooltip
-                    >
-                    <V-Control icon="mdi:code-braces">
-                      <input
-                        v-model="branch.code"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="code"
+                  >
+                    <V-Field>
+                      <VueTooltip
+                        label="Define the code for branch. Required and must be unique."
+                        abbreviation
+                        :multiline="true"
+                        size="is-small"
+                        class="light-text"
+                        >Code</VueTooltip
+                      >
+                      <V-Control icon="mdi:code-braces">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
               </div>
               <!-- Basic Details -->
@@ -177,147 +186,195 @@ const onSubmit = async (inputs: any) => {
               <div class="columns is-multiline">
                 <!-- Branch Country -->
                 <div class="column is-6">
-                  <V-Field>
-                    <label>Country *</label>
-                    <V-Control icon="ic:baseline-drive-file-rename-outline">
-                      <input
-                        v-model="branch.address.country"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.country" class="help is-danger">
-                        <b>{{ errors.country }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="country"
+                  >
+                    <V-Field>
+                      <label>Country *</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.country" class="help is-danger">
+                          <b>{{ errors.country }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
                 <!-- Branch Region / State -->
                 <div class="column is-6">
-                  <V-Field>
-                    <label>Region / State *</label>
-                    <V-Control icon="ic:baseline-drive-file-rename-outline">
-                      <input
-                        v-model="branch.address.regionState"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.regionState" class="help is-danger">
-                        <b>{{ errors.regionState }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="regionState"
+                  >
+                    <V-Field>
+                      <label>Region / State *</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.regionState" class="help is-danger">
+                          <b>{{ errors.regionState }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
                 <!-- Branch City -->
                 <div class="column is-6">
-                  <V-Field>
-                    <label>City *</label>
-                    <V-Control icon="ic:baseline-drive-file-rename-outline">
-                      <input
-                        v-model="branch.address.city"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.city" class="help is-danger">
-                        <b>{{ errors.city }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="city"
+                  >
+                    <V-Field>
+                      <label>City *</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.city" class="help is-danger">
+                          <b>{{ errors.city }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
                 <!-- Branch Address Line 1 -->
                 <div class="column is-6">
-                  <V-Field>
-                    <VueTooltip
-                      label="Primary Address (Street Addr, House #, etc..)"
-                      abbreviation
-                      :multiline="true"
-                      size="is-small"
-                      class="light-text"
-                    >
-                      Address Line 1 *
-                    </VueTooltip>
-                    <V-Control icon="ic:baseline-drive-file-rename-outline">
-                      <input
-                        v-model="branch.address.addressLine1"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.addressLine1" class="help is-danger">
-                        <b>{{ errors.addressLine1 }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="addressLine1"
+                  >
+                    <V-Field>
+                      <VueTooltip
+                        label="Primary Address (Street Addr, House #, etc..)"
+                        abbreviation
+                        :multiline="true"
+                        size="is-small"
+                        class="light-text"
+                      >
+                        Address Line 1 *
+                      </VueTooltip>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.addressLine1" class="help is-danger">
+                          <b>{{ errors.addressLine1 }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
                 <!-- Branch Address Line 2 -->
                 <div class="column is-6">
-                  <V-Field>
-                    <VueTooltip
-                      label="Secondary Address (Apartment, Unit, Bldg. floor, etc..)"
-                      abbreviation
-                      :multiline="true"
-                      size="is-small"
-                      class="light-text"
-                    >
-                      Address Line 2
-                    </VueTooltip>
-                    <V-Control icon="ic:baseline-drive-file-rename-outline">
-                      <input
-                        v-model="branch.address.addressLine2"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.addressLine2" class="help is-danger">
-                        <b>{{ errors.addressLine2 }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="addressLine2"
+                  >
+                    <V-Field>
+                      <VueTooltip
+                        label="Secondary Address (Apartment, Unit, Bldg. floor, etc..)"
+                        abbreviation
+                        :multiline="true"
+                        size="is-small"
+                        class="light-text"
+                      >
+                        Address Line 2
+                      </VueTooltip>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.addressLine2" class="help is-danger">
+                          <b>{{ errors.addressLine2 }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
                 <!-- Branch Postal / Zip -->
                 <div class="column is-6">
-                  <V-Field>
-                    <label>Postal / Zip</label>
-                    <V-Control icon="ic:baseline-drive-file-rename-outline">
-                      <input
-                        v-model="branch.address.postal"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.postal" class="help is-danger">
-                        <b>{{ errors.postal }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="postal"
+                  >
+                    <V-Field>
+                      <label>Postal / Zip</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.postal" class="help is-danger">
+                          <b>{{ errors.postal }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
                 <!-- Branch Longitude -->
                 <div class="column is-6">
-                  <V-Field>
-                    <label>Longitude</label>
-                    <V-Control icon="ic:baseline-drive-file-rename-outline">
-                      <input
-                        v-model="branch.address.geolocation.longitude"
-                        type="number"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.longitude" class="help is-danger">
-                        <b>{{ errors.longitude }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="longitude"
+                  >
+                    <V-Field>
+                      <label>Longitude</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="number"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.longitude" class="help is-danger">
+                          <b>{{ errors.longitude }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
                 <!-- Branch Latitude -->
                 <div class="column is-6">
-                  <V-Field>
-                    <label>Latitude</label>
-                    <V-Control icon="ic:baseline-drive-file-rename-outline">
-                      <input
-                        v-model="branch.address.geolocation.latitude"
-                        type="number"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.latitude" class="help is-danger">
-                        <b>{{ errors.latitude }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="latitude"
+                  >
+                    <V-Field>
+                      <label>Latitude</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="number"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.latitude" class="help is-danger">
+                          <b>{{ errors.latitude }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
               </div>
 
@@ -333,34 +390,49 @@ const onSubmit = async (inputs: any) => {
               <div class="columns is-multiline">
                 <!-- Branch Telephone -->
                 <div class="column is-6">
-                  <V-Field>
-                    <label>Telephone</label>
-                    <V-Control icon="ion:ios-telephone-outline">
-                      <input
-                        v-model="branch.contact.telephone"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.telephone" class="help is-danger">
-                        <b>{{ errors.telephone }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="telephone"
+                  >
+                    <V-Field>
+                      <label>Telephone</label>
+                      <V-Control icon="ion:ios-telephone-outline">
+                        <input
+                          v-bind="field"
+                          type="number"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.telephone" class="help is-danger">
+                          <b>{{ errors.telephone }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
                 <div class="column is-6">
-                  <V-Field>
-                    <label>Mobile</label>
-                    <V-Control icon="ph:device-mobile">
-                      <input
-                        v-model="branch.contact.mobile"
-                        type="text"
-                        class="input is-info-focus"
-                      />
-                      <!-- <p v-if="errors.mobile" class="help is-danger">
-                        <b>{{ errors.mobile }}</b>
-                      </p> -->
-                    </V-Control>
-                  </V-Field>
+                  <ValidationField
+                    v-model="mobile"
+                    :validate-on-input="false"
+                    name="mobile"
+                  >
+                    <V-Field>
+                      <label>Mobile</label>
+                      <V-Control icon="ph:device-mobile">
+                        <VIMaskInput
+                          v-model="mobile"
+                          class="input"
+                          :options="{
+                            mask: '{63} 0 000 000 000',
+                          }"
+                          placeholder="(63) 9 000 000 000"
+                        />
+                        <p v-if="errors.mobile" class="help is-danger">
+                          <b>{{ errors.mobile }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
                 </div>
               </div>
             </div>
