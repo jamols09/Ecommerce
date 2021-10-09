@@ -16,8 +16,8 @@ const promo = reactive<Promo>({
   name: '',
   description: '',
   type: 'raw',
-  amount: 0,
-  quantity: 0,
+  amount: null,
+  quantity: null,
   requiredAmount: 0,
   repeat: 'every_month',
   date: {
