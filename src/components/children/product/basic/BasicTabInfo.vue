@@ -273,7 +273,8 @@ onMounted(() => {
 
     .carousel__item {
       min-height: 300px;
-      max-height: 650px;
+      max-height: 630px;
+      max-width: 600px;
       color: white;
       font-size: 20px;
       border-radius: 6px;
