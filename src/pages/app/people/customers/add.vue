@@ -22,7 +22,7 @@ const headerName = computed((): string => {
 })
 
 const onSubmit = async (inputs: typeof CustomerForm) => {
-  console.log(inputs)
+  console.table(inputs)
   await sleep()
   isSubmitting.value = true
   notyf.success(`Customer <b><u> ${inputs.firstname} </u></b> added.`)

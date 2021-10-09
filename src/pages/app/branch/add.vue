@@ -15,34 +15,13 @@ const notyf = useNotyf()
 const autofill = ref('')
 const mobile = ref('')
 
-const branch = reactive<Branch>({
-  name: '',
-  code: '',
-  contact: {
-    telephone: null,
-    mobile: null,
-  },
-  address: {
-    country: '',
-    regionState: '',
-    city: '',
-    addressLine1: '',
-    addressLine2: '',
-    postal: null,
-    geolocation: {
-      longitude: null,
-      latitude: null,
-    },
-  },
-})
-
 const headerName = computed((): string => {
   const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
   return name.charAt(0).toUpperCase() + name.slice(1)
 })
 
 const onSubmit = async (inputs: any) => {
-  console.log(inputs)
+  console.table(inputs)
   isSubmitting.value = true
   //api call
   //error
