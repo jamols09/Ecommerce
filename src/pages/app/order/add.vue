@@ -122,12 +122,6 @@ const onGenerateComputation = async () => {
         </div>
       </div>
     </div>
-    <!-- Fixed Save Buttons-->
-    <div class="fixed-buttons is-active">
-      <div class="fixed-buttons-inner">
-        <button class="is-info is-elevated button VButton">Save</button>
-      </div>
-    </div>
   </div>
 </template>
 
