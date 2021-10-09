@@ -404,7 +404,7 @@ const onSubmit = async (inputs: any) => {
                           :options="{
                             mask: '{63} 0 000 000 000',
                           }"
-                          placeholder="(63) 9 000 000 000"
+                          placeholder="+63 9 000-000-000"
                         />
                         <p v-if="errors.mobile" class="help is-danger">
                           <b>{{ errors.mobile }}</b>
