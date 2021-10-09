@@ -10,7 +10,7 @@ const BranchSchema = yup.object().shape({
   code: yup.string().min(4).nullable().notRequired(),
   telephone: yup.string().matches(new RegExp('^[0-9- ]{7,14}$'), telError),
   mobile: yup.string().nullable().notRequired(),
-  country: yup.string().nullable().required('Coutry is required'),
+  country: yup.string().nullable().required('Country is required'),
   regionState: yup.string().nullable().required('Region or state is required'),
   city: yup.string().nullable().required('City is required'),
   addressLine1: yup.string().nullable().required('Address line 1 is required'),
