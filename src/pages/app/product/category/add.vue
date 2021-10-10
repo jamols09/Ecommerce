@@ -58,9 +58,9 @@ const onSubmit = async (e: any) => {
                     :validate-on-input="false"
                     name="name"
                   >
-                    <V-Field>
+                    <VField>
                       <label> Name * </label>
-                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                      <VControl icon="ic:baseline-drive-file-rename-outline">
                         <input
                           v-bind="field"
                           type="text"
@@ -69,8 +69,8 @@ const onSubmit = async (e: any) => {
                         <p v-if="errors.name" class="help is-danger">
                           <b>{{ errors.name }}</b>
                         </p>
-                      </V-Control>
-                    </V-Field>
+                      </VControl>
+                    </VField>
                   </ValidationField>
                 </div>
                 <!-- Parent -->
@@ -80,7 +80,7 @@ const onSubmit = async (e: any) => {
                     :validate-on-input="false"
                     name="parent"
                   >
-                    <V-Field>
+                    <VField>
                       <label>
                         Parent
                         <VueTooltip
@@ -94,7 +94,7 @@ const onSubmit = async (e: any) => {
                           <b>?</b>
                         </VueTooltip>
                       </label>
-                      <V-Control>
+                      <VControl>
                         <Multiselect
                           v-model="parent.value"
                           :options="parent.options"
@@ -103,8 +103,8 @@ const onSubmit = async (e: any) => {
                         <p v-if="errors.parent" class="help is-danger">
                           <b>{{ errors.parent }}</b>
                         </p>
-                      </V-Control>
-                    </V-Field>
+                      </VControl>
+                    </VField>
                   </ValidationField>
                 </div>
               </div>
