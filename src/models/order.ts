@@ -13,6 +13,10 @@ interface ProductOrdered {
   value: string
   label: string
 }
+interface BranchOrdered {
+  id: string
+  name: string
+}
 export interface CustomerInfo {
   firstName: string
   middleName?: string
@@ -29,12 +33,19 @@ export interface CustomerInfo {
   postal?: string | null
 }
 export interface OrderItems {
-  id: ProductOrdered
-  label?: string
+  value: string
+  label: string
   quantity: number
+  bvalue: string
+  blabel: string
 }
 export interface ProductDropdown {
   options: Array<Options>
   value: null | ProductOrdered
 }
+export interface BranchItems {
+  value: string
+  label: string
+}
 export type OrderItemsArray = OrderItems[]
+export type BranchItemsArray = BranchItems[]

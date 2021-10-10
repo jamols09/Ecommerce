@@ -29,6 +29,10 @@ interface Branch {
   _id: number
   quantity: number
 }
+interface BranchObj {
+  label: string
+  value: string
+}
 export interface Options {
   id?: string | number
   label: string
@@ -41,7 +45,7 @@ export interface TagsDropdown {
 }
 export interface GeneralDropdown {
   options: Array<Options>
-  value: Array<string> | null
+  value: Array<string> | null | Array<object>
 }
 export interface DimensionDropdown {
   options: Array<Options>
@@ -50,6 +54,10 @@ export interface DimensionDropdown {
 export interface WeightDropdown {
   options: Array<Options>
   value: WeightUnit
+}
+export interface BranchDropdown {
+  options: Array<Options>
+  value: BranchObj | null
 }
 export interface Product {
   active: boolean
