@@ -2,12 +2,7 @@
 import { popovers } from '/@src/data/users/userPopovers'
 import { ref, reactive, computed } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import type {
-  OrderTabs,
-  CustomerInfo,
-  OrderItemsArray,
-} from '/@src/models/order'
-import sleep from '/@src/utils/sleep'
+import type { OrderTabs } from '/@src/models/order'
 import useNotyf from '/@src/composable/useNotyf'
 
 pageTitle.value = 'Create Order'
@@ -15,20 +10,7 @@ pageTitle.value = 'Create Order'
 const notyf = useNotyf()
 const autofill = ref('')
 const selected = ref<OrderTabs>('customer')
-const customer = reactive<CustomerInfo>({
-  firstName: '',
-  middleName: '',
-  lastName: '',
-  country: '',
-  stateRegion: '',
-  province: '',
-  city: '',
-  line1: '',
-  line2: '',
-  mobile: '',
-  telephone: '',
-  postal: null,
-})
+
 //should do axios call
 const itemTree = reactive({
   options: [
@@ -52,26 +34,6 @@ const itemTree = reactive({
   ],
   value: null,
 })
-
-const isLoadingCalc = ref(false)
-const orderItem = reactive<OrderItemsArray>([])
-const isAdd = computed(() => itemTree.value === null)
-const isGenerateComp = computed(() => orderItem.length < 1)
-const onAddItem = () => {
-  itemTree.value !== null
-    ? orderItem.push({ code: itemTree.value, quantity: 1 })
-    : false
-}
-const onRemoveItem = async (e: number) => {
-  orderItem.splice(e, 1)
-}
-const onGenerateComputation = async () => {
-  isLoadingCalc.value = true
-  await sleep()
-  isLoadingCalc.value = false
-  notyf.success('Items computation generated.')
-  selected.value = 'computation'
-}
 </script>
 
 <template>
@@ -113,7 +75,7 @@ const onGenerateComputation = async () => {
                   <template #tab="{ activeValue }">
                     <CustomerTab v-if="activeValue === 'customer'" />
                     <ProductTab v-else-if="activeValue === 'product'" />
-                    <Computation v-else-if="activeValue === 'computation'" />
+                    <ComputationTab v-else-if="activeValue === 'computation'" />
                   </template>
                 </VTabs>
               </div>
