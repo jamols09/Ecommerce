@@ -4,6 +4,15 @@
 
 export type OrderTabs = 'customer' | 'item' | 'computation'
 
+interface Options {
+  id?: string | number
+  label: string
+  value?: string | number
+}
+interface ProductOrdered {
+  value: string
+  label: string
+}
 export interface CustomerInfo {
   firstName: string
   middleName?: string
@@ -20,8 +29,12 @@ export interface CustomerInfo {
   postal?: string | null
 }
 export interface OrderItems {
-  code: string
+  id: ProductOrdered
+  label?: string
   quantity: number
 }
-
+export interface ProductDropdown {
+  options: Array<Options>
+  value: null | ProductOrdered
+}
 export type OrderItemsArray = OrderItems[]
