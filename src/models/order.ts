@@ -27,10 +27,10 @@ export interface CustomerInfo {
   city: string
   barangay: string
   line1: string
-  line2?: string
+  line2: string
   mobile: string
-  telephone?: string
-  postal?: string | null
+  telephone: string
+  postal: number | null
 }
 export interface OrderItems {
   value: string

@@ -11,7 +11,7 @@ interface Order {
   barangay: string
   line1: string
   line2: string
-  postal: number
+  postal: number | null
   mobile: string
   telephone: string
 }
@@ -36,9 +36,9 @@ export const useOrderStore = defineStore('order', {
 
   getters: {
     GET_CUSTOMER_INFO: (state) => ({
-      firstname: state.firstName,
-      middlename: state.middleName,
-      lastname: state.lastName,
+      firstName: state.firstName,
+      middleName: state.middleName,
+      lastName: state.lastName,
       country: state.country,
       stateRegion: state.stateRegion,
       province: state.province,
@@ -46,7 +46,7 @@ export const useOrderStore = defineStore('order', {
       city: state.city,
       line1: state.line1,
       line2: state.line2,
-      postal: 0,
+      postal: state.postal,
       mobile: state.mobile,
       telephone: state.telephone,
     }),

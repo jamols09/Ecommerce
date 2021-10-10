@@ -8,6 +8,7 @@ import useNotyf from '/@src/composable/useNotyf'
 
 const notyf = useNotyf()
 const isUpdating = ref(false)
+const isDisabled = ref(true)
 const autofill = ref<HTMLInputElement>()
 const order = useOrderStore()
 
@@ -25,7 +26,7 @@ const customer = reactive<CustomerInfo>({
   line2: '',
   mobile: '',
   telephone: '',
-  postal: '',
+  postal: null,
 })
 
 //fill inputs fields from google result
@@ -57,6 +58,7 @@ const fillForm = () => {
         customer.country = data.long_name
         break
     }
+    isDisabled.value = false
   }
 }
 
@@ -68,6 +70,21 @@ onMounted(() => {
   }
   autocomplete = new google.maps.places.Autocomplete(autofill.value!, options)
   autocomplete.addListener('place_changed', fillForm)
+  //state
+  const data = order.GET_CUSTOMER_INFO
+  customer.firstName = data.firstName
+  customer.middleName = data.middleName
+  customer.lastName = data.lastName
+  customer.country = data.country
+  customer.stateRegion = data.stateRegion
+  customer.province = data.province
+  customer.barangay = data.barangay
+  customer.city = data.city
+  customer.line1 = data.line1
+  customer.line2 = data.line2
+  customer.postal = data.postal
+  customer.mobile = data.mobile
+  customer.telephone = data.telephone
 })
 
 const onUpdate = (inputs: any) => {
@@ -106,6 +123,7 @@ const onUpdate = (inputs: any) => {
     <div class="columns is-multiline">
       <ValidationField
         v-slot="{ field }"
+        v-model="customer.firstName"
         :validate-on-input="false"
         name="firstName"
       >
@@ -125,6 +143,7 @@ const onUpdate = (inputs: any) => {
 
       <ValidationField
         v-slot="{ field }"
+        v-model="customer.middleName"
         :validate-on-input="false"
         name="middleName"
       >
@@ -144,6 +163,7 @@ const onUpdate = (inputs: any) => {
 
       <ValidationField
         v-slot="{ field }"
+        v-model="customer.lastName"
         :validate-on-input="false"
         name="lastName"
       >
@@ -161,6 +181,7 @@ const onUpdate = (inputs: any) => {
         </div>
       </ValidationField>
     </div>
+
     <!-- Address Details -->
     <div class="fieldset-heading mb-5">
       <h4
@@ -170,6 +191,7 @@ const onUpdate = (inputs: any) => {
         Location
       </h4>
     </div>
+
     <div class="columns is-multiline">
       <!-- Autofill -->
       <div class="column is-12">
@@ -181,7 +203,7 @@ const onUpdate = (inputs: any) => {
               name="autofill"
               type="text"
               class="input is-info-focus"
-              placeholder="Autofill"
+              placeholder="Type your address to autofill up"
               autocomplete="off"
             />
           </VControl>
@@ -199,7 +221,12 @@ const onUpdate = (inputs: any) => {
           <VField>
             <label>Country *</label>
             <VControl icon="ic:baseline-drive-file-rename-outline">
-              <input v-bind="field" type="text" class="input is-info-focus" />
+              <input
+                v-bind="field"
+                :disabled="isDisabled"
+                type="text"
+                class="input is-info-focus"
+              />
               <p v-if="errors.country" class="help is-danger">
                 <b>{{ errors.country }}</b>
               </p>
@@ -220,6 +247,7 @@ const onUpdate = (inputs: any) => {
             <VControl icon="ic:baseline-drive-file-rename-outline">
               <input
                 v-model="customer.stateRegion"
+                :disabled="isDisabled"
                 type="text"
                 class="input is-info-focus"
               />
@@ -243,6 +271,7 @@ const onUpdate = (inputs: any) => {
             <VControl icon="ic:baseline-drive-file-rename-outline">
               <input
                 v-model="customer.province"
+                :disabled="isDisabled"
                 type="text"
                 class="input is-info-focus"
               />
@@ -266,6 +295,7 @@ const onUpdate = (inputs: any) => {
             <VControl icon="ic:baseline-drive-file-rename-outline">
               <input
                 v-model="customer.city"
+                :disabled="isDisabled"
                 type="text"
                 class="input is-info-focus"
               />
@@ -289,6 +319,7 @@ const onUpdate = (inputs: any) => {
             <VControl icon="ic:baseline-drive-file-rename-outline">
               <input
                 v-model="customer.barangay"
+                :disabled="isDisabled"
                 type="text"
                 class="input is-info-focus"
               />
@@ -312,6 +343,7 @@ const onUpdate = (inputs: any) => {
             <VControl icon="ic:baseline-drive-file-rename-outline">
               <input
                 v-model="customer.line1"
+                :disabled="isDisabled"
                 type="text"
                 class="input is-info-focus"
               />
@@ -335,6 +367,7 @@ const onUpdate = (inputs: any) => {
             <VControl icon="ic:baseline-drive-file-rename-outline">
               <input
                 v-model="customer.line2"
+                :disabled="isDisabled"
                 type="text"
                 class="input is-info-focus"
               />
@@ -358,6 +391,7 @@ const onUpdate = (inputs: any) => {
             <VControl icon="ic:baseline-drive-file-rename-outline">
               <input
                 v-model="customer.postal"
+                :disabled="isDisabled"
                 type="number"
                 class="input is-info-focus"
               />
