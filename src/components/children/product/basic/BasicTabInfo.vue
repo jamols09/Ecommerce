@@ -269,7 +269,7 @@ onMounted(() => {
     border-radius: 6px;
   }
   .carousel__slide {
-    padding: 10px;
+    padding: 50px;
 
     .carousel__item {
       min-height: 300px;
