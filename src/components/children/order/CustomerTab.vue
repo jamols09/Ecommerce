@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import useNotyf from '/@src/composable/useNotyf'
 import { computed, onMounted, ref } from 'vue'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { OrderCustomerForm } from '/@src/schema/OrderSchema'
 import { useOrderStore } from '/@src/state/piniaState/orderState'
-import useNotyf from '/@src/composable/useNotyf'
 
 const notyf = useNotyf()
-const isUpdating = ref(false)
-const isDisabled = ref(true)
-const autofill = ref<HTMLInputElement>()
 const order = useOrderStore()
+const isUpdating = ref(false)
+const isDisabled = ref(false)
+const autofill = ref<HTMLInputElement>()
 
 let autocomplete: google.maps.places.Autocomplete
 const customer = computed(() => order.GET_CUSTOMER_INFO)
@@ -35,6 +35,10 @@ const fillForm = () => {
       }
       case 'locality': {
         customer.value.city = data.long_name
+      }
+      case 'country': {
+        customer.value.country = data.long_name
+        break
       }
       case 'administrative_area_level_1': {
         customer.value.stateRegion = data.short_name
