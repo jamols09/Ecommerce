@@ -13,21 +13,12 @@ const isUpdating = ref(false)
 const options = ref<Array<string>>([])
 
 const onUpdate = async (inputs: any) => {
-  isSubmitting.value = true
   product.FILL_TAB_PRICE(inputs)
-  isSubmitting.value = false
   notyf.success('Product updated')
 }
 const onSubmit = async () => {
   isSubmitting.value = true
-  //Check required fields
-  if (
-    product.images.length > 0 &&
-    product.department.length > 0 &&
-    product.name.length > 0 &&
-    product.description.length > 0 &&
-    product.branches.length > 0
-  ) {
+  if (product.IS_MISSING_FIELDS) {
     notyf.success(`Product <b><u>${product.name}</u></b> added.`)
     product.$dispose()
     product.$reset()
