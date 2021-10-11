@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { popovers } from '/@src/data/users/userPopovers'
 
-const hello = ref('world')
+const isUpdating = ref(false)
 </script>
 
 <template>
@@ -136,6 +136,22 @@ const hello = ref('world')
         </div>
       </div>
     </div>
+
+    <!-- Button -->
+    <VField class="fixed-buttons is-active">
+      <VControl class="fixed-buttons-inner">
+        <VButton
+          color="primary"
+          type="submit"
+          :loading="isUpdating"
+          bold
+          fullwidth
+          raised
+        >
+          Submit
+        </VButton>
+      </VControl>
+    </VField>
   </div>
 </template>
 <style lang="scss">
