@@ -86,5 +86,9 @@ export const useOrderStore = defineStore('order', {
     FILL_ITEMS_ORDER(data: any) {
       this.items.push(data)
     },
+
+    REMOVE_ITEM_ORDER(data: number) {
+      this.items.splice(data, 1)
+    },
   },
 })
