@@ -83,10 +83,6 @@ export const useOrderStore = defineStore('order', {
         (this.telephone = data.telephone)
     },
 
-    // FILL_ITEMS_ORDER(data: any) {
-    //   this.items = data
-    // },
-
     FILL_ITEMS_ORDER(data: any) {
       this.items.push(data)
     },
