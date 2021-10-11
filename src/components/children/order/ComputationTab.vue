@@ -138,3 +138,77 @@ const hello = ref('world')
     </div>
   </div>
 </template>
+<style lang="scss">
+/* Separated treeselect due to conflict */
+@import '../../../scss/extensions/_treeselect.scss';
+</style>
+<style scoped lang="scss">
+@import '../../../scss/abstracts/_variables.scss';
+@import '../../../scss/abstracts/_mixins.scss';
+@import '../../../scss/pages/generic/_forms.scss';
+
+/* ==========================================================================
+1. Invoice Normal mode
+========================================================================== */
+.flex-table {
+  &.sub-table {
+    .flex-table-item {
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-bottom: 0;
+      min-height: 40px;
+      border: none;
+
+      .table-label {
+        font-family: var(--font);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: var(--light-text);
+      }
+
+      .table-total {
+        font-family: var(--font);
+        color: var(--dark-text);
+        font-weight: 500;
+
+        &.is-bigger {
+          font-size: 1.2rem;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .flex-table-header {
+    span {
+      &:not(:first-child) {
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  .flex-table-item {
+    .flex-table-cell {
+      &:not(:first-child) {
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+2. Invoice Dark mode
+========================================================================== */
+.is-dark {
+  .flex-table {
+    .flex-table-item {
+      background: var(--dark-sidebar-light-4);
+    }
+    &.sub-table {
+      .flex-table-item {
+        background: var(--dark-sidebar-light-4);
+      }
+    }
+  }
+}
+</style>
