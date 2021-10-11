@@ -573,3 +573,4 @@ Once again, thank you so much for purchasing this theme. As I said at the beginn
   - `REMOVE_DEFINITION` - remove state value
     <b>Getters<b>
   - `GET_DEFINITION` - retrieve state value
+  - `IS_DEFINITION` - retrieve boolean state value
