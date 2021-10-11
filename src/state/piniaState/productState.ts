@@ -85,6 +85,24 @@ export const useProductStore = defineStore('product', {
       options: state.options,
       price: state.price,
     }),
+
+    IS_MISSING_FIELDS: (state) => {
+      console.log(
+        state.images.length,
+        state.department.length,
+        state.name.length,
+        state.description.length,
+        state.branches.length
+      )
+      return (
+        (state.images.length > 0 &&
+          state.department.length > 0 &&
+          state.name.length > 0 &&
+          state.description.length > 0 &&
+          state.branches.length > 0) ??
+        'false'
+      )
+    },
   },
 
   actions: {
