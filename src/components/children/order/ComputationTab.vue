@@ -1,8 +1,26 @@
 <script setup lang="ts">
+import useNotyf from '/@src/composable/useNotyf'
+import sleep from '/@src/utils/sleep'
 import { ref } from 'vue'
 import { popovers } from '/@src/data/users/userPopovers'
+import { useOrderStore } from '/@src/state/piniaState/orderState'
 
-const isUpdating = ref(false)
+const notyf = useNotyf()
+const order = useOrderStore()
+const isSubmitting = ref(false)
+const onSubmit = async () => {
+  if (order.IS_MISSING_FIELDS) {
+    notyf.success('Order added.')
+    order.$dispose()
+    order.$reset()
+    await sleep(1500)
+    location.reload()
+  } else {
+    //api call
+    //error
+    notyf.error('Please save data by pressing update.')
+  }
+}
 </script>
 
 <template>
@@ -142,11 +160,11 @@ const isUpdating = ref(false)
       <VControl class="fixed-buttons-inner">
         <VButton
           color="primary"
-          type="submit"
-          :loading="isUpdating"
+          :loading="isSubmitting"
           bold
           fullwidth
           raised
+          @click="onSubmit"
         >
           Submit
         </VButton>

@@ -64,6 +64,20 @@ export const useOrderStore = defineStore('order', {
     GET_ITEMS_ORDER: (state) => {
       return state.items
     },
+
+    IS_MISSING_FIELDS: (state) => {
+      return (
+        (state.firstName.length > 1 &&
+          state.country.length > 1 &&
+          state.stateRegion.length > 1 &&
+          state.province.length > 1 &&
+          state.city.length > 1 &&
+          state.line1.length > 1 &&
+          state.barangay.length > 1 &&
+          state.postal! > 0) ??
+        'false'
+      )
+    },
   },
 
   actions: {
