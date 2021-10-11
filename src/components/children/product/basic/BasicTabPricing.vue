@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
+import { onMounted, ref } from 'vue'
 import { ProductPricingForm } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
-import sleep from '/@src/utils/sleep'
 
 const notyf = useNotyf()
 const product = useProductStore()
@@ -28,13 +28,13 @@ const onSubmit = async () => {
     product.description.length > 0 &&
     product.branches.length > 0
   ) {
-    notyf.success(`Product <b><u>${product.name}</u></b> added!`)
+    notyf.success(`Product <b><u>${product.name}</u></b> added.`)
     product.$dispose()
     product.$reset()
     await sleep(1500)
     location.reload()
   } else {
-    notyf.error('Please fill up required fields.')
+    notyf.error('Please save data by pressing update.')
   }
   isSubmitting.value = false
 }

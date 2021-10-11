@@ -25,7 +25,7 @@ const onSubmit = async (e: any) => {
     //error
     notyf.success(`Category <b><u>${e.name}</u></b> added.`)
   } else {
-    notyf.error('Please fill up required fields.')
+    notyf.error('Please save data by pressing update.')
   }
   isSubmitting.value = false
 }

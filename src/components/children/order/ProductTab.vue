@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import useNotyf from '/@src/composable/useNotyf'
-import { computed, onMounted, reactive, ref, toRefs } from 'vue'
-import { OrderItemsArray, OrderTabs } from '/@src/models/order'
+import { computed, ref } from 'vue'
 import { products, branch } from '/@src/static/product'
 import { useOrderStore } from '/@src/state/piniaState/orderState'
 import sleep from '/@src/utils/sleep'
