@@ -564,3 +564,12 @@ Once again, thank you so much for purchasing this theme. As I said at the beginn
 
 - Components
   When calling a Vue Component containing `two` or `more` words use <b>Pascal Casing</b>. Example: `VTabs`, `CustomComponent`, `MyComponent`
+
+- State Management
+  Make all caps for defining state management function
+  <b>Actions<b>
+  - `FILL_DEFINITION` - add state value
+  - `UPDATE_DEFINITION` - update state value
+  - `REMOVE_DEFINITION` - remove state value
+    <b>Getters<b>
+  - `GET_DEFINITION` - retrieve state value
