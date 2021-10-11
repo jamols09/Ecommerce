@@ -1,5 +1,12 @@
 import { defineStore } from 'pinia'
 
+interface ItemsOrder {
+  value: string
+  label: string
+  quantity: number
+  bvalue: string
+  blabel: string
+}
 interface Order {
   firstName: string
   middleName: string
@@ -14,6 +21,8 @@ interface Order {
   postal: number | null
   mobile: string
   telephone: string
+
+  items: Array<ItemsOrder>
 }
 
 export const useOrderStore = defineStore('order', {
@@ -32,6 +41,7 @@ export const useOrderStore = defineStore('order', {
       postal: 0,
       mobile: '',
       telephone: '',
+      items: [],
     } as Order),
 
   getters: {
@@ -50,6 +60,10 @@ export const useOrderStore = defineStore('order', {
       mobile: state.mobile,
       telephone: state.telephone,
     }),
+
+    GET_ITEMS_ORDER: (state) => {
+      return state.items
+    },
   },
 
   actions: {
@@ -67,6 +81,14 @@ export const useOrderStore = defineStore('order', {
         (this.postal = data.postal),
         (this.mobile = data.mobile),
         (this.telephone = data.telephone)
+    },
+
+    // FILL_ITEMS_ORDER(data: any) {
+    //   this.items = data
+    // },
+
+    FILL_ITEMS_ORDER(data: any) {
+      this.items.push(data)
     },
   },
 })
