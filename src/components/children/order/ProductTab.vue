@@ -15,6 +15,8 @@ const isLoadingCalc = ref(false)
 
 const onGenerateComputation = async () => {
   isLoadingCalc.value = true
+  //api call
+  //error
   await sleep()
   isLoadingCalc.value = false
   notyf.success('Items computation generated.')
@@ -30,7 +32,7 @@ const onAddItem = () => {
     : false
 }
 const onRemoveItem = async (e: number) => {
-  orderItem.value.splice(e, 1)
+  order.REMOVE_ITEM_ORDER(e)
 }
 </script>
 

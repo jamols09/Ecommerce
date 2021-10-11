@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watchEffect } from 'vue'
-import { CustomerInfo } from '/@src/models/order'
+import { computed, onMounted, ref } from 'vue'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { OrderCustomerForm } from '/@src/schema/OrderSchema'
 import { useOrderStore } from '/@src/state/piniaState/orderState'
@@ -13,21 +12,7 @@ const autofill = ref<HTMLInputElement>()
 const order = useOrderStore()
 
 let autocomplete: google.maps.places.Autocomplete
-const customer = reactive<CustomerInfo>({
-  firstName: '',
-  middleName: '',
-  lastName: '',
-  country: '',
-  stateRegion: '',
-  province: '',
-  city: '',
-  barangay: '',
-  line1: '',
-  line2: '',
-  mobile: '',
-  telephone: '',
-  postal: null,
-})
+const customer = computed(() => order.GET_CUSTOMER_INFO)
 
 //fill inputs fields from google result
 const fillForm = () => {
@@ -36,27 +21,29 @@ const fillForm = () => {
   for (const data of place.address_components as google.maps.GeocoderAddressComponent[]) {
     const componentType = data.types[0]
     switch (componentType) {
+      case 'country': {
+        customer.value.country = data.long_name
+        break
+      }
       case 'street_number': {
         street.value = `${data.long_name} ${street.value}`
         break
       }
       case 'route': {
-        customer.line1 = street.value + data.short_name
+        customer.value.line1 = street.value + data.short_name
         break
       }
       case 'locality': {
-        customer.city = data.long_name
+        customer.value.city = data.long_name
       }
       case 'administrative_area_level_1': {
-        customer.stateRegion = data.short_name
+        customer.value.stateRegion = data.short_name
         break
       }
       case 'administrative_area_level_2': {
-        customer.province = data.long_name
-      }
-      case 'country':
-        customer.country = data.long_name
+        customer.value.province = data.long_name
         break
+      }
     }
     isDisabled.value = false
   }
@@ -70,21 +57,6 @@ onMounted(() => {
   }
   autocomplete = new google.maps.places.Autocomplete(autofill.value!, options)
   autocomplete.addListener('place_changed', fillForm)
-  //state
-  const data = order.GET_CUSTOMER_INFO
-  customer.firstName = data.firstName
-  customer.middleName = data.middleName
-  customer.lastName = data.lastName
-  customer.country = data.country
-  customer.stateRegion = data.stateRegion
-  customer.province = data.province
-  customer.barangay = data.barangay
-  customer.city = data.city
-  customer.line1 = data.line1
-  customer.line2 = data.line2
-  customer.postal = data.postal
-  customer.mobile = data.mobile
-  customer.telephone = data.telephone
 })
 
 const onUpdate = (inputs: any) => {
