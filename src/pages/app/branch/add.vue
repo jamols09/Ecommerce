@@ -1,297 +1,440 @@
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { Branch } from '/@src/models/branch'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
+import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
+import { BranchForm } from '/@src/schema/BranchSchema'
+import useNotyf from '/@src/composable/useNotyf'
 pageTitle.value = 'Create Branch'
 
-const branchOptions = ref<string[]>([])
-const branch = reactive<Branch>({
-  name: '',
-  code: '',
-  contact: {
-    telephone: null,
-    mobile: null,
-  },
-  address: {
-    country: '',
-    regionState: '',
-    city: '',
-    addressLine1: '',
-    addressLine2: '',
-    postal: null,
-    geolocation: {
-      longitude: null,
-      latitude: null,
-    },
-  },
-})
-
+const notyf = useNotyf()
 const route = useRoute()
+const options = ref([])
+const isSubmitting = ref(false)
+const autofill = ref('')
+const mobile = ref('')
+
 const headerName = computed((): string => {
   const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
   return name.charAt(0).toUpperCase() + name.slice(1)
 })
+
+const onSubmit = async (inputs: any) => {
+  console.table(inputs)
+  isSubmitting.value = true
+  //api call
+  //error
+  notyf.success(`Branch <b><u> ${inputs.name} </u></b> added.`)
+  isSubmitting.value = false
+}
 </script>
 
 <template>
-  <div class="page-content-inner">
-    <div class="form-layout is-stacked">
-      <div class="form-outer">
-        <div class="form-header">
-          <div class="form-header-inner">
-            <div class="left">
-              <h3>{{ headerName }}</h3>
+  <ValidationForm
+    v-slot="{ errors }"
+    :validation-schema="BranchForm"
+    @submit="onSubmit"
+  >
+    <div class="page-content-inner">
+      <div class="form-layout is-stacked">
+        <div class="form-outer">
+          <div class="form-header">
+            <div class="form-header-inner">
+              <div class="left">
+                <h3>{{ headerName }}</h3>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="form-body">
-          <div class="form-section is-grey">
-            <div class="columns is-multiline">
-              <div class="column is-12">
-                <V-Field>
-                  <V-Control>
-                    <V-Checkbox
-                      v-model="branchOptions"
-                      value="active"
-                      label="Active"
-                      color="info"
-                    />
-                    <VueTooltip
-                      label="Warning! This will affect all the inventory assigned to this branch."
-                      abbreviation
-                      :multiline="true"
-                      size="is-small"
-                      class="light-text mr-3"
-                      position="is-bottom"
-                    >
-                      <b>?</b>
-                    </VueTooltip>
-                  </V-Control>
-                </V-Field>
+          <div class="form-body">
+            <div class="form-section is-grey">
+              <div class="columns is-multiline">
+                <!-- Checkbox -->
+                <div class="column is-12">
+                  <V-Field>
+                    <V-Control>
+                      <ValidationField
+                        v-model="options"
+                        :validate-on-input="false"
+                        name="options"
+                      >
+                        <VCheckbox
+                          v-model="options"
+                          value="active"
+                          label="Active"
+                          color="info"
+                        />
+                        <VueTooltip
+                          label="Make products sellable in this branch"
+                          abbreviation
+                          :multiline="true"
+                          size="is-small"
+                          class="light-text mr-3"
+                          position="is-bottom"
+                        >
+                          <b>?</b>
+                        </VueTooltip>
+                      </ValidationField>
+                    </V-Control>
+                  </V-Field>
+                </div>
               </div>
-            </div>
-            <!-- Basic Details -->
-            <div class="fieldset-heading mb-5">
-              <h4
-                class="has-text-weight-semibold"
-                style="font-family: Montserrat, sans-serif"
-              >
-                Details
-              </h4>
-            </div>
-            <div class="columns is-multiline">
-              <!-- Branch Name -->
-              <div class="column is-6">
-                <V-Field>
-                  <label>Name</label>
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.name"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
+              <!-- Basic Details -->
+              <div class="fieldset-heading mb-5">
+                <h4
+                  class="has-text-weight-semibold"
+                  style="font-family: Montserrat, sans-serif"
+                >
+                  Details
+                </h4>
               </div>
-              <!-- Branch Code -->
-              <div class="column is-6">
-                <V-Field>
-                  <VueTooltip
-                    label="Define the code for branch. Required and must be unique."
-                    abbreviation
-                    :multiline="true"
-                    size="is-small"
-                    class="light-text"
-                    >Code</VueTooltip
+              <div class="columns is-multiline">
+                <!-- Branch Name -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="name"
                   >
-                  <V-Control icon="mdi:code-braces">
-                    <input
-                      v-model="branch.code"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
-              </div>
-            </div>
-            <!-- Basic Details -->
-            <div class="fieldset-heading mb-5">
-              <h4
-                class="has-text-weight-semibold"
-                style="font-family: Montserrat, sans-serif"
-              >
-                Address
-              </h4>
-            </div>
-            <div class="columns is-multiline">
-              <!-- Branch Country -->
-              <div class="column is-6">
-                <V-Field>
-                  <label>Country</label>
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.address.country"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
-              </div>
-              <!-- Branch Region / State -->
-              <div class="column is-6">
-                <V-Field>
-                  <label>Region / State</label>
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.address.regionState"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
-              </div>
-              <!-- Branch City -->
-              <div class="column is-6">
-                <V-Field>
-                  <label>City</label>
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.address.city"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
-              </div>
-              <!-- Branch Address Line 1 -->
-              <div class="column is-6">
-                <V-Field>
-                  <VueTooltip
-                    label="Primary Address (Street Addr, House #, etc..)"
-                    abbreviation
-                    :multiline="true"
-                    size="is-small"
-                    class="light-text"
-                    >Address Line 1</VueTooltip
+                    <V-Field>
+                      <label>Name *</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.name" class="help is-danger">
+                          <b>{{ errors.name }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch Code -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="code"
                   >
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.address.addressLine1"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
+                    <V-Field>
+                      <VueTooltip
+                        label="Define the code for branch. Required and must be unique."
+                        abbreviation
+                        :multiline="true"
+                        size="is-small"
+                        class="light-text"
+                        >Code</VueTooltip
+                      >
+                      <V-Control icon="mdi:code-braces">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
               </div>
-              <!-- Branch Address Line 2 -->
-              <div class="column is-6">
-                <V-Field>
-                  <VueTooltip
-                    label="Secondary Address (Apartment, Unit, Bldg. floor, etc..)"
-                    abbreviation
-                    :multiline="true"
-                    size="is-small"
-                    class="light-text"
-                    >Address Line 2 (optional)</VueTooltip
+              <!-- Basic Details -->
+              <div class="fieldset-heading mb-5">
+                <h4
+                  class="has-text-weight-semibold"
+                  style="font-family: Montserrat, sans-serif"
+                >
+                  Address
+                </h4>
+              </div>
+              <!-- Autofill -->
+              <div class="columns is-multiline">
+                <div class="column is-12">
+                  <VField>
+                    <VControl icon="ic:baseline-drive-file-rename-outline">
+                      <input
+                        v-model="autofill"
+                        type="text"
+                        class="input is-info-focus"
+                        placeholder="Autofill address"
+                      />
+                    </VControl>
+                  </VField>
+                </div>
+              </div>
+              <div class="columns is-multiline">
+                <!-- Branch Country -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="country"
                   >
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.address.addressLine2"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
+                    <V-Field>
+                      <label>Country *</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.country" class="help is-danger">
+                          <b>{{ errors.country }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch Region / State -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="regionState"
+                  >
+                    <V-Field>
+                      <label>Region / State *</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.regionState" class="help is-danger">
+                          <b>{{ errors.regionState }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch City -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="city"
+                  >
+                    <V-Field>
+                      <label>City *</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.city" class="help is-danger">
+                          <b>{{ errors.city }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch Address Line 1 -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="addressLine1"
+                  >
+                    <V-Field>
+                      <VueTooltip
+                        label="Primary Address (Street Addr, House #, etc..)"
+                        abbreviation
+                        :multiline="true"
+                        size="is-small"
+                        class="light-text"
+                      >
+                        Address Line 1 *
+                      </VueTooltip>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.addressLine1" class="help is-danger">
+                          <b>{{ errors.addressLine1 }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch Address Line 2 -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="addressLine2"
+                  >
+                    <V-Field>
+                      <VueTooltip
+                        label="Secondary Address (Apartment, Unit, Bldg. floor, etc..)"
+                        abbreviation
+                        :multiline="true"
+                        size="is-small"
+                        class="light-text"
+                      >
+                        Address Line 2
+                      </VueTooltip>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.addressLine2" class="help is-danger">
+                          <b>{{ errors.addressLine2 }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch Postal / Zip -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="postal"
+                  >
+                    <V-Field>
+                      <label>Postal / Zip</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.postal" class="help is-danger">
+                          <b>{{ errors.postal }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch Longitude -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="longitude"
+                  >
+                    <V-Field>
+                      <label>Longitude</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="number"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.longitude" class="help is-danger">
+                          <b>{{ errors.longitude }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch Latitude -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="latitude"
+                  >
+                    <V-Field>
+                      <label>Latitude</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="number"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.latitude" class="help is-danger">
+                          <b>{{ errors.latitude }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
               </div>
-              <!-- Branch Postal / Zip -->
-              <div class="column is-6">
-                <V-Field>
-                  <label>Postal / Zip</label>
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.address.postal"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
-              </div>
-              <!-- Branch Longitude -->
-              <div class="column is-6">
-                <V-Field>
-                  <label>Longitude</label>
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.address.geolocation.longitude"
-                      type="number"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
-              </div>
-              <!-- Branch Latitude -->
-              <div class="column is-6">
-                <V-Field>
-                  <label>Longitude</label>
-                  <V-Control icon="ic:baseline-drive-file-rename-outline">
-                    <input
-                      v-model="branch.address.geolocation.latitude"
-                      type="number"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
-              </div>
-            </div>
 
-            <!-- Basic Details -->
-            <div class="fieldset-heading mb-5">
-              <h4
-                class="has-text-weight-semibold"
-                style="font-family: Montserrat, sans-serif"
-              >
-                Contact
-              </h4>
-            </div>
-            <div class="columns is-multiline">
-              <!-- Branch Telephone -->
-              <div class="column is-6">
-                <V-Field>
-                  <label>Telephone</label>
-                  <V-Control icon="ion:ios-telephone-outline">
-                    <input
-                      v-model="branch.contact.telephone"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
+              <!-- Basic Details -->
+              <div class="fieldset-heading mb-5">
+                <h4
+                  class="has-text-weight-semibold"
+                  style="font-family: Montserrat, sans-serif"
+                >
+                  Contact
+                </h4>
               </div>
-              <div class="column is-6">
-                <V-Field>
-                  <label>Mobile</label>
-                  <V-Control icon="ph:device-mobile">
-                    <input
-                      v-model="branch.contact.mobile"
-                      type="text"
-                      class="input is-info-focus"
-                    />
-                  </V-Control>
-                </V-Field>
+              <div class="columns is-multiline">
+                <!-- Branch Telephone -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="telephone"
+                  >
+                    <V-Field>
+                      <label>Telephone</label>
+                      <V-Control icon="ion:ios-telephone-outline">
+                        <input
+                          v-bind="field"
+                          type="number"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.telephone" class="help is-danger">
+                          <b>{{ errors.telephone }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <div class="column is-6">
+                  <ValidationField
+                    v-model="mobile"
+                    :validate-on-input="false"
+                    name="mobile"
+                  >
+                    <V-Field>
+                      <label>Mobile</label>
+                      <V-Control icon="ph:device-mobile">
+                        <VIMaskInput
+                          v-model="mobile"
+                          class="input"
+                          :options="{
+                            mask: '{63} 0 000 000 000',
+                          }"
+                          placeholder="+63 9 000-000-000"
+                        />
+                        <p v-if="errors.mobile" class="help is-danger">
+                          <b>{{ errors.mobile }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- Fixed Save Buttons-->
-    <div class="fixed-buttons is-active">
-      <div class="fixed-buttons-inner">
-        <button class="is-info is-elevated button v-button">Save</button>
-      </div>
-    </div>
-  </div>
+
+    <!-- Button -->
+    <VField class="fixed-buttons is-active">
+      <VControl class="fixed-buttons-inner">
+        <VButton
+          type="submit"
+          color="primary"
+          :loading="isSubmitting"
+          bold
+          fullwidth
+          raised
+        >
+          Submit
+        </VButton>
+      </VControl>
+    </VField>
+  </ValidationForm>
 </template>
 
 <style lang="scss">

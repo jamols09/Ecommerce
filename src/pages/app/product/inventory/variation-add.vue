@@ -266,7 +266,9 @@ const create = async () => {
                       v-else-if="activeValue === 'table'"
                       class="columns is-multiline"
                     >
-                      <div class="column is-12 table-container">
+                      <div
+                        class="column is-12 table-container has-slimscroll-h"
+                      >
                         <table
                           class="table is-striped is-hoverable is-fullwidth"
                         >

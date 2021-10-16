@@ -1,9 +1,11 @@
 import { reactive } from 'vue'
+import { ProductDropdown } from '../models/order'
 import {
   DimensionDropdown,
   WeightDropdown,
   GeneralDropdown,
   TagsDropdown,
+  BranchDropdown,
 } from '../models/product'
 
 export const dimension = reactive<DimensionDropdown>({
@@ -30,7 +32,7 @@ export const department = reactive<GeneralDropdown>({
   ],
   value: null,
 })
-export const branch = reactive<GeneralDropdown>({
+export const branch = reactive<BranchDropdown>({
   options: [
     { value: '12340', label: 'Davao Branch' },
     { value: '1241', label: 'Cebu Branch' },
@@ -77,11 +79,34 @@ export const color = reactive<GeneralDropdown>({
   ],
   value: [],
 })
+export const parent = reactive<GeneralDropdown>({
+  options: [
+    { value: 'parent1', label: 'Category Parent 1' },
+    { value: 'parent2', label: 'Category Parent 2' },
+  ],
+  value: null,
+})
 export const size = reactive<GeneralDropdown>({
   options: [],
   value: null,
 })
 export const material = reactive<GeneralDropdown>({
   options: [],
+  value: null,
+})
+export const products = reactive<ProductDropdown>({
+  options: [
+    { value: '11a23', label: 'Item 1' },
+    { value: '1a2w3', label: 'Item 2' },
+    { value: '13', label: 'Item 3' },
+    { value: '1a213', label: 'Item 4' },
+    { value: '1233', label: 'Item 5' },
+    { value: '13123', label: 'Item 6' },
+    { value: '1adf23', label: 'Item 7' },
+    { value: '1a3123', label: 'Item 8' },
+    { value: '1a21323', label: 'Item 9' },
+    { value: '1a32q3', label: 'Item 11' },
+    { value: '1edb23', label: 'Item 12' },
+  ],
   value: null,
 })

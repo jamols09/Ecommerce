@@ -8,6 +8,7 @@ const flashOptions = ref<FlashOptionsArray>([])
 const promo = reactive<Promo>({
   active: false,
   amount: 0,
+  type: 'raw',
   specific: false,
   date: {
     start: new Date(),

@@ -95,7 +95,7 @@ const onRedirect = async (e: string) => {
                     disabled
                     @click="onRedirect('variation')"
                   >
-                    Coming Soon !
+                    Coming Soon!
                   </V-Button>
                 </div>
               </div>

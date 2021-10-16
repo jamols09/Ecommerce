@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import usePreviewImages from '/@src/composable/usePreviewImages'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import { ProductInfoSchema } from '/@src/schema/ProductSchema'
+import { ProductInfoForm } from '/@src/schema/ProductSchema'
 import { ckEditorConfig } from '/@src/configs/'
 import { department } from '/@src/static/product'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import { carouselConfig } from '/@src/configs/'
-import { useProductStore } from '/@src/state/products/'
+import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { onMounted } from 'vue-demi'
 import { ref } from 'vue'
@@ -20,21 +20,15 @@ const stateImage = ref<Array<string>>([])
 const isSubmitting = ref(false)
 const stateValue = product.GET_TAB_INFO
 
-const onUpdate = async (input: any) => {
+const onUpdate = async (inputs: any) => {
   isSubmitting.value = true
   // Convert uploaded image to blob and save it on state
   stateImage.value.length = 0
-  input.images.forEach((e: any) => {
+  inputs.images.forEach((e: any) => {
     stateImage.value.push(URL.createObjectURL(e))
   })
   // Save data to state
-  product.FILL_TAB_INFO({
-    name: input.name,
-    sku: input.sku,
-    department: input.department,
-    description: input.description,
-    images: stateImage.value,
-  })
+  product.FILL_TAB_INFO({ ...inputs, images: stateImage.value })
 
   await sleep()
   isSubmitting.value = false
@@ -48,7 +42,7 @@ onMounted(() => {
 <template>
   <ValidationForm
     v-slot="{ errors }"
-    :validation-schema="ProductInfoSchema"
+    :validation-schema="ProductInfoForm"
     @submit="onUpdate"
   >
     <!-- Image Preview -->
@@ -90,12 +84,12 @@ onMounted(() => {
     </div>
 
     <div class="columns">
-      <!-- File Upload -->
       <div class="column is-12">
         <VField grouped>
           <VControl>
-            <div class="file is-info">
+            <div class="file">
               <label class="file-label">
+                <!-- File Upload -->
                 <ValidationField
                   name="images"
                   class="file-input"
@@ -142,21 +136,23 @@ onMounted(() => {
           </VField>
         </div>
       </ValidationField>
+
+      <!-- Brand -->
       <ValidationField
-        v-model="stateValue.department"
+        v-model="stateValue.brand"
         :validate-on-input="false"
-        name="department"
+        name="brand"
       >
         <div class="column is-6">
           <VField>
             <label>Brand</label>
             <VControl>
               <Multiselect
-                v-model="stateValue.department"
+                v-model="stateValue.brand"
                 :options="department.options"
               />
-              <p v-if="errors.department" class="help is-danger">
-                <b>{{ errors.department }}</b>
+              <p v-if="errors.brand" class="help is-danger">
+                <b>{{ errors.brand }}</b>
               </p>
             </VControl>
           </VField>
@@ -243,6 +239,8 @@ onMounted(() => {
         </div>
       </ValidationField>
     </div>
+
+    <!-- Button -->
     <VField class="fixed-buttons is-active">
       <VControl class="fixed-buttons-inner">
         <VButton
@@ -271,11 +269,12 @@ onMounted(() => {
     border-radius: 6px;
   }
   .carousel__slide {
-    padding: 10px;
+    padding: 50px;
 
     .carousel__item {
       min-height: 300px;
-      max-height: 650px;
+      max-height: 630px;
+      max-width: 600px;
       color: white;
       font-size: 20px;
       border-radius: 6px;

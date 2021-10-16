@@ -28,8 +28,8 @@ export interface Promo {
   name?: string
   description?: string
   type?: PromoType
-  amount: number
-  quantity?: number
+  amount: number | null
+  quantity?: number | null
   requiredAmount?: number
   repeat?: PromoRepeatOptions
   date: DateTimeFrame

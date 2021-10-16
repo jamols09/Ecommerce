@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
-import { ProductPricingSchema } from '/@src/schema/ProductSchema'
-import { useProductStore } from '/@src/state/products/'
+import { onMounted, ref } from 'vue'
+import { ProductPricingForm } from '/@src/schema/ProductSchema'
+import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 
 const notyf = useNotyf()
@@ -10,18 +11,23 @@ const product = useProductStore()
 const isSubmitting = ref(false)
 const isUpdating = ref(false)
 const options = ref<Array<string>>([])
-const stateValue = product.GET_TAB_PRICE
 
 const onUpdate = async (inputs: any) => {
-  product.FILL_TAB_PRICE({
-    options: inputs.options,
-    price: inputs.price,
-  })
-  isSubmitting.value = false
+  product.FILL_TAB_PRICE(inputs)
   notyf.success('Product updated')
 }
 const onSubmit = async () => {
-  notyf.success(`Product <b><u>${product.name}</u></b> created !`)
+  isSubmitting.value = true
+  if (product.IS_MISSING_FIELDS) {
+    notyf.success(`Product <b><u>${product.name}</u></b> added.`)
+    product.$dispose()
+    product.$reset()
+    await sleep(1500)
+    location.reload()
+  } else {
+    notyf.error('Please save data by pressing update.')
+  }
+  isSubmitting.value = false
 }
 onMounted(() => {
   options.value = product.options
@@ -30,7 +36,7 @@ onMounted(() => {
 <template>
   <ValidationForm
     v-slot="{ errors }"
-    :validation-schema="ProductPricingSchema"
+    :validation-schema="ProductPricingForm"
     @submit="onUpdate"
   >
     <div class="columns">
@@ -69,7 +75,7 @@ onMounted(() => {
     <div class="columns">
       <ValidationField
         v-slot="{ field }"
-        v-model="stateValue.price"
+        v-model="product.price"
         :validate-on-input="false"
         name="price"
       >

@@ -11,8 +11,8 @@ import {
   size,
 } from '/@src/static/product'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
-import { ProductSpecsSchema } from '/@src/schema/ProductSchema'
-import { useProductStore } from '/@src/state/products/'
+import { ProductSpecsForm } from '/@src/schema/ProductSchema'
+import { useProductStore } from '/@src/state/piniaState/productState'
 import useNotyf from '/@src/composable/useNotyf'
 import sleep from '/@src/utils/sleep'
 
@@ -54,26 +54,11 @@ const onCheckSize = (e: any) => {
 const onUpdate = async (inputs: any) => {
   isSubmitting.value = true
   // Save data to state
-  product.FILL_TAB_SPECS({
-    options: inputs.options,
-    branches: inputs.branches,
-    quantity: inputs.quantity,
-    quantityWarn: inputs.quantityWarn,
-    tags: inputs.tags,
-    colors: inputs.colors,
-    sizes: inputs.sizes,
-    materials: inputs.materials,
-    weightUnit: inputs.weightUnit,
-    weightAmount: inputs.weightAmount,
-    dimensionUnit: inputs.dimensionUnit,
-    dimensionLength: inputs.dimensionLength,
-    dimensionHeight: inputs.dimensionHeight,
-    dimensionWidth: inputs.dimensionWidth,
-  })
+  product.FILL_TAB_SPECS(inputs)
 
   await sleep()
   isSubmitting.value = false
-  notyf.success('Product updated')
+  notyf.success('Product updated.')
 }
 onMounted(() => {
   options.value = stateValue.options
@@ -90,7 +75,7 @@ watchEffect(() => {
 <template>
   <ValidationForm
     v-slot="{ errors }"
-    :validation-schema="ProductSpecsSchema"
+    :validation-schema="ProductSpecsForm"
     @submit="onUpdate"
   >
     <div class="columns">
