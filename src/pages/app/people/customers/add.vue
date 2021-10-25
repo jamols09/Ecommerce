@@ -247,7 +247,7 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="passwordConfirm"
+                    name="password_confirmation"
                   >
                     <V-Field>
                       <label>Confirm Password</label>
@@ -257,8 +257,11 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                           type="password"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.passwordConfirm" class="help is-danger">
-                          <b>{{ errors.passwordConfirm }}</b>
+                        <p
+                          v-if="errors.password_confirmation"
+                          class="help is-danger"
+                        >
+                          <b>{{ errors.password_confirmation }}</b>
                         </p>
                       </V-Control>
                     </V-Field>

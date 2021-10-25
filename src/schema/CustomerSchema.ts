@@ -11,7 +11,7 @@ const CustomerSchema = yup.object().shape({
     .string()
     .email('Email must be valid')
     .required('Email is required'),
-  passwordConfirm: yup
+  password_confirmation: yup
     .string()
     .required('Confirmation is required')
     .test('passwords-match', 'Passwords must match', function (value) {
@@ -32,5 +32,5 @@ export const CustomerForm = CustomerSchema.pick([
   'email',
   'options',
   'password',
-  'passwordConfirm',
+  'password_confirmation',
 ])
