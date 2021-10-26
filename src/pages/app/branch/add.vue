@@ -5,25 +5,21 @@ import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { BranchForm } from '/@src/schema/BranchSchema'
 import useNotyf from '/@src/composable/useNotyf'
+import { useBranch } from '/@src/composable/api/useBranch'
+
 pageTitle.value = 'Create Branch'
 
 const notyf = useNotyf()
-const route = useRoute()
 const options = ref([])
 const isSubmitting = ref(false)
 const autofill = ref('')
 const mobile = ref('')
-
-const headerName = computed((): string => {
-  const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
-  return name.charAt(0).toUpperCase() + name.slice(1)
-})
+const branch = useBranch()
 
 const onSubmit = async (inputs: any) => {
-  console.table(inputs)
   isSubmitting.value = true
-  //api call
-  //error
+  inputs.is_active = options.value.length > 0 ? true : false
+  await branch.create(inputs)
   notyf.success(`Branch <b><u> ${inputs.name} </u></b> added.`)
   isSubmitting.value = false
 }
@@ -41,7 +37,7 @@ const onSubmit = async (inputs: any) => {
           <div class="form-header">
             <div class="form-header-inner">
               <div class="left">
-                <h3>{{ headerName }}</h3>
+                <h3>Branch</h3>
               </div>
             </div>
           </div>
@@ -189,7 +185,7 @@ const onSubmit = async (inputs: any) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="regionState"
+                    name="state"
                   >
                     <V-Field>
                       <label>Region / State *</label>
@@ -199,8 +195,8 @@ const onSubmit = async (inputs: any) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.regionState" class="help is-danger">
-                          <b>{{ errors.regionState }}</b>
+                        <p v-if="errors.state" class="help is-danger">
+                          <b>{{ errors.state }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
@@ -233,7 +229,7 @@ const onSubmit = async (inputs: any) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="addressLine1"
+                    name="address_line_1"
                   >
                     <V-Field>
                       <VueTooltip
@@ -251,8 +247,8 @@ const onSubmit = async (inputs: any) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.addressLine1" class="help is-danger">
-                          <b>{{ errors.addressLine1 }}</b>
+                        <p v-if="errors.address_line_1" class="help is-danger">
+                          <b>{{ errors.address_line_1 }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
@@ -263,7 +259,7 @@ const onSubmit = async (inputs: any) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="addressLine2"
+                    name="address_line_2"
                   >
                     <V-Field>
                       <VueTooltip
@@ -281,8 +277,8 @@ const onSubmit = async (inputs: any) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.addressLine2" class="help is-danger">
-                          <b>{{ errors.addressLine2 }}</b>
+                        <p v-if="errors.address_line_2" class="help is-danger">
+                          <b>{{ errors.address_line_2 }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
