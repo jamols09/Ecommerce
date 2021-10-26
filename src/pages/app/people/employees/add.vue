@@ -19,7 +19,7 @@ const statusOptions = ref<StatusArray>([])
 const isSubmitting = ref(false)
 const birthdate = ref(new Date())
 
-const onSubmit = async (inputs: any) => {
+const onSubmit = async (inputs: typeof EmployeeForm) => {
   isSubmitting.value = true
   inputs.account_type = 'ADMIN'
   inputs.is_active = statusOptions.value.length > 0 ? true : false
@@ -27,7 +27,6 @@ const onSubmit = async (inputs: any) => {
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
 
   await users.create(inputs)
-
   isSubmitting.value = false
 }
 </script>

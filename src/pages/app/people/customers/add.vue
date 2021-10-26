@@ -15,13 +15,14 @@ const isSubmitting = ref(false)
 const birthdate = ref(new Date())
 
 const onSubmit = async (inputs: typeof CustomerForm) => {
+  isSubmitting.value = true
   inputs.account_type = 'CLIENT'
   inputs.is_active = statusOptions.value.length > 0 ? true : false
   inputs.birthdate =
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
 
-  isSubmitting.value = true
   await users.create(inputs)
+  isSubmitting.value = false
 }
 </script>
 
