@@ -27,7 +27,7 @@ export function initApi(session: UserSessionData) {
   return api
 }
 
-export default function useApi() {
+export function useApi() {
   const api = inject(apiSymbol)
   if (!api) {
     throw new Error('Api not properly injected in app')
