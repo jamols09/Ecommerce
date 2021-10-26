@@ -2,31 +2,26 @@
 import useNotyf from '/@src/composable/useNotyf'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
 import { People, StatusArray } from '/@src/models/people'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { CustomerForm } from '/@src/schema/CustomerSchema'
-import sleep from '/@src/utils/sleep'
+import { useUser } from '/@src/composable/api/useUser'
 
 pageTitle.value = 'Create Customer'
 
-const notyf = useNotyf()
-const route = useRoute()
+const users = useUser()
 const statusOptions = ref<StatusArray>([])
 const isSubmitting = ref(false)
 const birthdate = ref(new Date())
 
-const headerName = computed((): string => {
-  const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
-  return name.charAt(0).toUpperCase() + name.slice(1)
-})
-
 const onSubmit = async (inputs: typeof CustomerForm) => {
-  console.table(inputs)
-  await sleep()
+  inputs.account_type = 'CLIENT'
+  inputs.is_active = statusOptions.value.length > 0 ? true : false
+  inputs.birthdate =
+    inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
+
   isSubmitting.value = true
-  notyf.success(`Customer <b><u> ${inputs.firstname} </u></b> added.`)
-  isSubmitting.value = false
+  await users.create(inputs)
 }
 </script>
 
@@ -42,7 +37,7 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
           <div class="form-header">
             <div class="form-header-inner">
               <div class="left">
-                <h3>{{ headerName }}</h3>
+                <h3>Customers</h3>
               </div>
             </div>
           </div>
@@ -247,7 +242,7 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="passwordConfirm"
+                    name="password_confirmation"
                   >
                     <V-Field>
                       <label>Confirm Password</label>
@@ -257,8 +252,11 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                           type="password"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.passwordConfirm" class="help is-danger">
-                          <b>{{ errors.passwordConfirm }}</b>
+                        <p
+                          v-if="errors.password_confirmation"
+                          class="help is-danger"
+                        >
+                          <b>{{ errors.password_confirmation }}</b>
                         </p>
                       </V-Control>
                     </V-Field>

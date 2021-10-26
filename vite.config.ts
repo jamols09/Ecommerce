@@ -14,7 +14,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 const SILENT = Boolean(process.env.SILENT) ?? false
 const SOURCE_MAP = Boolean(process.env.SOURCE_MAP) ?? false
-
+const DOMAIN_URL = Boolean(process.env.VITE_DOMAIN_URL) || ''
 /**
  * This is the main configuration file for vitejs
  *
@@ -27,7 +27,11 @@ export default defineConfig({
   // You also need to add this base like `history: createWebHistory('my-subdirectory')`
   // in ./src/router.ts
   // base: '/my-subdirectory/',
-  base: '/',
+  base: `/`,
+  server: {
+    host: `${DOMAIN_URL}`,
+    port: 8080,
+  },
   // Directory to serve as plain static assets.
   publicDir: 'public',
   // Adjust console output verbosity.

@@ -8,7 +8,10 @@ export const apiSymbol: InjectionKey<AxiosInstance> = Symbol()
 export function initApi(session: UserSessionData) {
   // Here we set the base URL for all requests made to the api
   const api = axios.create({
-    baseURL: 'http://localhost:1337',
+    baseURL: 'http://api.ecommerce-backend.test/backend',
+    headers: {
+      'Content-type': 'application/json',
+    },
   })
 
   // We set an interceptor for each request to
@@ -24,7 +27,7 @@ export function initApi(session: UserSessionData) {
   return api
 }
 
-export default function useApi() {
+export function useApi() {
   const api = inject(apiSymbol)
   if (!api) {
     throw new Error('Api not properly injected in app')

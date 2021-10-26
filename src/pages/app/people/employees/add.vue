@@ -3,56 +3,32 @@ import { ref, computed, reactive } from 'vue'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { useRoute } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { ImageData, People, StatusArray } from '../../../../models/people'
+import { StatusArray } from '../../../../models/people'
 import { EmployeeForm } from '/@src/schema/EmployeeSchema'
+import {
+  onAddFile,
+  onRemoveFile,
+  onAddFileProgress,
+} from '/@src/composable/useFilePond'
+import { useUser } from '/@src/composable/api/useUser'
 
 pageTitle.value = 'Create Employee'
 
-const route = useRoute()
+const users = useUser()
 const statusOptions = ref<StatusArray>([])
 const isSubmitting = ref(false)
 const birthdate = ref(new Date())
 
-const role = reactive({
-  options: [
-    { value: 'basic', label: 'Basic' },
-    { value: 'admin', label: 'Admin' },
-  ],
-  value: ['basic'],
-})
-
-const imageData = reactive<ImageData>({
-  name: '',
-  file: null,
-})
-
-// File Pond
-const onAddFile = (error: any, fileInfo: any) => {
-  if (error) {
-    console.error(error)
-    return
-  }
-  const _file = fileInfo.file as File
-  if (_file) {
-    imageData.file = _file
-  }
-}
-const onRemoveFile = (error: any, fileInfo: any) => {
-  if (error) {
-    console.error(error)
-    return
-  }
-  imageData.file = null
-}
-const onAddFileProgress = (file: any, progress: any) => {
-  console.log(file, progress)
-}
-const headerName = computed((): string => {
-  const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
-  return name.charAt(0).toUpperCase() + name.slice(1)
-})
 const onSubmit = async (inputs: any) => {
-  console.table(inputs)
+  isSubmitting.value = true
+  inputs.account_type = 'ADMIN'
+  inputs.is_active = statusOptions.value.length > 0 ? true : false
+  inputs.birthdate =
+    inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
+
+  await users.create(inputs)
+
+  isSubmitting.value = false
 }
 </script>
 
@@ -68,7 +44,7 @@ const onSubmit = async (inputs: any) => {
           <div class="form-header">
             <div class="form-header-inner">
               <div class="left">
-                <h3>{{ headerName }}</h3>
+                <h3>Employees</h3>
               </div>
             </div>
           </div>
@@ -320,7 +296,7 @@ const onSubmit = async (inputs: any) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="passwordConfirm"
+                    name="password_confirmation"
                   >
                     <V-Field>
                       <label>Confirm Password</label>
@@ -330,8 +306,11 @@ const onSubmit = async (inputs: any) => {
                           type="password"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.passwordConfirm" class="help is-danger">
-                          <b>{{ errors.passwordConfirm }}</b>
+                        <p
+                          v-if="errors.password_confirmation"
+                          class="help is-danger"
+                        >
+                          <b>{{ errors.password_confirmation }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
