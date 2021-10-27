@@ -2,20 +2,16 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useHead } from '@vueuse/head'
-
 import { isDark } from '/@src/state/darkModeState'
 import useUserSession from '/@src/composable/useUserSession'
 import useNotyf from '/@src/composable/useNotyf'
 import sleep from '/@src/utils/sleep'
-import axios from 'axios'
 import { useAuth } from '/@src/composable/api/useAuth'
 
 const notyf = useNotyf()
 const api = useAuth()
 const isLoading = ref(false)
 const router = useRouter()
-
-const notif = useNotyf()
 const userSession = useUserSession()
 const form = reactive({
   email: '',
@@ -26,15 +22,14 @@ const handleLogin = async () => {
   isLoading.value = true
 
   await api.signIn(form)
-  await sleep(500)
+  await sleep(300)
   await api.getUser()
 
   if (
     api.signInResponse.value?.id !== undefined ||
     api.loggedInResponse.value?.id !== undefined
   ) {
-    console.log(api.signInResponse.value)
-    notyf.success(`Welcome ${api.signInResponse.value?.username}`)
+    notyf.success(`Welcome <b>${api.signInResponse.value?.username}</b>`)
     isLoading.value = false
     router.push({ name: 'app' })
   } else {
