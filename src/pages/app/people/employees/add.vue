@@ -19,14 +19,13 @@ const statusOptions = ref<StatusArray>([])
 const isSubmitting = ref(false)
 const birthdate = ref(new Date())
 
-const onSubmit = async (inputs: typeof EmployeeForm) => {
+const onSubmit = async (e: typeof EmployeeForm) => {
   isSubmitting.value = true
-  inputs.account_type = 'ADMIN'
-  inputs.is_active = statusOptions.value.length > 0 ? true : false
-  inputs.birthdate =
-    inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
+  e.account_type = 'ADMIN'
+  e.is_active = statusOptions.value.length > 0 ? true : false
+  e.birthdate = e.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
 
-  await users.create(inputs)
+  await users.create(e)
   isSubmitting.value = false
 }
 </script>
@@ -119,7 +118,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="firstName"
+                    name="first_name"
                   >
                     <V-Field>
                       <label>First Name *</label>
@@ -129,8 +128,8 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.firstName" class="help is-danger">
-                          <b>{{ errors.firstName }}</b>
+                        <p v-if="errors.first_name" class="help is-danger">
+                          <b>{{ errors.first_name }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
@@ -142,7 +141,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="middleName"
+                    name="middle_name"
                   >
                     <V-Field>
                       <label>Middle Name</label>
@@ -152,8 +151,8 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.middleName" class="help is-danger">
-                          <b>{{ errors.middleName }}</b>
+                        <p v-if="errors.middle_name" class="help is-danger">
+                          <b>{{ errors.middle_name }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
@@ -165,7 +164,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="lastName"
+                    name="last_name"
                   >
                     <V-Field>
                       <label>Last Name</label>
@@ -175,8 +174,8 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.lastName" class="help is-danger">
-                          <b>{{ errors.lastName }}</b>
+                        <p v-if="errors.last_name" class="help is-danger">
+                          <b>{{ errors.last_name }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
