@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, watchEffect } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { BranchForm } from '/@src/schema/BranchSchema'
@@ -9,12 +8,13 @@ import { useBranch } from '/@src/composable/api/useBranch'
 
 pageTitle.value = 'Create Branch'
 
+const branch = useBranch()
 const notyf = useNotyf()
 const options = ref([])
 const isSubmitting = ref(false)
 const autofill = ref('')
 const mobile = ref('')
-const branch = useBranch()
+const code = ref('')
 
 const onSubmit = async (inputs: any) => {
   isSubmitting.value = true
@@ -23,6 +23,10 @@ const onSubmit = async (inputs: any) => {
   notyf.success(`Branch <b><u> ${inputs.name} </u></b> added.`)
   isSubmitting.value = false
 }
+
+watchEffect(() => {
+  code.value.length > 0 ? (code.value = code.value.toUpperCase()) : code.value
+})
 </script>
 
 <template>
@@ -109,7 +113,7 @@ const onSubmit = async (inputs: any) => {
                 <!-- Branch Code -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="code"
                     :validate-on-input="false"
                     name="code"
                   >
@@ -124,7 +128,7 @@ const onSubmit = async (inputs: any) => {
                       >
                       <V-Control icon="mdi:code-braces">
                         <input
-                          v-bind="field"
+                          v-model="code"
                           type="text"
                           class="input is-info-focus"
                         />
