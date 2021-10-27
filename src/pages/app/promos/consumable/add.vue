@@ -78,11 +78,6 @@ const tag = reactive<TreeOptions>({
   ],
   value: [],
 })
-
-const headerName = computed(() => {
-  const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
-  return name.charAt(0).toUpperCase() + name.slice(1)
-})
 </script>
 
 <template>
@@ -92,7 +87,7 @@ const headerName = computed(() => {
         <div class="form-header">
           <div class="form-header-inner">
             <div class="left">
-              <h3>{{ headerName }}</h3>
+              <h3>Consumable</h3>
             </div>
           </div>
         </div>
