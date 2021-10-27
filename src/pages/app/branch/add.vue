@@ -8,7 +8,7 @@ import { useBranch } from '/@src/composable/api/useBranch'
 
 pageTitle.value = 'Create Branch'
 
-const branch = useBranch()
+const api = useBranch()
 const notyf = useNotyf()
 const options = ref([])
 const isSubmitting = ref(false)
@@ -19,7 +19,7 @@ const code = ref('')
 const onSubmit = async (inputs: any) => {
   isSubmitting.value = true
   inputs.is_active = options.value.length > 0 ? true : false
-  await branch.create(inputs)
+  await api.create(inputs)
   notyf.success(`Branch <b><u> ${inputs.name} </u></b> added.`)
   isSubmitting.value = false
 }
