@@ -1,9 +1,9 @@
 import * as yup from 'yup'
 
 const EmployeeSchema = yup.object().shape({
-  firstName: yup.string().required('First name is required'),
-  middleName: yup.string().nullable(),
-  lastName: yup.string().nullable(),
+  first_name: yup.string().required('First name is required'),
+  middle_name: yup.string().nullable(),
+  last_name: yup.string().nullable(),
   birthdate: yup.date().nullable().required('Birthdate is required'),
   options: yup.array().of(yup.string()).nullable(),
   username: yup.string().min(4).required('Username is required'),
@@ -24,9 +24,9 @@ const EmployeeSchema = yup.object().shape({
 })
 
 export const EmployeeForm = EmployeeSchema.pick([
-  'firstName',
-  'middleName',
-  'lastName',
+  'first_name',
+  'middle_name',
+  'last_name',
   'birthdate',
   'username',
   'email',
