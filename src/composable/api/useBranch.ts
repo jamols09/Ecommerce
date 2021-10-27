@@ -11,8 +11,12 @@ export function useBranch() {
    * @returns HTTP status or error message
    */
   const create = async (branch: any): Promise<any> => {
-    const { data } = await api.post('/v1/branch', branch)
-    result.value = data
+    try {
+      const { data } = await api.post('/v1/branch', branch)
+      result.value = data
+    } catch (err: any) {
+      result.value = err
+    }
   }
 
   return {
