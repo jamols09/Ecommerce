@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import useNotyf from '/@src/composable/useNotyf'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
-import { ref, computed } from 'vue'
-import { People, StatusArray } from '/@src/models/people'
+import { ref } from 'vue'
+import { StatusArray } from '/@src/models/people'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { CustomerForm } from '/@src/schema/CustomerSchema'
 import { useUser } from '/@src/composable/api/useUser'
