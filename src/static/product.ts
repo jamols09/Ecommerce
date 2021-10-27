@@ -81,8 +81,8 @@ export const color = reactive<GeneralDropdown>({
 })
 export const parent = reactive<GeneralDropdown>({
   options: [
-    { value: 'parent1', label: 'Category Parent 1' },
-    { value: 'parent2', label: 'Category Parent 2' },
+    { value: '1', label: 'Category Parent 1' },
+    { value: '2', label: 'Category Parent 2' },
   ],
   value: null,
 })
