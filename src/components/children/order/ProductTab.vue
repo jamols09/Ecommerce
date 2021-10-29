@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import useNotyf from '/@src/composable/useNotyf'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { products, branch } from '/@src/static/product'
 import { useOrderStore } from '/@src/state/piniaState/orderState'
+import { useBranch } from '/@src/composable/api/useBranch'
 import sleep from '/@src/utils/sleep'
 
+const api = useBranch()
 const notyf = useNotyf()
 const order = useOrderStore()
 const orderItem = computed(() => order.GET_ITEMS_ORDER)
@@ -14,8 +16,6 @@ const isLoadingCalc = ref(false)
 
 const onGenerateComputation = async () => {
   isLoadingCalc.value = true
-  //api call
-  //error
   await sleep()
   isLoadingCalc.value = false
   notyf.success('Items computation generated.')
@@ -33,6 +33,9 @@ const onAddItem = () => {
 const onRemoveItem = async (e: number) => {
   order.REMOVE_ITEM_ORDER(e)
 }
+const onGetBranch = async () => {
+  await api.dropdown()
+}
 </script>
 
 <template>
@@ -44,10 +47,11 @@ const onRemoveItem = async (e: number) => {
           <VControl>
             <Multiselect
               v-model="branch.value"
-              :options="branch.options"
+              :options="api.dropdownResponse.value"
               :searchable="true"
-              :object="true"
+              :loading="api.isLoading.value"
               track-by="label"
+              @open="onGetBranch"
             />
           </VControl>
         </VField>
