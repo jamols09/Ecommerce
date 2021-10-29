@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref } from 'vue'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
-import { useRoute } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { StatusArray } from '../../../../models/people'
 import { EmployeeForm } from '/@src/schema/EmployeeSchema'
