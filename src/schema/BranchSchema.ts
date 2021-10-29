@@ -7,7 +7,7 @@ const telError = {
 
 const BranchSchema = yup.object().shape({
   name: yup.string().nullable().required('Branch name is required'),
-  code: yup.string().min(4).nullable().notRequired(),
+  code: yup.string().nullable().notRequired(),
   telephone: yup.string().matches(new RegExp('^[0-9- ]{7,14}$'), telError),
   mobile: yup.string().nullable().notRequired(),
   country: yup.string().nullable().required('Country is required'),
