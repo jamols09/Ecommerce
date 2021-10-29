@@ -121,7 +121,7 @@ watchEffect(() => {
       >
         <div class="column is-6">
           <VField>
-            <label>Branch</label>
+            <label>Branch *</label>
             <VControl>
               <Multiselect
                 v-model="branch.value"
