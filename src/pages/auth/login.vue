@@ -18,7 +18,7 @@ const form = reactive({
   password: '',
 })
 
-const handleLogin = async () => {
+const onLogin = async () => {
   isLoading.value = true
 
   await api.signIn(form)
@@ -79,7 +79,7 @@ useHead({
       <div class="inner-wrap">
         <!--Form-->
         <div class="form-card">
-          <form @submit.prevent="handleLogin">
+          <form @submit.prevent="onLogin">
             <div class="login-form">
               <!--Form Title-->
               <div class="auth-head">
