@@ -1,39 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useHead } from '@vueuse/head'
-
 import { isDark } from '/@src/state/darkModeState'
 import useUserSession from '/@src/composable/useUserSession'
 import useNotyf from '/@src/composable/useNotyf'
 import sleep from '/@src/utils/sleep'
+import { useAuth } from '/@src/composable/api/useAuth'
 
+const notyf = useNotyf()
+const api = useAuth()
 const isLoading = ref(false)
 const router = useRouter()
-const route = useRoute()
-const notif = useNotyf()
 const userSession = useUserSession()
-const redirect = route.query.redirect as string
+const form = reactive({
+  email: '',
+  password: '',
+})
 
-const handleLogin = async () => {
-  if (!isLoading.value) {
-    isLoading.value = true
+const onLogin = async () => {
+  isLoading.value = true
 
-    await sleep(2000)
-    userSession.token = 'logged-in'
-    notif.success('Welcome back, Erik Kovalsky')
+  await api.signIn(form)
+  await sleep(300)
+  await api.getUser()
 
-    if (redirect) {
-      router.push(redirect)
-    } else {
-      router.push({
-        name: 'app',
-      })
-    }
-
+  if (
+    api.signInResponse.value?.id !== undefined ||
+    api.loggedInResponse.value?.id !== undefined
+  ) {
+    notyf.success(`Welcome <b>${api.signInResponse.value?.username}</b>`)
     isLoading.value = false
+    router.push({ name: 'app' })
+  } else {
+    notyf.error('Invalid credentials')
   }
+
+  isLoading.value = false
 }
+
+onMounted(() => {
+  api.getCookie()
+})
 
 useHead({
   title: 'StoreYehey - Login',
@@ -71,7 +79,7 @@ useHead({
       <div class="inner-wrap">
         <!--Form-->
         <div class="form-card">
-          <form @submit.prevent="handleLogin">
+          <form @submit.prevent="onLogin">
             <div class="login-form">
               <!--Form Title-->
               <div class="auth-head">
@@ -83,6 +91,7 @@ useHead({
               <V-Field>
                 <V-Control icon="feather:mail">
                   <input
+                    v-model="form.email"
                     class="input"
                     type="email"
                     placeholder="Email"
@@ -93,6 +102,7 @@ useHead({
               <V-Field>
                 <V-Control icon="feather:lock">
                   <input
+                    v-model="form.password"
                     class="input"
                     type="password"
                     placeholder="Password"

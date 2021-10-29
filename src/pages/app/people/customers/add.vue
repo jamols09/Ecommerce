@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import useNotyf from '/@src/composable/useNotyf'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
-import { ref, computed } from 'vue'
-import { People, StatusArray } from '/@src/models/people'
+import { ref } from 'vue'
+import { StatusArray } from '/@src/models/people'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { CustomerForm } from '/@src/schema/CustomerSchema'
 import { useUser } from '/@src/composable/api/useUser'
@@ -15,13 +15,14 @@ const isSubmitting = ref(false)
 const birthdate = ref(new Date())
 
 const onSubmit = async (inputs: typeof CustomerForm) => {
+  isSubmitting.value = true
   inputs.account_type = 'CLIENT'
   inputs.is_active = statusOptions.value.length > 0 ? true : false
   inputs.birthdate =
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
 
-  isSubmitting.value = true
   await users.create(inputs)
+  isSubmitting.value = false
 }
 </script>
 

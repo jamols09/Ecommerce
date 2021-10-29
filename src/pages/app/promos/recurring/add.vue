@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, watchEffect, reactive } from 'vue'
-import { useRoute } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { TreeOptions, Promo, PromoOptionsArray } from '/@src/models/promo'
 pageTitle.value = 'Create Repeating Promo'
 
-const route = useRoute()
 const isQuantity = ref(false)
 const promoOptions = ref<PromoOptionsArray>([])
 const promo = reactive<Promo>({
@@ -24,10 +22,6 @@ const promo = reactive<Promo>({
     end: new Date(),
   },
 })
-
-const uppercaseFunc = (): void => {
-  if (promo.name?.length) promo.name = promo.name.toUpperCase()
-}
 
 watchEffect(() => {
   if (promoOptions.value.includes('unlimited')) {
@@ -50,6 +44,8 @@ watchEffect(() => {
   } else {
     promo.specific = false
   }
+
+  if (promo.name?.length) promo.name = promo.name.toUpperCase()
 })
 
 const category = reactive<TreeOptions>({
@@ -83,11 +79,6 @@ const tag = reactive<TreeOptions>({
   ],
   value: [],
 })
-
-const headerName = computed((): string => {
-  const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index -2, -1
-  return name.charAt(0).toUpperCase() + name.slice(1)
-})
 </script>
 
 <template>
@@ -97,7 +88,7 @@ const headerName = computed((): string => {
         <div class="form-header">
           <div class="form-header-inner">
             <div class="left">
-              <h3>{{ headerName }}</h3>
+              <h3>Recurring</h3>
             </div>
           </div>
         </div>
@@ -264,7 +255,6 @@ const headerName = computed((): string => {
                       v-model="promo.name"
                       type="text"
                       class="input is-info-focus"
-                      @keyup="uppercaseFunc"
                     />
                   </V-Control>
                 </V-Field>

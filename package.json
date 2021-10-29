@@ -71,7 +71,7 @@
     "@vueuse/core": "6.4.1",
     "@vueuse/head": "0.6.0",
     "apexcharts": "3.28.3",
-    "axios": "0.21.4",
+    "axios": "0.24.0",
     "billboard.js": "3.1.5",
     "bulma": "0.9.3",
     "bulma-css-vars": "0.7.0",

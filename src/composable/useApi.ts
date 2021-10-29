@@ -8,9 +8,11 @@ export const apiSymbol: InjectionKey<AxiosInstance> = Symbol()
 export function initApi(session: UserSessionData) {
   // Here we set the base URL for all requests made to the api
   const api = axios.create({
-    baseURL: 'http://api.ecommerce-backend.test/backend',
+    // baseURL: 'http://api.ecommerce-backend.test/backend',
+    baseURL: 'http://localhost:8000/backend',
     headers: {
       'Content-type': 'application/json',
+      Accept: 'application/json',
     },
   })
 
@@ -19,6 +21,7 @@ export function initApi(session: UserSessionData) {
   api.interceptors.request.use((config) => {
     if (session.token) {
       config.headers.Authorization = `Bearer ${session.token}`
+      config.withCredentials = true
     }
 
     return config
