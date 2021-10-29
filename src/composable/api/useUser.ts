@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import useErrorNotification from './useErrorNotification'
 import { useApi } from '/@src/composable/useApi'
+import useErrorNotification from './useErrorNotification'
 
 const createResponse = ref()
 
@@ -8,7 +8,7 @@ export function useUser() {
   const api = useApi()
 
   /**
-   * @param data object
+   * @param object user
    * @returns HTTP status or error message
    */
   const create = async (user: any): Promise<any> => {
@@ -16,12 +16,10 @@ export function useUser() {
       const { data } = await api.post('/v1/users', user)
       createResponse.value = data
     } catch (err: any) {
+      console.log(err)
       useErrorNotification.error(err.response.data)
     }
   }
-
-  // notyf.success(`Employee <b><u> ${inputs.firstname} </u></b> added.`)
-  // notyf.error(`Something wong here.`)
 
   return {
     createResponse,
