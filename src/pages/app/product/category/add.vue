@@ -11,16 +11,8 @@ pageTitle.value = 'Create Category'
 const api = useCategory()
 const isSubmitting = ref(false)
 
-interface IRCategory {
-  id: number
-  name: string
-}
-
 const onGetParents = async () => {
-  await api.fetch()
-  parent.options = api.fetchResponse.value.body.map((e: IRCategory) => {
-    return { value: e.id, label: e.name }
-  })
+  await api.dropdown()
 }
 
 const onSubmit = async (e: typeof CategoryForm) => {
@@ -29,10 +21,6 @@ const onSubmit = async (e: typeof CategoryForm) => {
   onGetParents()
   isSubmitting.value = false
 }
-
-onMounted(() => {
-  onGetParents()
-})
 </script>
 
 <template>
@@ -101,8 +89,10 @@ onMounted(() => {
                       <VControl>
                         <Multiselect
                           v-model="parent.value"
-                          :options="parent.options"
+                          :options="api.dropdownResponse.value"
+                          :loading="api.isLoading.value"
                           :searchable="true"
+                          @open="onGetParents"
                         >
                         </Multiselect>
                         <p v-if="errors.parent" class="help is-danger">
