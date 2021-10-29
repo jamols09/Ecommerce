@@ -20,7 +20,6 @@ const onSubmit = async (inputs: any) => {
   isSubmitting.value = true
   inputs.is_active = options.value.length > 0 ? true : false
   await api.create(inputs)
-  notyf.success(`Branch <b><u> ${inputs.name} </u></b> added.`)
   isSubmitting.value = false
 }
 
