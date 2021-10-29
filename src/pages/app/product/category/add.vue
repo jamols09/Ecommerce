@@ -1,34 +1,38 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { CategoryForm } from '/@src/schema/CategorySchema'
-import useNotyf from '/@src/composable/useNotyf'
 import { parent } from '/@src/static/product'
+import { useCategory } from '/@src/composable/api/useCategory'
+
 pageTitle.value = 'Create Category'
 
-const notyf = useNotyf()
-const route = useRoute()
+const api = useCategory()
 const isSubmitting = ref(false)
-const name = ref('')
 
-const headerName = computed((): string => {
-  const name = route.fullPath.split('/').slice(-2, -1)[0] // get 2nd to the last index
-  return name.charAt(0).toUpperCase() + name.slice(1)
-})
+interface IRCategory {
+  id: number
+  name: string
+}
 
-const onSubmit = async (e: any) => {
+const onGetParents = async () => {
+  await api.fetch()
+  parent.options = api.fetchResponse.value.body.map((e: IRCategory) => {
+    return { value: e.id, label: e.name }
+  })
+}
+
+const onSubmit = async (e: typeof CategoryForm) => {
   isSubmitting.value = true
-  if (name.value.length > 0) {
-    //api call
-    //error
-    notyf.success(`Category <b><u>${e.name}</u></b> added.`)
-  } else {
-    notyf.error('Please save data by pressing update.')
-  }
+  await api.create(e)
+  onGetParents()
   isSubmitting.value = false
 }
+
+onMounted(() => {
+  onGetParents()
+})
 </script>
 
 <template>
@@ -43,7 +47,7 @@ const onSubmit = async (e: any) => {
           <div class="form-header">
             <div class="form-header-inner">
               <div class="left">
-                <h3>{{ headerName }}</h3>
+                <h3>Category</h3>
               </div>
             </div>
           </div>
@@ -54,7 +58,6 @@ const onSubmit = async (e: any) => {
                 <div class="column is-6">
                   <ValidationField
                     v-slot="{ field }"
-                    v-model="name"
                     :validate-on-input="false"
                     name="name"
                   >
@@ -73,12 +76,13 @@ const onSubmit = async (e: any) => {
                     </VField>
                   </ValidationField>
                 </div>
+
                 <!-- Parent -->
                 <div class="column is-6">
                   <ValidationField
                     v-model="parent.value"
                     :validate-on-input="false"
-                    name="parent"
+                    name="parent_id"
                   >
                     <VField>
                       <label>
@@ -99,7 +103,8 @@ const onSubmit = async (e: any) => {
                           v-model="parent.value"
                           :options="parent.options"
                           :searchable="true"
-                        />
+                        >
+                        </Multiselect>
                         <p v-if="errors.parent" class="help is-danger">
                           <b>{{ errors.parent }}</b>
                         </p>
