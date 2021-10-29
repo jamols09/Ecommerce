@@ -9,20 +9,17 @@ import { useUser } from '/@src/composable/api/useUser'
 
 pageTitle.value = 'Create Customer'
 
-const users = useUser()
+const api = useUser()
 const statusOptions = ref<StatusArray>([])
-const isSubmitting = ref(false)
 const birthdate = ref(new Date())
 
 const onSubmit = async (inputs: typeof CustomerForm) => {
-  isSubmitting.value = true
   inputs.account_type = 'CLIENT'
   inputs.is_active = statusOptions.value.length > 0 ? true : false
   inputs.birthdate =
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
 
-  await users.create(inputs)
-  isSubmitting.value = false
+  await api.create(inputs)
 }
 </script>
 
@@ -74,7 +71,7 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="firstname"
+                    name="first_name"
                   >
                     <V-Field>
                       <label>First Name</label>
@@ -84,8 +81,8 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.firstname" class="help is-danger">
-                          <b>{{ errors.firstname }}</b>
+                        <p v-if="errors.first_name" class="help is-danger">
+                          <b>{{ errors.first_name }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
@@ -96,7 +93,7 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="middlename"
+                    name="middle_name"
                   >
                     <V-Field>
                       <label>Middle Name</label>
@@ -106,8 +103,8 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.middlename" class="help is-danger">
-                          <b>{{ errors.middlename }}</b>
+                        <p v-if="errors.middle_name" class="help is-danger">
+                          <b>{{ errors.middle_name }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
@@ -118,7 +115,7 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                   <ValidationField
                     v-slot="{ field }"
                     :validate-on-input="false"
-                    name="lastname"
+                    name="last_name"
                   >
                     <V-Field>
                       <label>Last Name</label>
@@ -128,8 +125,8 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.lastname" class="help is-danger">
-                          <b>{{ errors.lastname }}</b>
+                        <p v-if="errors.last_name" class="help is-danger">
+                          <b>{{ errors.last_name }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
@@ -276,7 +273,7 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
         <VButton
           type="submit"
           color="primary"
-          :loading="isSubmitting"
+          :loading="api.isLoading.value"
           bold
           fullwidth
           raised

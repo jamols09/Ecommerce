@@ -1,9 +1,9 @@
 import * as yup from 'yup'
 
 const CustomerSchema = yup.object().shape({
-  firstname: yup.string().required('First name is required'),
-  middlename: yup.string().nullable(),
-  lastname: yup.string().nullable(),
+  first_name: yup.string().required('First name is required'),
+  middle_name: yup.string().nullable(),
+  last_name: yup.string().nullable(),
   birthdate: yup.date().nullable().required('Birthdate is required'),
   options: yup.array().of(yup.string()).nullable(),
   username: yup.string().min(4).required('Username is required'),
@@ -24,9 +24,9 @@ const CustomerSchema = yup.object().shape({
 })
 
 export const CustomerForm = CustomerSchema.pick([
-  'firstname',
-  'middlename',
-  'lastname',
+  'first_name',
+  'middle_name',
+  'last_name',
   'birthdate',
   'username',
   'email',
