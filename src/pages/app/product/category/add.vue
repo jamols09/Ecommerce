@@ -18,7 +18,6 @@ const onGetParents = async () => {
 const onSubmit = async (e: typeof CategoryForm) => {
   isSubmitting.value = true
   await api.create(e)
-  onGetParents()
   isSubmitting.value = false
 }
 </script>
