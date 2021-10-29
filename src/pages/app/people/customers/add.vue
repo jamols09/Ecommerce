@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import useNotyf from '/@src/composable/useNotyf'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { ref } from 'vue'
 import { StatusArray } from '/@src/models/people'
@@ -18,7 +17,6 @@ const onSubmit = async (inputs: typeof CustomerForm) => {
   inputs.is_active = statusOptions.value.length > 0 ? true : false
   inputs.birthdate =
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
-
   await api.create(inputs)
 }
 </script>
