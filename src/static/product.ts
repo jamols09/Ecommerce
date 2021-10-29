@@ -33,15 +33,7 @@ export const department = reactive<GeneralDropdown>({
   value: null,
 })
 export const branch = reactive<BranchDropdown>({
-  options: [
-    { value: '12340', label: 'Davao Branch' },
-    { value: '1241', label: 'Cebu Branch' },
-    { value: '12141', label: 'La3ng Branch' },
-    { value: '133', label: 'Nabs Branch' },
-    { value: '33141', label: 'L1nang Branch' },
-    { value: '13', label: 'Na1s Branch' },
-    { value: '-1', label: 'All' },
-  ],
+  options: [],
   value: null,
 })
 export const category = reactive<GeneralDropdown>({
