@@ -26,7 +26,6 @@ export function useBranch() {
       createResponse.value = data
       notif.success(`Branch <b>${branch.name}</b> successfully added.`)
     } catch (err: any) {
-      console.log(err)
       useErrorNotification.error(err.response.data)
     }
   }
@@ -42,7 +41,6 @@ export function useBranch() {
         return { value: e.id, label: e.name }
       })
     } catch (err: any) {
-      console.log(err)
       useErrorNotification.error(err.response.data)
     }
     isLoading.value = false
