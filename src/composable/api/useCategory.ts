@@ -3,10 +3,10 @@ import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
 
+const tableResponse = ref()
 const dropdownResponse = ref()
 const createResponse = ref()
 const isLoading = ref(false)
-const notif = useNotyf()
 
 interface IRCategory {
   id: number
@@ -24,7 +24,7 @@ export function useCategory() {
     try {
       const { data } = await api.post('/v1/category', category)
       createResponse.value = data
-      notif.success(`Category <b>${data.body.name}</b> added.`)
+      useNotyf().success(`Category <b>${data.body.name}</b> added.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -46,11 +46,28 @@ export function useCategory() {
     isLoading.value = false
   }
 
+  /**
+   * @param object search
+   * @returns Paginated category
+   */
+  const table = async (): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.get('/v1/category')
+      tableResponse.value = data
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
+    tableResponse,
     dropdownResponse,
     createResponse,
     isLoading,
     dropdown,
     create,
+    table,
   } as const // as const is a typescript keyword to prevent from updating
 }
