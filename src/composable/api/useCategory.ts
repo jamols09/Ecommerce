@@ -57,7 +57,7 @@ export function useCategory() {
     isLoading.value = true
     try {
       const { data } = await api.get(
-        `/v1/category?page=1&row=${e.rowCount}&type=${e.type}&q=${e.query}`
+        `/v1/category?page=${e.page}&row=${e.row}&type=${e.type}&q=${e.query}`
       )
       tableResponse.value = data
     } catch (err: any) {
