@@ -47,13 +47,18 @@ export function useCategory() {
   }
 
   /**
-   * @param object search
+   * @param string search
+   * @param number rowCount
+   * @param string type
    * @returns Paginated category
    */
-  const table = async (): Promise<any> => {
+  const table = async (e?: any): Promise<any> => {
+    console.log(e)
     isLoading.value = true
     try {
-      const { data } = await api.get('/v1/category')
+      const { data } = await api.get(
+        `/v1/category?page=1&row=${e.rowCount}&type=${e.type}&q=${e.query}`
+      )
       tableResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
