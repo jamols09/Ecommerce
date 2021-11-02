@@ -7,7 +7,7 @@ pageTitle.value = 'List Category'
 const api = useCategory()
 const table = reactive({
   searchType: ['Name', 'Created At'],
-  totalRows: [10, 15, 30, 50],
+  totalRows: [5, 15, 30, 51],
   headers: [
     { name: 'Name', sortable: true },
     { name: 'Parent', sortable: true },
@@ -77,7 +77,11 @@ watchEffect(async () => {
 <template>
   <div>
     <CategoryTable
-      :total-rows="table.totalRows.sort()"
+      :total-rows="
+        table.totalRows.sort(function (a, b) {
+          return a - b
+        })
+      "
       :headers="table.headers"
       :data="table.data"
       :search-type="table.searchType"
