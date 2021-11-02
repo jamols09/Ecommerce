@@ -49,7 +49,6 @@ const onCheckAll = () => {
 }
 
 const isLoadState = computed(() => props.isLoading)
-watchEffect(() => console.log(isLoadState.value))
 debouncedWatch(
   search,
   () => {
@@ -198,10 +197,10 @@ onMounted(() => {
           <tr>
             <td colspan="7">
               <VLoader
-                size="xl"
+                size="large"
                 class="project-preview-wrapper"
                 :active="isLoading"
-                grey
+                :lighter="true"
               >
                 <VPlaceholderSection
                   title="No data to show"
