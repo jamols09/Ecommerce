@@ -39,7 +39,6 @@ const onSearch = (e: any) => {
 
 const onChangePage = (e: any) => {
   e > 0 ? (page.value += 1) : (page.value -= 1)
-  console.log(page.value)
   calltable()
 }
 
@@ -77,6 +76,7 @@ watchEffect(async () => {
       :headers="table.headers"
       :data="table.data"
       :search-type="table.searchType"
+      :is-loading="api.isLoading.value"
       @rowCount="rowCount = $event"
       @type="type = $event"
       @search="onSearch"
@@ -90,6 +90,7 @@ watchEffect(async () => {
         :last-page-url="pagination.last_page_url"
         :next-page-url="pagination.next_page_url"
         :prev-page-url="pagination.prev_page_url"
+        :is-loading="api.isLoading.value"
         @next="onChangePage"
         @prev="onChangePage"
       />

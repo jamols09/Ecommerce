@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 interface IPaginationProps {
   total: number
@@ -10,14 +10,16 @@ interface IPaginationProps {
   lastPageUrl: string | null
   nextPageUrl: string | null
   prevPageUrl: string | null
+  isLoading: boolean
 }
 const props = withDefaults(defineProps<IPaginationProps>(), {
   current: 0,
   from: 0,
   to: 0,
   total: 0,
+  isLoading: false,
 })
-
+const isLoadState = computed(() => props.isLoading)
 const emit = defineEmits(['next', 'prev'])
 </script>
 
@@ -31,17 +33,11 @@ const emit = defineEmits(['next', 'prev'])
     aria-label="pagination"
     data-filter-hide
   >
-    <!-- 
-      <li class="active"><a href="#" data-page="1">1</a></li>
-      <li class=""><a href="#" data-page="2">2</a></li>
-      <li class="pager"><a href="#" data-page="2">›</a></li> 
-    -->
-
     <!-- Previous Btn -->
     <a
       v-if="props.prevPageUrl"
       class="pagination-previous has-chevron"
-      @click="emit('prev', -1)"
+      @click="isLoadState === false ? emit('prev', -1) : false"
     >
       <i
         aria-hidden="true"
@@ -52,8 +48,9 @@ const emit = defineEmits(['next', 'prev'])
     <!-- Next Btn -->
     <a
       v-if="props.nextPageUrl"
+      :disable="isLoadState"
       class="pagination-next has-chevron"
-      @click="emit('next', 1)"
+      @click="isLoadState === false ? emit('prev', 1) : false"
     >
       <i
         aria-hidden="true"

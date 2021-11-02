@@ -3,7 +3,7 @@ import 'simple-datatables/src/style.css'
 </script>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
 
 interface IHeader {
@@ -22,6 +22,7 @@ interface ITableProps {
   totalRows?: Array<number>
   data: IData[]
   searchType: Array<any>
+  isLoading: boolean
 }
 
 const props = withDefaults(defineProps<ITableProps>(), {
@@ -47,8 +48,8 @@ const onCheckAll = () => {
   }
 }
 
-//pagination
-
+const isLoadState = computed(() => props.isLoading)
+watchEffect(() => console.log(isLoadState.value))
 debouncedWatch(
   search,
   () => {
@@ -155,7 +156,7 @@ onMounted(() => {
             </th>
           </tr>
         </thead>
-        <tbody v-if="data && data.length > 0">
+        <tbody v-if="data && data.length > 0 && isLoadState === false">
           <tr v-for="(row, index) in data" :key="index">
             <td>
               <VControl>
@@ -196,24 +197,30 @@ onMounted(() => {
         <tbody v-else>
           <tr>
             <td colspan="7">
-              <!--Empty Placeholder-->
-              <VPlaceholderSection
-                title="No data to show"
-                subtitle="There is currently no data to show in this list."
+              <VLoader
+                size="xl"
+                class="project-preview-wrapper"
+                :active="isLoading"
+                grey
               >
-                <template #image>
-                  <img
-                    class="light-image"
-                    src="/@src/assets/illustrations/placeholders/search-4.svg"
-                    alt=""
-                  />
-                  <img
-                    class="dark-image"
-                    src="/@src/assets/illustrations/placeholders/search-4-dark.svg"
-                    alt=""
-                  />
-                </template>
-              </VPlaceholderSection>
+                <VPlaceholderSection
+                  title="No data to show"
+                  subtitle="There is currently no data to show in this list."
+                >
+                  <template #image>
+                    <img
+                      class="light-image"
+                      src="/@src/assets/illustrations/placeholders/search-4.svg"
+                      alt=""
+                    />
+                    <img
+                      class="dark-image"
+                      src="/@src/assets/illustrations/placeholders/search-4-dark.svg"
+                      alt=""
+                    />
+                  </template>
+                </VPlaceholderSection>
+              </VLoader>
             </td>
           </tr>
         </tbody>
