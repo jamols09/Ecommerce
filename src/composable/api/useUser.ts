@@ -19,10 +19,8 @@ export function useUser() {
     try {
       const { data } = await api.post('/v1/users', user)
       createResponse.value = data
-      console.log(data)
       notif.success(`Account successfully added.`)
     } catch (err: any) {
-      console.log(err)
       useErrorNotification.error(err.response.data)
     }
     isLoading.value = false
