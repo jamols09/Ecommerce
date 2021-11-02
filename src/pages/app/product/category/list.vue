@@ -26,6 +26,7 @@ const pagination = ref({
   next_page_url: '',
   first_page_url: '',
   prev_page_url: '',
+  links: [],
 })
 
 const rowCount = ref()
@@ -37,8 +38,13 @@ const onSearch = (e: any) => {
   calltable()
 }
 
-const onChangePage = (e: any) => {
-  e > 0 ? (page.value += 1) : (page.value -= 1)
+const onChangePage = (e?: any) => {
+  if (e.hasOwnProperty('select')) {
+    page.value = e.select
+  } else {
+    e > 0 ? (page.value += 1) : (page.value -= 1)
+  }
+
   calltable()
 }
 
@@ -51,8 +57,8 @@ const calltable = async () => {
   })
   const { body } = api.tableResponse.value
   table.data = body.data
-  //pagination
   pagination.value = body //Object.assign(pagination, body)
+  console.log(pagination.value.links)
 }
 
 watchEffect(async () => {
@@ -64,7 +70,6 @@ watchEffect(async () => {
   })
   const { body } = api.tableResponse.value
   table.data = body.data
-  //pagination
   pagination.value = body //reactive()Object.assign(pagination, body)
 })
 </script>
@@ -91,8 +96,10 @@ watchEffect(async () => {
         :next-page-url="pagination.next_page_url"
         :prev-page-url="pagination.prev_page_url"
         :is-loading="api.isLoading.value"
+        :links="pagination.links"
         @next="onChangePage"
         @prev="onChangePage"
+        @set-link="onChangePage({ select: $event })"
       />
     </CategoryTable>
   </div>

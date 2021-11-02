@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
+interface IPageLinks {
+  url: string
+  label: string
+  active: boolean
+}
+
 interface IPaginationProps {
   total: number
   current: number
@@ -11,6 +17,7 @@ interface IPaginationProps {
   nextPageUrl: string | null
   prevPageUrl: string | null
   isLoading: boolean
+  links: Array<IPageLinks>
 }
 const props = withDefaults(defineProps<IPaginationProps>(), {
   current: 0,
@@ -19,8 +26,15 @@ const props = withDefaults(defineProps<IPaginationProps>(), {
   total: 0,
   isLoading: false,
 })
+const linksList = computed(() => {
+  if (props.links.length > 1) {
+    return props.links.slice(1, -1)
+  } else {
+    return props.links
+  }
+})
 const isLoadState = computed(() => props.isLoading)
-const emit = defineEmits(['next', 'prev'])
+const emit = defineEmits(['next', 'prev', 'setLink'])
 </script>
 
 <template>
@@ -59,6 +73,17 @@ const emit = defineEmits(['next', 'prev'])
       ></i>
     </a>
     <!-- Pages -->
-    <ul class="pagination-list"></ul>
+    <ul class="pagination-list">
+      <li v-for="page in linksList" :key="page.label">
+        <a
+          class="pagination-link"
+          :aria-current="current === +page.label ? 'page' : undefined"
+          :class="[current === +page.label && 'is-current']"
+          @click="isLoadState === false ? emit('setLink', +page.label) : false"
+        >
+          {{ page.label }}
+        </a>
+      </li>
+    </ul>
   </nav>
 </template>
