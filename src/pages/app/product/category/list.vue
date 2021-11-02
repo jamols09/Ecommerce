@@ -60,7 +60,7 @@ watchEffect(async () => {
     page: (page.value = 1),
     row: rowCount.value ?? table.totalRows[0],
     query: '',
-    type: type.value ?? table.searchType[0],
+    type: table.searchType[0],
   })
   const { body } = api.tableResponse.value
   table.data = body.data
