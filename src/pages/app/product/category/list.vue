@@ -58,7 +58,7 @@ const calltable = async () => {
 
 watchEffect(async () => {
   await api.table({
-    page: 1,
+    page: (page.value = 1),
     row: rowCount.value ?? table.totalRows[0],
     query: '',
     type: type.value ?? table.searchType[0],
