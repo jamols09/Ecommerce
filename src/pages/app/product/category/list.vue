@@ -15,6 +15,8 @@ const table = reactive({
     { name: 'Action', sortable: false },
   ],
   data: [],
+  order: 'asc',
+  column: '',
 })
 
 const pagination = ref({
@@ -44,7 +46,12 @@ const onChangePage = (e?: any) => {
   } else {
     e > 0 ? (page.value += 1) : (page.value -= 1)
   }
+  calltable()
+}
 
+const onSort = (e?: any) => {
+  table.order = table.order === 'asc' ? 'desc' : 'asc'
+  table.column = encodeURIComponent(e)
   calltable()
 }
 
@@ -54,11 +61,12 @@ const calltable = async () => {
     row: rowCount.value ?? table.totalRows[0],
     query: search.value ?? '',
     type: type.value ?? table.searchType[0],
+    column: table.column ?? '',
+    order: table.order ?? '',
   })
   const { body } = api.tableResponse.value
   table.data = body.data
   pagination.value = body //Object.assign(pagination, body)
-  console.log(pagination.value.links)
 }
 
 watchEffect(async () => {
@@ -67,6 +75,8 @@ watchEffect(async () => {
     row: rowCount.value ?? table.totalRows[0],
     query: '',
     type: table.searchType[0],
+    column: '',
+    order: '',
   })
   const { body } = api.tableResponse.value
   table.data = body.data
@@ -89,6 +99,7 @@ watchEffect(async () => {
       @rowCount="rowCount = $event"
       @type="type = $event"
       @search="onSearch"
+      @sort="onSort"
     >
       <VBasicPagination
         :total="pagination.total"

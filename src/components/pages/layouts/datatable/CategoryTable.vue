@@ -32,7 +32,9 @@ const props = withDefaults(defineProps<ITableProps>(), {
   searchType: () => [],
 })
 
-const emit = defineEmits(['search', 'rowCount', 'type'])
+const sortException = [3, 1]
+
+const emit = defineEmits(['search', 'rowCount', 'type', 'sort'])
 
 const type = ref()
 const search = ref()
@@ -146,13 +148,20 @@ onMounted(() => {
                 </label>
               </VControl>
             </th>
-            <th
-              v-for="(header, index) in props.headers"
-              :key="index"
-              scope="col"
-            >
-              <a href="#" class="table-sorter">{{ header.name }}</a>
-            </th>
+            <template v-for="(header, index) in props.headers" :key="index">
+              <th
+                scope="col"
+                @click="
+                  !sortException.includes(index)
+                    ? emit('sort', header.name)
+                    : null
+                "
+              >
+                <a href="#" class="table-sorter"
+                  >{{ header.name }} {{ index }}</a
+                >
+              </th>
+            </template>
           </tr>
         </thead>
         <tbody v-if="data && data.length > 0 && isLoadState === false">
