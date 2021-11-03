@@ -12,8 +12,6 @@ interface IPaginationProps {
   current: number
   from: number
   to: number
-  firstPageUrl: string | null
-  lastPageUrl: string | null
   nextPageUrl: string | null
   prevPageUrl: string | null
   isLoading: boolean
@@ -79,7 +77,11 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
           class="pagination-link"
           :aria-current="current === +page.label ? 'page' : undefined"
           :class="[current === +page.label && 'is-current']"
-          @click="isLoadState === false ? emit('setLink', +page.label) : false"
+          @click="
+            isLoadState === false && current !== +page.label
+              ? emit('setLink', +page.label)
+              : false
+          "
         >
           {{ page.label }}
         </a>

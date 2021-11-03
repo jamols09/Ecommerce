@@ -3,8 +3,9 @@ import 'simple-datatables/src/style.css'
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
+import CategoryActionDropdown from '/@src/components/partials/dropdowns/CategoryActionDropdown.vue'
 
 interface IHeader {
   name: string
@@ -51,6 +52,9 @@ const onCheckAll = () => {
 }
 
 const isLoadState = computed(() => props.isLoading)
+watchEffect(() => {
+  isLoadState.value
+})
 debouncedWatch(
   search,
   () => {
@@ -58,7 +62,6 @@ debouncedWatch(
   },
   { debounce: 700 }
 )
-
 onMounted(() => {
   rowCount.value = props.totalRows[0]
   type.value = props.searchType[0]
@@ -131,7 +134,7 @@ onMounted(() => {
     </div>
     <!-- Body -->
     <div class="table-body">
-      <table class="table is-striped is-fullwidth">
+      <table class="table is-hoverable is-fullwidth">
         <thead>
           <tr>
             <th scope="col" data-sortable="false">
@@ -157,9 +160,7 @@ onMounted(() => {
                     : null
                 "
               >
-                <a href="#" class="table-sorter"
-                  >{{ header.name }} {{ index }}</a
-                >
+                <a href="#" class="table-sorter"> {{ header.name }} </a>
               </th>
             </template>
           </tr>
@@ -198,7 +199,7 @@ onMounted(() => {
               <span class="light-text">{{ row.created_at }}</span>
             </td>
             <td>
-              <WidgetDropdown />
+              <CategoryActionDropdown />
             </td>
           </tr>
         </tbody>
