@@ -1,34 +1,28 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
-interface IPageLinks {
-  url: string
-  label: string
-  active: boolean
-}
-
-interface IPaginationProps {
+interface IPagination {
   total: number
-  current: number
-  from: number | null
-  to: number | null
-  nextPageUrl: string | null
-  prevPageUrl: string | null
+  current_page: number
+  from: number
+  to: number
+  next_page_url: string
+  prev_page_url: string
+  links: any
+}
+;``
+interface IPaginationProps {
   isLoading: boolean
-  links: Array<IPageLinks>
+  pagination: IPagination
 }
 const props = withDefaults(defineProps<IPaginationProps>(), {
-  current: 0,
-  from: 0,
-  to: 0,
-  total: 0,
   isLoading: false,
 })
 const linksList = computed(() => {
-  if (props.links.length > 1) {
-    return props.links.slice(1, -1)
+  if (props.pagination.links.length > 1) {
+    return props.pagination.links.slice(1, -1)
   } else {
-    return props.links
+    return props.pagination.links
   }
 })
 const isLoadState = computed(() => props.isLoading)
@@ -37,7 +31,8 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
 
 <template>
   <div class="dataTable-info">
-    Showing {{ props.from }} to {{ props.to }} of {{ props.total }} result
+    Showing {{ props.pagination.from }} to {{ props.pagination.to }} of
+    {{ props.pagination.total }} result
   </div>
   <nav
     class="flex-pagination pagination is-rounded"
@@ -47,7 +42,7 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
   >
     <!-- Previous Btn -->
     <a
-      v-if="props.prevPageUrl"
+      v-if="props.pagination.next_page_url"
       class="pagination-previous has-chevron"
       @click="isLoadState === false ? emit('prev', -1) : false"
     >
@@ -59,7 +54,7 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
     </a>
     <!-- Next Btn -->
     <a
-      v-if="props.nextPageUrl"
+      v-if="props.pagination.prev_page_url"
       :disable="isLoadState"
       class="pagination-next has-chevron"
       @click="isLoadState === false ? emit('prev', 1) : false"
@@ -75,10 +70,12 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
       <li v-for="page in linksList" :key="page.label">
         <a
           class="pagination-link"
-          :aria-current="current === +page.label ? 'page' : undefined"
-          :class="[current === +page.label && 'is-current']"
+          :aria-current="
+            pagination.current_page === +page.label ? 'page' : undefined
+          "
+          :class="[pagination.current_page === +page.label && 'is-current']"
           @click="
-            isLoadState === false && current !== +page.label
+            isLoadState === false && pagination.current_page !== +page.label
               ? emit('setLink', +page.label)
               : false
           "

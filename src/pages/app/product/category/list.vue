@@ -108,14 +108,8 @@ watchEffect(async () => {
       @sort="onSort"
     >
       <VBasicPagination
-        :total="pagination.total"
-        :current="pagination.current_page"
-        :from="pagination.from"
-        :to="pagination.to"
-        :next-page-url="pagination.next_page_url"
-        :prev-page-url="pagination.prev_page_url"
         :is-loading="api.isLoading.value"
-        :links="pagination.links"
+        :pagination="pagination"
         @next="onChangePage"
         @prev="onChangePage"
         @set-link="onChangePage({ select: $event })"
