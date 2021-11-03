@@ -54,8 +54,8 @@ const onSort = (e?: any) => {
 }
 
 const onRemove = async (e: any) => {
-  console.log(e)
   await api.remove({ id: e })
+  page.value = null
   calltable()
 }
 
@@ -70,7 +70,7 @@ const calltable = async () => {
   })
   const { body } = api.tableResponse.value
   table.data = body.data
-  pagination.value = body //Object.assign(pagination, body)
+  pagination.value = body //reactive() Object.assign(pagination, body)
 }
 
 watchEffect(async () => {
