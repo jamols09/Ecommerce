@@ -3,7 +3,7 @@ import 'simple-datatables/src/style.css'
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
 import CategoryActionDropdown from '/@src/components/partials/dropdowns/CategoryActionDropdown.vue'
 
@@ -24,6 +24,7 @@ interface ITableProps {
   data: IData[]
   searchType: Array<any>
   isLoading: boolean
+  resetChecked: boolean
 }
 
 const props = withDefaults(defineProps<ITableProps>(), {
@@ -31,12 +32,12 @@ const props = withDefaults(defineProps<ITableProps>(), {
   totalRows: () => [],
   data: () => [],
   searchType: () => [],
+  resetChecked: false,
 })
 
+const emit = defineEmits(['search', 'rowCount', 'type', 'sort', 'remove'])
+
 const sortException = [3, 1]
-
-const emit = defineEmits(['search', 'rowCount', 'type', 'sort'])
-
 const type = ref()
 const search = ref()
 const rowCount = ref<number>()
@@ -53,12 +54,12 @@ const onCheckAll = () => {
 
 const isLoadState = computed(() => props.isLoading)
 
-watchEffect(() => {
-  if (isLoadState.value === true) {
-    checked.value.length = 0
-    checkAll.value = false
-  }
-})
+// watchEffect(() => {
+//   if (isLoadState.value === true) {
+//     checked.value.length = 0
+//     checkAll.value = false
+//   }
+// })
 
 debouncedWatch(
   search,
@@ -99,9 +100,14 @@ onMounted(() => {
         <div class="table-btnRemove">
           <transition name="fade">
             <VButton
-              v-if="checkAll || checked.length > 0"
+              v-if="checked.length > 0"
               color="danger"
               raised
+              @click="
+                emit('remove', checked),
+                  (checkAll = false),
+                  (checked.length = 0)
+              "
             >
               Remove
             </VButton>

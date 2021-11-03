@@ -10,8 +10,8 @@ interface IPageLinks {
 interface IPaginationProps {
   total: number
   current: number
-  from: number
-  to: number
+  from: number | null
+  to: number | null
   nextPageUrl: string | null
   prevPageUrl: string | null
   isLoading: boolean

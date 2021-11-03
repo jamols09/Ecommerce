@@ -7,7 +7,7 @@ pageTitle.value = 'List Category'
 const api = useCategory()
 const table = reactive({
   searchType: ['Name', 'Created At'],
-  totalRows: [5, 15, 30, 50],
+  totalRows: [10, 15, 30, 50],
   headers: [
     { name: 'Name', sortable: true },
     { name: 'Parent', sortable: true },
@@ -53,6 +53,12 @@ const onSort = (e?: any) => {
   calltable()
 }
 
+const onRemove = async (e: any) => {
+  console.log(e)
+  await api.remove({ id: e })
+  calltable()
+}
+
 const calltable = async () => {
   await api.table({
     page: page.value ?? '1',
@@ -94,6 +100,8 @@ watchEffect(async () => {
       :data="table.data"
       :search-type="table.searchType"
       :is-loading="api.isLoading.value"
+      :reset-checked="false"
+      @remove="onRemove"
       @rowCount="rowCount = $event"
       @type="type = $event"
       @search="onSearch"
