@@ -52,9 +52,14 @@ const onCheckAll = () => {
 }
 
 const isLoadState = computed(() => props.isLoading)
+
 watchEffect(() => {
-  isLoadState.value
+  if (isLoadState.value === true) {
+    checked.value.length = 0
+    checkAll.value = false
+  }
 })
+
 debouncedWatch(
   search,
   () => {

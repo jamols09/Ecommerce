@@ -7,7 +7,7 @@ pageTitle.value = 'List Category'
 const api = useCategory()
 const table = reactive({
   searchType: ['Name', 'Created At'],
-  totalRows: [5, 15, 30, 51],
+  totalRows: [5, 15, 30, 50],
   headers: [
     { name: 'Name', sortable: true },
     { name: 'Parent', sortable: true },
@@ -24,9 +24,7 @@ const pagination = ref({
   current_page: 0,
   from: 0,
   to: 0,
-  last_page_url: '',
   next_page_url: '',
-  first_page_url: '',
   prev_page_url: '',
   links: [],
 })
@@ -80,7 +78,7 @@ watchEffect(async () => {
   })
   const { body } = api.tableResponse.value
   table.data = body.data
-  pagination.value = body //reactive()Object.assign(pagination, body)
+  pagination.value = body //reactive() Object.assign(pagination, body)
 })
 </script>
 
