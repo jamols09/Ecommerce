@@ -3,8 +3,9 @@ import 'simple-datatables/src/style.css'
 </script>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
+import CategoryActionDropdown from '/@src/components/partials/dropdowns/CategoryActionDropdown.vue'
 
 interface IHeader {
   name: string
@@ -22,6 +23,8 @@ interface ITableProps {
   totalRows?: Array<number>
   data: IData[]
   searchType: Array<any>
+  isLoading: boolean
+  resetChecked: boolean
 }
 
 const props = withDefaults(defineProps<ITableProps>(), {
@@ -29,10 +32,12 @@ const props = withDefaults(defineProps<ITableProps>(), {
   totalRows: () => [],
   data: () => [],
   searchType: () => [],
+  resetChecked: false,
 })
 
-const emit = defineEmits(['search', 'rowCount', 'type'])
+const emit = defineEmits(['search', 'rowCount', 'type', 'sort', 'remove'])
 
+const sortException = [3, 1]
 const type = ref()
 const search = ref()
 const rowCount = ref<number>()
@@ -47,7 +52,14 @@ const onCheckAll = () => {
   }
 }
 
-//pagination
+const isLoadState = computed(() => props.isLoading)
+
+// watchEffect(() => {
+//   if (isLoadState.value === true) {
+//     checked.value.length = 0
+//     checkAll.value = false
+//   }
+// })
 
 debouncedWatch(
   search,
@@ -56,7 +68,6 @@ debouncedWatch(
   },
   { debounce: 700 }
 )
-
 onMounted(() => {
   rowCount.value = props.totalRows[0]
   type.value = props.searchType[0]
@@ -89,9 +100,14 @@ onMounted(() => {
         <div class="table-btnRemove">
           <transition name="fade">
             <VButton
-              v-if="checkAll || checked.length > 0"
+              v-if="checked.length > 0"
               color="danger"
               raised
+              @click="
+                emit('remove', checked),
+                  (checkAll = false),
+                  (checked.length = 0)
+              "
             >
               Remove
             </VButton>
@@ -129,7 +145,7 @@ onMounted(() => {
     </div>
     <!-- Body -->
     <div class="table-body">
-      <table class="table is-striped is-fullwidth">
+      <table class="table is-hoverable is-fullwidth">
         <thead>
           <tr>
             <th scope="col" data-sortable="false">
@@ -146,16 +162,21 @@ onMounted(() => {
                 </label>
               </VControl>
             </th>
-            <th
-              v-for="(header, index) in props.headers"
-              :key="index"
-              scope="col"
-            >
-              <a href="#" class="table-sorter">{{ header.name }}</a>
-            </th>
+            <template v-for="(header, index) in props.headers" :key="index">
+              <th
+                scope="col"
+                @click="
+                  !sortException.includes(index)
+                    ? emit('sort', header.name)
+                    : null
+                "
+              >
+                <a href="#" class="table-sorter"> {{ header.name }} </a>
+              </th>
+            </template>
           </tr>
         </thead>
-        <tbody v-if="data && data.length > 0">
+        <tbody v-if="data && data.length > 0 && isLoadState === false">
           <tr v-for="(row, index) in data" :key="index">
             <td>
               <VControl>
@@ -189,31 +210,37 @@ onMounted(() => {
               <span class="light-text">{{ row.created_at }}</span>
             </td>
             <td>
-              <WidgetDropdown />
+              <CategoryActionDropdown />
             </td>
           </tr>
         </tbody>
         <tbody v-else>
           <tr>
             <td colspan="7">
-              <!--Empty Placeholder-->
-              <VPlaceholderSection
-                title="No data to show"
-                subtitle="There is currently no data to show in this list."
+              <VLoader
+                size="large"
+                class="project-preview-wrapper"
+                :active="isLoading"
+                :lighter="true"
               >
-                <template #image>
-                  <img
-                    class="light-image"
-                    src="/@src/assets/illustrations/placeholders/search-4.svg"
-                    alt=""
-                  />
-                  <img
-                    class="dark-image"
-                    src="/@src/assets/illustrations/placeholders/search-4-dark.svg"
-                    alt=""
-                  />
-                </template>
-              </VPlaceholderSection>
+                <VPlaceholderSection
+                  title="No data to show"
+                  subtitle="There is currently no data to show in this list."
+                >
+                  <template #image>
+                    <img
+                      class="light-image"
+                      src="/@src/assets/illustrations/placeholders/search-4.svg"
+                      alt=""
+                    />
+                    <img
+                      class="dark-image"
+                      src="/@src/assets/illustrations/placeholders/search-4-dark.svg"
+                      alt=""
+                    />
+                  </template>
+                </VPlaceholderSection>
+              </VLoader>
             </td>
           </tr>
         </tbody>

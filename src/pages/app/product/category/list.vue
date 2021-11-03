@@ -15,6 +15,8 @@ const table = reactive({
     { name: 'Action', sortable: false },
   ],
   data: [],
+  order: 'asc',
+  column: '',
 })
 
 const pagination = ref({
@@ -22,10 +24,9 @@ const pagination = ref({
   current_page: 0,
   from: 0,
   to: 0,
-  last_page_url: '',
   next_page_url: '',
-  first_page_url: '',
   prev_page_url: '',
+  links: [],
 })
 
 const rowCount = ref()
@@ -37,9 +38,24 @@ const onSearch = (e: any) => {
   calltable()
 }
 
-const onChangePage = (e: any) => {
-  e > 0 ? (page.value += 1) : (page.value -= 1)
-  console.log(page.value)
+const onChangePage = (e?: any) => {
+  if (e.hasOwnProperty('select')) {
+    page.value = e.select
+  } else {
+    e > 0 ? (page.value += 1) : (page.value -= 1)
+  }
+  calltable()
+}
+
+const onSort = (e?: any) => {
+  table.order = table.order === 'asc' ? 'desc' : 'asc'
+  table.column = encodeURIComponent(e)
+  calltable()
+}
+
+const onRemove = async (e: any) => {
+  console.log(e)
+  await api.remove({ id: e })
   calltable()
 }
 
@@ -49,49 +65,60 @@ const calltable = async () => {
     row: rowCount.value ?? table.totalRows[0],
     query: search.value ?? '',
     type: type.value ?? table.searchType[0],
+    column: table.column ?? '',
+    order: table.order ?? '',
   })
   const { body } = api.tableResponse.value
   table.data = body.data
-  //pagination
   pagination.value = body //Object.assign(pagination, body)
 }
 
 watchEffect(async () => {
   await api.table({
-    page: 1,
+    page: (page.value = 1),
     row: rowCount.value ?? table.totalRows[0],
     query: '',
-    type: type.value ?? table.searchType[0],
+    type: table.searchType[0],
+    column: '',
+    order: '',
   })
   const { body } = api.tableResponse.value
   table.data = body.data
-  //pagination
-  pagination.value = body //reactive()Object.assign(pagination, body)
+  pagination.value = body //reactive() Object.assign(pagination, body)
 })
 </script>
 
 <template>
   <div>
     <CategoryTable
-      :total-rows="table.totalRows.sort()"
+      :total-rows="
+        table.totalRows.sort(function (a, b) {
+          return a - b
+        })
+      "
       :headers="table.headers"
       :data="table.data"
       :search-type="table.searchType"
+      :is-loading="api.isLoading.value"
+      :reset-checked="false"
+      @remove="onRemove"
       @rowCount="rowCount = $event"
       @type="type = $event"
       @search="onSearch"
+      @sort="onSort"
     >
       <VBasicPagination
         :total="pagination.total"
         :current="pagination.current_page"
         :from="pagination.from"
         :to="pagination.to"
-        :first-page-url="pagination.first_page_url"
-        :last-page-url="pagination.last_page_url"
         :next-page-url="pagination.next_page_url"
         :prev-page-url="pagination.prev_page_url"
+        :is-loading="api.isLoading.value"
+        :links="pagination.links"
         @next="onChangePage"
         @prev="onChangePage"
+        @set-link="onChangePage({ select: $event })"
       />
     </CategoryTable>
   </div>
