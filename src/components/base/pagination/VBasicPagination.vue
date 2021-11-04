@@ -42,7 +42,7 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
   >
     <!-- Previous Btn -->
     <a
-      v-if="props.pagination.next_page_url"
+      v-if="props.pagination.prev_page_url"
       class="pagination-previous has-chevron"
       @click="isLoadState === false ? emit('prev', -1) : false"
     >
@@ -54,7 +54,7 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
     </a>
     <!-- Next Btn -->
     <a
-      v-if="props.pagination.prev_page_url"
+      v-if="props.pagination.next_page_url"
       :disable="isLoadState"
       class="pagination-next has-chevron"
       @click="isLoadState === false ? emit('prev', 1) : false"

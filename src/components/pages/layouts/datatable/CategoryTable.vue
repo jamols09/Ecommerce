@@ -35,7 +35,14 @@ const props = withDefaults(defineProps<ITableProps>(), {
   resetChecked: false,
 })
 
-const emit = defineEmits(['search', 'rowCount', 'type', 'sort', 'remove'])
+const emit = defineEmits([
+  'search',
+  'rowCount',
+  'type',
+  'sort',
+  'remove',
+  'reload',
+])
 
 const sortException = [3, 1]
 const type = ref()
@@ -210,7 +217,15 @@ onMounted(() => {
               <span class="light-text">{{ row.created_at }}</span>
             </td>
             <td>
-              <CategoryActionDropdown />
+              <CategoryActionDropdown
+                :action-id="row.id"
+                @click=";(checkAll = false), (checked.length = 0)"
+                @remove="
+                  emit('remove', (checked = $event)),
+                    (checkAll = false),
+                    (checked.length = 0)
+                "
+              />
             </td>
           </tr>
         </tbody>

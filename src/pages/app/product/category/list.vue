@@ -55,7 +55,7 @@ const onSort = (e?: any) => {
 
 const onRemove = async (e: any) => {
   await api.remove({ id: e })
-  page.value = null
+  page.value = 1
   calltable()
 }
 
