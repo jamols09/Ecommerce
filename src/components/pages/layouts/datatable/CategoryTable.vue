@@ -3,7 +3,7 @@ import 'simple-datatables/src/style.css'
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
 import CategoryActionDropdown from '/@src/components/partials/dropdowns/CategoryActionDropdown.vue'
 
@@ -24,7 +24,7 @@ interface ITableProps {
   data: IData[]
   searchType: Array<any>
   isLoading: boolean
-  resetChecked: boolean
+  resetChecked?: boolean
 }
 
 const props = withDefaults(defineProps<ITableProps>(), {
@@ -59,19 +59,25 @@ const onCheckAll = () => {
   }
 }
 
-const isLoadState = computed(() => props.isLoading)
+const reset = () => {
+  checked.value.length = 0
+  checkAll.value = false
+}
 
-// watchEffect(() => {
-//   if (isLoadState.value === true) {
-//     checked.value.length = 0
-//     checkAll.value = false
-//   }
-// })
+const isLoadState = computed(() => props.isLoading)
+const isReset = ref(() => {
+  return props.resetChecked
+})
+
+watch(isReset.value, (current, prev) => {
+  reset()
+})
 
 debouncedWatch(
   search,
   () => {
     emit('search', search.value)
+    reset()
   },
   { debounce: 700 }
 )
@@ -219,12 +225,8 @@ onMounted(() => {
             <td>
               <CategoryActionDropdown
                 :action-id="row.id"
-                @click=";(checkAll = false), (checked.length = 0)"
-                @remove="
-                  emit('remove', (checked = $event)),
-                    (checkAll = false),
-                    (checked.length = 0)
-                "
+                @click="reset()"
+                @remove="emit('remove', (checked = $event)), reset()"
               />
             </td>
           </tr>

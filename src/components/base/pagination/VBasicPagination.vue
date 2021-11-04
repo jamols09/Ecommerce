@@ -10,7 +10,7 @@ interface IPagination {
   prev_page_url: string
   links: any
 }
-;``
+
 interface IPaginationProps {
   isLoading: boolean
   pagination: IPagination
@@ -26,7 +26,7 @@ const linksList = computed(() => {
   }
 })
 const isLoadState = computed(() => props.isLoading)
-const emit = defineEmits(['next', 'prev', 'setLink'])
+const emit = defineEmits(['change', 'setLink'])
 </script>
 
 <template>
@@ -44,7 +44,7 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
     <a
       v-if="props.pagination.prev_page_url"
       class="pagination-previous has-chevron"
-      @click="isLoadState === false ? emit('prev', -1) : false"
+      @click="isLoadState === false ? emit('change', -1) : false"
     >
       <i
         aria-hidden="true"
@@ -57,7 +57,7 @@ const emit = defineEmits(['next', 'prev', 'setLink'])
       v-if="props.pagination.next_page_url"
       :disable="isLoadState"
       class="pagination-next has-chevron"
-      @click="isLoadState === false ? emit('prev', 1) : false"
+      @click="isLoadState === false ? emit('change', 1) : false"
     >
       <i
         aria-hidden="true"

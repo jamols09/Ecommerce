@@ -33,6 +33,7 @@ const rowCount = ref()
 const type = ref()
 const search = ref()
 const page = ref(1)
+const reset = ref(false)
 const onSearch = (e: any) => {
   search.value = e
   calltable()
@@ -44,6 +45,7 @@ const onChangePage = (e?: any) => {
   } else {
     e > 0 ? (page.value += 1) : (page.value -= 1)
   }
+  reset.value = !reset.value
   calltable()
 }
 
@@ -100,7 +102,7 @@ watchEffect(async () => {
       :data="table.data"
       :search-type="table.searchType"
       :is-loading="api.isLoading.value"
-      :reset-checked="false"
+      :reset-checked="reset"
       @remove="onRemove"
       @rowCount="rowCount = $event"
       @type="type = $event"
@@ -110,8 +112,7 @@ watchEffect(async () => {
       <VBasicPagination
         :is-loading="api.isLoading.value"
         :pagination="pagination"
-        @next="onChangePage"
-        @prev="onChangePage"
+        @change="onChangePage"
         @set-link="onChangePage({ select: $event })"
       />
     </CategoryTable>
