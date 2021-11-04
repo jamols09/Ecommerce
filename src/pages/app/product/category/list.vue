@@ -33,6 +33,7 @@ const rowCount = ref()
 const type = ref()
 const search = ref()
 const page = ref(1)
+const reset = ref(false)
 const onSearch = (e: any) => {
   search.value = e
   calltable()
@@ -44,6 +45,7 @@ const onChangePage = (e?: any) => {
   } else {
     e > 0 ? (page.value += 1) : (page.value -= 1)
   }
+  reset.value = !reset.value
   calltable()
 }
 
@@ -54,8 +56,8 @@ const onSort = (e?: any) => {
 }
 
 const onRemove = async (e: any) => {
-  console.log(e)
   await api.remove({ id: e })
+  page.value = 1
   calltable()
 }
 
@@ -70,7 +72,7 @@ const calltable = async () => {
   })
   const { body } = api.tableResponse.value
   table.data = body.data
-  pagination.value = body //Object.assign(pagination, body)
+  pagination.value = body //reactive() Object.assign(pagination, body)
 }
 
 watchEffect(async () => {
@@ -100,7 +102,7 @@ watchEffect(async () => {
       :data="table.data"
       :search-type="table.searchType"
       :is-loading="api.isLoading.value"
-      :reset-checked="false"
+      :reset-checked="reset"
       @remove="onRemove"
       @rowCount="rowCount = $event"
       @type="type = $event"
@@ -108,16 +110,9 @@ watchEffect(async () => {
       @sort="onSort"
     >
       <VBasicPagination
-        :total="pagination.total"
-        :current="pagination.current_page"
-        :from="pagination.from"
-        :to="pagination.to"
-        :next-page-url="pagination.next_page_url"
-        :prev-page-url="pagination.prev_page_url"
         :is-loading="api.isLoading.value"
-        :links="pagination.links"
-        @next="onChangePage"
-        @prev="onChangePage"
+        :pagination="pagination"
+        @change="onChangePage"
         @set-link="onChangePage({ select: $event })"
       />
     </CategoryTable>
