@@ -13,10 +13,17 @@ interface IHeader {
 }
 interface IData {
   id: number
-  name: string
-  parent_id?: number | null
+  username: string
+  first_name: string
+  middle_name: string | null
+  last_name: string | null
+  birthdate: string
+  thumbnail: string | null
+  is_active: number
+  email: string
+  account_type: string
+  email_verified_at: string
   created_at?: string
-  parent: any
 }
 interface ITableProps {
   headers: IHeader[]
@@ -204,28 +211,37 @@ onMounted(() => {
                 </label>
               </VControl>
             </td>
-            <td>
-              <span
-                class="
-                  has-dark-text
-                  dark-inverted
-                  is-font-alt is-weight-600
-                  rem-90
-                "
-              >
-                {{ row.name }}
-              </span>
+            <td class="is-media">
+              <VAvatar v-if="row.thumbnail" picture="{{row.thumbnail}}" />
+              <VAvatar v-else picture="/demo/avatars/8.gif" />
             </td>
             <td>
-              <span class="light-text">{{ row.parent?.name }}</span>
+              <span class="light-text">{{ row.is_active }}</span>
             </td>
+            <td>
+              <span class="light-text">{{ row.username }}</span>
+            </td>
+            <td>
+              <span class="light-text">{{ row.first_name }}</span>
+            </td>
+            <td>
+              <span class="light-text">{{ row.middle_name }}</span>
+            </td>
+            <td>
+              <span class="light-text">{{ row.last_name }}</span>
+            </td>
+            <td>
+              <span class="light-text">{{ row.email }}</span>
+            </td>
+
             <td>
               <span class="light-text">{{ row.created_at }}</span>
             </td>
+
             <td>
               <GenericActionDropdown
                 :action-id="row.id"
-                :message-remove="'Remove'"
+                :message-remove="'Deactivate'"
                 @click="reset()"
                 @remove="emit('remove', (checked = $event)), reset()"
               />
@@ -234,7 +250,7 @@ onMounted(() => {
         </tbody>
         <tbody v-else>
           <tr>
-            <td colspan="7">
+            <td colspan="12">
               <VLoader
                 size="large"
                 class="project-preview-wrapper"
