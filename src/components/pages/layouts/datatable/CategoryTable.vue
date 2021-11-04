@@ -19,7 +19,7 @@ interface IData {
   parent: any
 }
 interface ITableProps {
-  headers: Array<IHeader>
+  headers: IHeader[]
   totalRows?: Array<number>
   data: IData[]
   searchType: Array<any>
