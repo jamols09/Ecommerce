@@ -33,7 +33,7 @@ export function useUser() {
     isLoading.value = true
     try {
       const { data } = await api.get(
-        `/v1/users?page=${e.page}&row=${e.row}&type=${e.type}&q=${e.query}&col=${e.column}&order=${e.order}&u=a`
+        `/v1/users?page=${e.page}&row=${e.row}&type=${e.type}&q=${e.query}&col=${e.column}&order=${e.order}&u=${e.account}`
       )
       tableResponse.value = data
     } catch (err: any) {
@@ -63,7 +63,7 @@ export function useUser() {
     try {
       const { data } = await api.post(`/v1/users/delete`, e)
       removeResponse.value = data
-      notif.success(`Account(s) successfully removed.`)
+      notif.warning(`Account(s) removed.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }

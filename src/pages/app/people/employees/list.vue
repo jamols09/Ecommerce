@@ -2,7 +2,7 @@
 import { reactive, ref, watchEffect } from 'vue'
 import { useUser } from '/@src/composable/api/useUser'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-pageTitle.value = 'List Employee'
+pageTitle.value = 'List of Employee'
 
 const api = useUser()
 const table = reactive({
@@ -80,6 +80,7 @@ const calltable = async () => {
     type: type.value ?? table.searchType[0],
     column: table.column ?? '',
     order: table.order ?? '',
+    account: 'a',
   })
   const { body } = api.tableResponse.value
   table.data = body.data
@@ -94,6 +95,7 @@ watchEffect(async () => {
     type: table.searchType[0],
     column: '',
     order: '',
+    account: 'a',
   })
   const { body } = api.tableResponse.value
   table.data = body.data
