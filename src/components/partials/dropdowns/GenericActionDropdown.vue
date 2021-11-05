@@ -4,10 +4,14 @@ import { useCategory } from '/@src/composable/api/useCategory'
 
 interface IActionDropdown {
   actionId: number
+  messageRemove?: string
+  messageEdit?: string
 }
 const api = useCategory()
 const props = withDefaults(defineProps<IActionDropdown>(), {
   actionId: 0,
+  messageRemove: '',
+  messageEdit: '',
 })
 const emit = defineEmits(['remove'])
 const action = ref<Array<number>>([])
@@ -42,7 +46,7 @@ const onRemove = async (e: number) => {
           <i aria-hidden="true" class="lnil lnil-trash-can-alt"></i>
         </div>
         <div class="meta">
-          <span>Remove</span>
+          <span>{{ props.messageRemove }}</span>
         </div>
       </a>
     </template>

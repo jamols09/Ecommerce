@@ -3,9 +3,8 @@ import 'simple-datatables/src/style.css'
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
-import CategoryActionDropdown from '../../../partials/dropdowns/GenericActionDropdown.vue'
 
 interface IHeader {
   name: string
@@ -13,10 +12,17 @@ interface IHeader {
 }
 interface IData {
   id: number
-  name: string
-  parent_id?: number | null
+  username: string
+  first_name: string
+  middle_name: string | null
+  last_name: string | null
+  birthdate: string
+  thumbnail: string | null
+  is_active: number
+  email: string
+  account_type: string
+  email_verified_at: string
   created_at?: string
-  parent: any
 }
 interface ITableProps {
   headers: IHeader[]
@@ -42,9 +48,10 @@ const emit = defineEmits([
   'sort',
   'remove',
   'reload',
+  'activate',
 ])
 
-const sortException = [3, 1]
+const sortException = [0, 8]
 const type = ref()
 const search = ref()
 const rowCount = ref<number>()
@@ -122,7 +129,7 @@ onMounted(() => {
                   (checked.length = 0)
               "
             >
-              Remove
+              Deactivate
             </VButton>
           </transition>
         </div>
@@ -204,37 +211,52 @@ onMounted(() => {
                 </label>
               </VControl>
             </td>
-            <td>
-              <span
-                class="
-                  has-dark-text
-                  dark-inverted
-                  is-font-alt is-weight-600
-                  rem-90
-                "
-              >
-                {{ row.name }}
-              </span>
+            <td class="is-media">
+              <VAvatar v-if="row.thumbnail" picture="{{row.thumbnail}}" />
+              <VAvatar v-else picture="/demo/avatars/8.gif" />
             </td>
             <td>
-              <span class="light-text">{{ row.parent?.name }}</span>
+              <span class="light-text">{{ row.is_active ? 'Yes' : 'No' }}</span>
             </td>
+            <td>
+              <span class="light-text">{{ row.username }}</span>
+            </td>
+            <td>
+              <span class="light-text">{{ row.first_name }}</span>
+            </td>
+            <td>
+              <span class="light-text">{{ row.middle_name }}</span>
+            </td>
+            <td>
+              <span class="light-text">{{ row.last_name }}</span>
+            </td>
+            <td>
+              <span class="light-text">{{ row.email }}</span>
+            </td>
+
             <td>
               <span class="light-text">{{ row.created_at }}</span>
             </td>
+
             <td>
               <GenericActionDropdown
                 :action-id="row.id"
-                :message-remove="'Remove'"
+                :message-remove="row.is_active ? 'Deactivate' : 'Activate'"
                 @click="reset()"
-                @remove="emit('remove', (checked = $event)), reset()"
+                @remove="
+                  emit(
+                    row.is_active ? 'remove' : 'activate',
+                    (checked = $event)
+                  ),
+                    reset()
+                "
               />
             </td>
           </tr>
         </tbody>
         <tbody v-else>
           <tr>
-            <td colspan="7">
+            <td colspan="12">
               <VLoader
                 size="large"
                 class="project-preview-wrapper"
