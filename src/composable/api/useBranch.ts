@@ -3,6 +3,7 @@ import useNotyf from '../useNotyf'
 import useErrorNotification from './useErrorNotification'
 import { useApi } from '/@src/composable/useApi'
 
+const statusResponse = ref()
 const tableResponse = ref()
 const createResponse = ref()
 const dropdownResponse = ref()
@@ -67,13 +68,29 @@ export function useBranch() {
 
   /**
    * @param array id
-   * @returns Paginated category
+   * @returns Paginated branch
    */
   const remove = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.post(`/v1/category/delete`, e)
+      const { data } = await api.post(`/v1/branch/delete`, e)
       removeResponse.value = data
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
+  /**
+   * @param array id
+   * @returns Paginated branch
+   */
+  const status = async (e?: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.post(`/v1/branch/status`, e)
+      statusResponse.value = data
+      notif.success(`Account(s) successfully ${e?.status}d.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -90,5 +107,6 @@ export function useBranch() {
     create,
     table,
     remove,
+    status,
   } as const // as const is a typescript keyword to prevent from updating
 }

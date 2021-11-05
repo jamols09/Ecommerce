@@ -67,9 +67,9 @@ const onSort = (e?: any) => {
 }
 
 const onSetStatus = async (e: any, a?: string) => {
-  // await api.status({ id: e, status: a })
-  // page.value = 1
-  // calltable()
+  await api.status({ id: e, status: a })
+  page.value = 1
+  calltable()
 }
 
 const calltable = async () => {
