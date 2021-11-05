@@ -3,9 +3,8 @@ import 'simple-datatables/src/style.css'
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
-import CategoryActionDropdown from '../../../partials/dropdowns/GenericActionDropdown.vue'
 
 interface IHeader {
   name: string
@@ -51,7 +50,7 @@ const emit = defineEmits([
   'reload',
 ])
 
-const sortException = [3, 1]
+const sortException = [0, 8]
 const type = ref()
 const search = ref()
 const rowCount = ref<number>()
@@ -129,7 +128,7 @@ onMounted(() => {
                   (checked.length = 0)
               "
             >
-              Remove
+              Deactivate
             </VButton>
           </transition>
         </div>
@@ -216,7 +215,7 @@ onMounted(() => {
               <VAvatar v-else picture="/demo/avatars/8.gif" />
             </td>
             <td>
-              <span class="light-text">{{ row.is_active }}</span>
+              <span class="light-text">{{ row.is_active ? 'Yes' : 'No' }}</span>
             </td>
             <td>
               <span class="light-text">{{ row.username }}</span>
