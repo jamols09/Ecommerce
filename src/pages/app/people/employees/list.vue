@@ -2,7 +2,7 @@
 import { reactive, ref, watchEffect } from 'vue'
 import { useUser } from '/@src/composable/api/useUser'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-pageTitle.value = 'List Employee'
+pageTitle.value = 'List of Employee'
 
 const api = useUser()
 const table = reactive({
@@ -54,6 +54,12 @@ const onChangePage = (e?: any) => {
   calltable()
 }
 
+const onRemove = async (e?: any) => {
+  await api.remove({ id: e })
+  page.value = 1
+  calltable()
+}
+
 const onSort = (e?: any) => {
   table.order = table.order === 'asc' ? 'desc' : 'asc'
   table.column = encodeURIComponent(e)
@@ -74,6 +80,7 @@ const calltable = async () => {
     type: type.value ?? table.searchType[0],
     column: table.column ?? '',
     order: table.order ?? '',
+    account: 'a',
   })
   const { body } = api.tableResponse.value
   table.data = body.data
@@ -88,6 +95,7 @@ watchEffect(async () => {
     type: table.searchType[0],
     column: '',
     order: '',
+    account: 'a',
   })
   const { body } = api.tableResponse.value
   table.data = body.data
@@ -109,7 +117,8 @@ watchEffect(async () => {
       :is-loading="api.isLoading.value"
       :reset-checked="reset"
       @activate="onSetStatus($event, 'activate')"
-      @remove="onSetStatus($event, 'deactivate')"
+      @remove="onRemove($event)"
+      @deactivate="onSetStatus($event, 'deactivate')"
       @rowCount="rowCount = $event"
       @type="type = $event"
       @search="onSearch"

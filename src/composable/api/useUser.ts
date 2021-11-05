@@ -3,6 +3,7 @@ import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
 
+const removeResponse = ref()
 const statusResponse = ref()
 const createResponse = ref()
 const tableResponse = ref()
@@ -32,7 +33,7 @@ export function useUser() {
     isLoading.value = true
     try {
       const { data } = await api.get(
-        `/v1/users?page=${e.page}&row=${e.row}&type=${e.type}&q=${e.query}&col=${e.column}&order=${e.order}&u=a`
+        `/v1/users?page=${e.page}&row=${e.row}&type=${e.type}&q=${e.query}&col=${e.column}&order=${e.order}&u=${e.account}`
       )
       tableResponse.value = data
     } catch (err: any) {
@@ -57,7 +58,20 @@ export function useUser() {
     isLoading.value = false
   }
 
+  const remove = async (e?: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.post(`/v1/users/delete`, e)
+      removeResponse.value = data
+      notif.warning(`Account(s) removed.`)
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
+    removeResponse,
     statusResponse,
     tableResponse,
     createResponse,
@@ -65,5 +79,6 @@ export function useUser() {
     table,
     create,
     status,
+    remove,
   } as const // as const is a typescript keyword to prevent from updating
 }

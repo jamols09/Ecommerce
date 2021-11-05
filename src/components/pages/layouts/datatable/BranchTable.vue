@@ -12,17 +12,14 @@ interface IHeader {
 }
 interface IData {
   id: number
-  username: string
-  first_name: string
-  middle_name: string | null
-  last_name: string | null
-  birthdate: string
-  thumbnail: string | null
   is_active: number
-  email: string
-  account_type: string
-  email_verified_at: string
-  created_at?: string
+  name: string
+  code: string | null
+  city: string | null
+  barangay: string
+  address_line_1: number
+  telephone: string
+  mobile: string
 }
 interface ITableProps {
   headers: IHeader[]
@@ -212,33 +209,30 @@ onMounted(() => {
                 </label>
               </VControl>
             </td>
-            <td class="is-media">
-              <VAvatar v-if="row.thumbnail" picture="{{row.thumbnail}}" />
-              <VAvatar v-else picture="/demo/avatars/8.gif" />
-            </td>
             <td>
               <span class="light-text">{{ row.is_active ? 'Yes' : 'No' }}</span>
             </td>
             <td>
-              <span class="light-text">{{ row.username }}</span>
+              <span class="light-text">{{ row.name }}</span>
             </td>
             <td>
-              <span class="light-text">{{ row.first_name }}</span>
+              <span class="light-text">{{ row.code }}</span>
             </td>
             <td>
-              <span class="light-text">{{ row.middle_name }}</span>
+              <span class="light-text">{{ row.city }}</span>
             </td>
             <td>
-              <span class="light-text">{{ row.last_name }}</span>
+              <span class="light-text">{{ row.barangay }}</span>
             </td>
             <td>
-              <span class="light-text">{{ row.email }}</span>
+              <span class="light-text">{{ row.address_line_1 }}</span>
             </td>
-
             <td>
-              <span class="light-text">{{ row.created_at }}</span>
+              <span class="light-text">{{ row.telephone }}</span>
             </td>
-
+            <td>
+              <span class="light-text">{{ row.mobile }}</span>
+            </td>
             <td>
               <GenericActionDropdown
                 :action-id="row.id"
