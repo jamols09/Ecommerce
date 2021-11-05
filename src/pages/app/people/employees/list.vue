@@ -60,8 +60,8 @@ const onSort = (e?: any) => {
   calltable()
 }
 
-const onRemove = async (e: any) => {
-  await api.remove({ id: e })
+const onSetStatus = async (e: any, a?: string) => {
+  await api.status({ id: e, status: a })
   page.value = 1
   calltable()
 }
@@ -108,7 +108,8 @@ watchEffect(async () => {
       :search-type="table.searchType"
       :is-loading="api.isLoading.value"
       :reset-checked="reset"
-      @remove="onRemove"
+      @activate="onSetStatus($event, 'activate')"
+      @remove="onSetStatus($event, 'deactivate')"
       @rowCount="rowCount = $event"
       @type="type = $event"
       @search="onSearch"

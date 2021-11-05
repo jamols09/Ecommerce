@@ -48,6 +48,7 @@ const emit = defineEmits([
   'sort',
   'remove',
   'reload',
+  'activate',
 ])
 
 const sortException = [0, 8]
@@ -240,9 +241,15 @@ onMounted(() => {
             <td>
               <GenericActionDropdown
                 :action-id="row.id"
-                :message-remove="'Deactivate'"
+                :message-remove="row.is_active ? 'Deactivate' : 'Activate'"
                 @click="reset()"
-                @remove="emit('remove', (checked = $event)), reset()"
+                @remove="
+                  emit(
+                    row.is_active ? 'remove' : 'activate',
+                    (checked = $event)
+                  ),
+                    reset()
+                "
               />
             </td>
           </tr>

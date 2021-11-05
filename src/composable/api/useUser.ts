@@ -3,7 +3,7 @@ import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
 
-const removeResponse = ref()
+const statusResponse = ref()
 const createResponse = ref()
 const tableResponse = ref()
 const notif = useNotyf()
@@ -45,11 +45,12 @@ export function useUser() {
    * @param array id
    * @returns Paginated category
    */
-  const remove = async (e?: any): Promise<any> => {
+  const status = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.post(`/v1/users/delete`, e)
-      removeResponse.value = data
+      const { data } = await api.post(`/v1/users/status`, e)
+      statusResponse.value = data
+      notif.success(`Account(s) successfully ${e?.status}d.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -57,12 +58,12 @@ export function useUser() {
   }
 
   return {
-    removeResponse,
+    statusResponse,
     tableResponse,
     createResponse,
     isLoading,
     table,
     create,
-    remove,
+    status,
   } as const // as const is a typescript keyword to prevent from updating
 }
