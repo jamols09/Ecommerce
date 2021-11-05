@@ -54,6 +54,12 @@ const onChangePage = (e?: any) => {
   calltable()
 }
 
+const onRemove = async (e?: any) => {
+  await api.remove({ id: e })
+  page.value = 1
+  calltable()
+}
+
 const onSort = (e?: any) => {
   table.order = table.order === 'asc' ? 'desc' : 'asc'
   table.column = encodeURIComponent(e)
@@ -109,7 +115,8 @@ watchEffect(async () => {
       :is-loading="api.isLoading.value"
       :reset-checked="reset"
       @activate="onSetStatus($event, 'activate')"
-      @remove="onSetStatus($event, 'deactivate')"
+      @remove="onRemove($event)"
+      @deactivate="onSetStatus($event, 'deactivate')"
       @rowCount="rowCount = $event"
       @type="type = $event"
       @search="onSearch"

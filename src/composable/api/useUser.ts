@@ -3,6 +3,7 @@ import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
 
+const removeResponse = ref()
 const statusResponse = ref()
 const createResponse = ref()
 const tableResponse = ref()
@@ -57,7 +58,20 @@ export function useUser() {
     isLoading.value = false
   }
 
+  const remove = async (e?: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.post(`/v1/users/delete`, e)
+      removeResponse.value = data
+      notif.success(`Account(s) successfully removed.`)
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
+    removeResponse,
     statusResponse,
     tableResponse,
     createResponse,
@@ -65,5 +79,6 @@ export function useUser() {
     table,
     create,
     status,
+    remove,
   } as const // as const is a typescript keyword to prevent from updating
 }

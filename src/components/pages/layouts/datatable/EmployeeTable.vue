@@ -49,6 +49,7 @@ const emit = defineEmits([
   'remove',
   'reload',
   'activate',
+  'deactivate',
 ])
 
 const sortException = [0, 8]
@@ -129,7 +130,7 @@ onMounted(() => {
                   (checked.length = 0)
               "
             >
-              Deactivate
+              Remove
             </VButton>
           </transition>
         </div>
@@ -245,7 +246,7 @@ onMounted(() => {
                 @click="reset()"
                 @remove="
                   emit(
-                    row.is_active ? 'remove' : 'activate',
+                    row.is_active ? 'deactivate' : 'activate',
                     (checked = $event)
                   ),
                     reset()
