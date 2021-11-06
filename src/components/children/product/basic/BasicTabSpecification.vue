@@ -20,12 +20,15 @@ import { useBranch } from '/@src/composable/api/useBranch'
 const api = useBranch()
 const notyf = useNotyf()
 const product = useProductStore()
+const option = ref()
 const isSubmitting = ref(false)
 const options = ref<Array<string>>([])
 const stateValue = product.GET_TAB_SPECS
 
 const onGetBranch = async () => {
   await api.dropdown()
+  option.value = api.dropdownResponse.value
+  option.value.push({ value: '-1', label: 'All' })
 }
 const onUpdateBranch = (e: any) => {
   e == '-1' && branch.value?.length
@@ -133,7 +136,7 @@ watchEffect(() => {
                 :close-on-select="false"
                 :create-tag="false"
                 :searchable="true"
-                :options="api.dropdownResponse.value"
+                :options="option"
                 :loading="api.isLoading.value"
                 @open="onGetBranch"
                 @select="onUpdateBranch($event)"

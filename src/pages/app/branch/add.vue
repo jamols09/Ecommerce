@@ -3,7 +3,6 @@ import { ref, watchEffect } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { BranchForm } from '/@src/schema/BranchSchema'
-import useNotyf from '/@src/composable/useNotyf'
 import { useBranch } from '/@src/composable/api/useBranch'
 
 pageTitle.value = 'Create Branch'
