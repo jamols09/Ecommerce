@@ -9,7 +9,6 @@ import { useBranch } from '/@src/composable/api/useBranch'
 pageTitle.value = 'Create Branch'
 
 const api = useBranch()
-const notyf = useNotyf()
 const options = ref([])
 const isSubmitting = ref(false)
 const autofill = ref('')
@@ -211,6 +210,28 @@ watchEffect(() => {
                     v-slot="{ field }"
                     :validate-on-input="false"
                     name="city"
+                  >
+                    <V-Field>
+                      <label>City *</label>
+                      <V-Control icon="ic:baseline-drive-file-rename-outline">
+                        <input
+                          v-bind="field"
+                          type="text"
+                          class="input is-info-focus"
+                        />
+                        <p v-if="errors.city" class="help is-danger">
+                          <b>{{ errors.city }}</b>
+                        </p>
+                      </V-Control>
+                    </V-Field>
+                  </ValidationField>
+                </div>
+                <!-- Branch Barangay -->
+                <div class="column is-6">
+                  <ValidationField
+                    v-slot="{ field }"
+                    :validate-on-input="false"
+                    name="barangay"
                   >
                     <V-Field>
                       <label>City *</label>
