@@ -1,16 +1,47 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, markRaw, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import useNotyf from '/@src/composable/useNotyf'
-import type { InventoryTabs } from '/@src/models/product'
+import BasicTabInfo from '/@src/components/children/product/basic/BasicTabInfo.vue'
+import BasicTabPricing from '/@src/components/children/product/basic/BasicTabPricing.vue'
+import BasicTabSpecification from '/@src/components/children/product/basic/BasicTabSpecification.vue'
 
 pageTitle.value = 'Create Basic Item'
 
 const router = useRouter()
 const notyf = useNotyf()
 const isLoading = ref(false)
-const selectedTab = ref<InventoryTabs>('info')
+const selectedTab = ref('BasicTabInfo')
+const tabs = [
+  {
+    label: 'Info',
+    value: 'BasicTabInfo',
+    icon: 'octicon:info-16',
+  },
+  {
+    label: 'Specifications',
+    value: 'BasicTabSpecification',
+    icon: 'mdi:form-select',
+  },
+  {
+    label: 'Pricing',
+    value: 'BasicTabPricing',
+    icon: 'si-glyph:tag-price',
+  },
+]
+
+const tab = ref(null)
+
+const onChangeTab = (e: any) => {
+  const lookup = {
+    BasicTabInfo,
+    BasicTabPricing,
+    BasicTabSpecification,
+  }
+  tab.value = markRaw(lookup[e])
+}
+onChangeTab('BasicTabInfo')
 
 const create = async () => {
   isLoading.value = true
@@ -40,30 +71,13 @@ const create = async () => {
               <div class="column is-full">
                 <VTabs
                   :selected="selectedTab"
-                  :tabs="[
-                    { label: 'Info', value: 'info', icon: 'octicon:info-16' },
-                    {
-                      label: 'Specifications',
-                      value: 'specs',
-                      icon: 'mdi:form-select',
-                    },
-                    {
-                      label: 'Pricing',
-                      value: 'pricing',
-                      icon: 'si-glyph:tag-price',
-                    },
-                  ]"
-                  @clicked-tab="selectedTab = $event"
+                  :tabs="tabs"
+                  @clicked-tab=";(selectedTab = $event), onChangeTab($event)"
                 >
-                  <template #tab="{ activeValue }">
-                    <!-- Tab 1 -->
-                    <BasicTabInfo v-if="activeValue === 'info'" />
-                    <!-- Tab 2 -->
-                    <BasicTabSpecification
-                      v-else-if="activeValue === 'specs'"
-                    />
-                    <!-- Tab 3 -->
-                    <BasicTabPricing v-else-if="activeValue === 'pricing'" />
+                  <template #tab="{}">
+                    <keep-alive>
+                      <component :is="tab"></component>
+                    </keep-alive>
                   </template>
                 </VTabs>
               </div>
