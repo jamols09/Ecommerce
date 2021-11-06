@@ -15,13 +15,18 @@ import { ProductSpecsForm } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/piniaState/productState'
 import useNotyf from '/@src/composable/useNotyf'
 import sleep from '/@src/utils/sleep'
+import { useBranch } from '/@src/composable/api/useBranch'
 
+const api = useBranch()
 const notyf = useNotyf()
 const product = useProductStore()
 const isSubmitting = ref(false)
 const options = ref<Array<string>>([])
 const stateValue = product.GET_TAB_SPECS
 
+const onGetBranch = async () => {
+  await api.dropdown()
+}
 const onUpdateBranch = (e: any) => {
   e == '-1' && branch.value?.length
     ? (branch.value = branch.value.slice(-1))
@@ -55,7 +60,6 @@ const onUpdate = async (inputs: any) => {
   isSubmitting.value = true
   // Save data to state
   product.FILL_TAB_SPECS(inputs)
-
   await sleep()
   isSubmitting.value = false
   notyf.success('Product updated.')
@@ -129,7 +133,9 @@ watchEffect(() => {
                 :close-on-select="false"
                 :create-tag="false"
                 :searchable="true"
-                :options="branch.options"
+                :options="api.dropdownResponse.value"
+                :loading="api.isLoading.value"
+                @open="onGetBranch"
                 @select="onUpdateBranch($event)"
               />
               <p v-if="errors.branches" class="help is-danger">
