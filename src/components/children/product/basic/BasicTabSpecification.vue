@@ -97,7 +97,7 @@ watchEffect(() => {
             >
               <VCheckbox
                 v-model="options"
-                value="active"
+                value="is_active"
                 label="Active"
                 color="info"
               />
@@ -109,7 +109,7 @@ watchEffect(() => {
             >
               <VCheckbox
                 v-model="options"
-                value="displayQuantity"
+                value="is_display_qty"
                 label="Display Quantity"
                 color="info"
               />
@@ -251,7 +251,7 @@ watchEffect(() => {
       <ValidationField
         v-model="color.value"
         :validate-on-input="false"
-        name="colors"
+        name="color"
       >
         <!-- Color -->
         <div class="column is-6">
@@ -277,8 +277,8 @@ watchEffect(() => {
                 :create-tag="true"
                 @select="onUpdateColor($event)"
               />
-              <p v-if="errors.colors" class="help is-danger">
-                <b>{{ errors.colors }}</b>
+              <p v-if="errors.color" class="help is-danger">
+                <b>{{ errors.color }}</b>
               </p>
             </VControl>
           </VField>
@@ -288,7 +288,7 @@ watchEffect(() => {
       <ValidationField
         v-model="size.value"
         :validate-on-input="false"
-        name="sizes"
+        name="size"
       >
         <!-- Size -->
         <div class="column is-6">
@@ -324,7 +324,7 @@ watchEffect(() => {
       <ValidationField
         v-model="material.value"
         :validate-on-input="false"
-        name="materials"
+        name="material"
       >
         <!-- Material -->
         <div class="column is-6">

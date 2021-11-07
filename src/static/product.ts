@@ -10,26 +10,20 @@ import {
 
 export const dimension = reactive<DimensionDropdown>({
   options: [
-    { value: 'inch', label: 'Inch' },
-    { value: 'cm', label: 'Centimeter' },
+    { value: 'INCH', label: 'Inch' },
+    { value: 'CENTIMETER', label: 'Centimeter' },
   ],
   value: null,
 })
 export const weight = reactive<WeightDropdown>({
   options: [
-    { value: 'g', label: 'Gram' },
-    { value: 'kg', label: 'Kilogram' },
+    { value: 'GRAM', label: 'Gram' },
+    { value: 'KILOGRAM', label: 'Kilogram' },
   ],
-  value: 'g',
+  value: 'GRAM',
 })
 export const department = reactive<GeneralDropdown>({
-  options: [
-    { value: 'food', label: 'Food' },
-    { value: 'other', label: 'Other' },
-    { value: 'clothe', label: 'Clothe' },
-    { value: 'accessories', label: 'Accessory' },
-    { value: 'hardware', label: 'Hardware' },
-  ],
+  options: [],
   value: null,
 })
 export const branch = reactive<BranchDropdown>({

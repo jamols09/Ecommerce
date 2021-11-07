@@ -20,10 +20,19 @@ const onUpdate = async (inputs: any) => {
 const onSubmit = async () => {
   isSubmitting.value = true
   if (product.IS_MISSING_FIELDS) {
-    // await api.create()
-    // product.$dispose()
-    // product.$reset()
-    // location.reload()
+    const state = {
+      ...product.GET_TAB_INFO,
+      ...product.GET_TAB_PRICE,
+      ...product.GET_TAB_SPECS,
+      is_active: product.options.includes('is_active') ?? false,
+      is_discountable: product.options.includes('is_discountable') ?? false,
+      is_display_qty: product.options.includes('is_display_qty') ?? false,
+    }
+    const { options, ...data } = state
+    await api.create(data)
+    product.$dispose()
+    product.$reset()
+    location.reload()
   } else {
     notyf.error('Please save data by pressing update.')
   }
@@ -51,7 +60,7 @@ onMounted(() => {
             >
               <VCheckbox
                 v-model="options"
-                value="discountable"
+                value="is_discountable"
                 label="Discountable"
                 color="info"
               />

@@ -131,7 +131,7 @@ onMounted(() => {
         v-model="stateValue.department_id"
         :validate-on-input="false"
         name="department_id"
-        >``
+      >
         <div class="column is-6">
           <VField>
             <label>Department *</label>
@@ -152,22 +152,22 @@ onMounted(() => {
 
       <!-- Brand -->
       <ValidationField
-        v-model="stateValue.brand"
+        v-model="stateValue.brand_id"
         :validate-on-input="false"
-        name="brand"
+        name="brand_id"
       >
         <div class="column is-6">
           <VField>
             <label>Brand</label>
             <VControl>
               <Multiselect
-                v-model="stateValue.brand"
+                v-model="stateValue.brand_id"
                 :options="apiBrand.dropdownResponse.value"
                 :loading="apiBrand.isLoading.value"
                 @open="onGetBrand"
               />
-              <p v-if="errors.brand" class="help is-danger">
-                <b>{{ errors.brand }}</b>
+              <p v-if="errors.brand_id" class="help is-danger">
+                <b>{{ errors.brand_id }}</b>
               </p>
             </VControl>
           </VField>
