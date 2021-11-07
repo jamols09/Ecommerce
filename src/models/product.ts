@@ -2,7 +2,6 @@
  * INVENTORY & CATEGORY TYPES DECLARATION *
  ****************************************/
 
-export type InventoryTabs = 'info' | 'specs' | 'pricing'
 export type WeightUnit = 'kg' | 'g' | null
 export type DimensionUnit = 'inch' | 'cm' | null
 export type GenderOptions = 'm' | 'f' | 'u' | null
@@ -56,8 +55,8 @@ export interface WeightDropdown {
   value: WeightUnit
 }
 export interface BranchDropdown {
-  options: Array<Options>
-  value: BranchObj | null
+  options: Options[]
+  value: BranchObj[] | null
 }
 export interface Product {
   active: boolean

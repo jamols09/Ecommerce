@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 interface Product {
   sku: string
   name: string
-  department: string
+  department_id: string
   description: string
   images: Array<string>
   brand: string
@@ -11,17 +11,17 @@ interface Product {
   options: Array<string>
   branches: Array<string>
   quantity: number
-  quantityWarn: number
+  quantity_warn: number
   tags: Array<string>
   colors: Array<string>
   sizes: Array<string>
   materials: Array<string>
-  weightUnit: string
-  weightAmount: number
-  dimensionUnit: string
-  dimensionLength: number
-  dimensionHeight: number
-  dimensionWidth: number
+  weight_unit: string
+  weight_amount: number
+  dimension_unit: string
+  length: number
+  height: number
+  width: number
 
   price: number
 }
@@ -31,7 +31,7 @@ export const useProductStore = defineStore('product', {
     ({
       sku: '',
       name: '',
-      department: '',
+      department_id: '',
       description: '',
       images: [],
       branches: [],
@@ -39,17 +39,17 @@ export const useProductStore = defineStore('product', {
 
       options: [],
       quantity: 0,
-      quantityWarn: 0,
+      quantity_warn: 0,
       tags: [],
       colors: [],
       sizes: [],
       materials: [],
-      weightUnit: '',
-      weightAmount: 0,
-      dimensionUnit: '',
-      dimensionLength: 0,
-      dimensionHeight: 0,
-      dimensionWidth: 0,
+      weight_unit: '',
+      weight_amount: 0,
+      dimension_unit: '',
+      length: 0,
+      height: 0,
+      width: 0,
 
       price: 0,
     } as Product),
@@ -58,7 +58,7 @@ export const useProductStore = defineStore('product', {
     GET_TAB_INFO: (state) => ({
       sku: state.sku,
       name: state.name,
-      department: state.department,
+      department_id: state.department_id,
       description: state.description,
       images: state.images,
       brand: state.brand,
@@ -68,17 +68,17 @@ export const useProductStore = defineStore('product', {
       options: state.options,
       branches: state.branches,
       quantity: state.quantity,
-      quantityWarn: state.quantityWarn,
+      quantity_warn: state.quantity_warn,
       tags: state.tags,
       colors: state.colors,
       sizes: state.sizes,
       materials: state.materials,
-      weightUnit: state.weightUnit,
-      weightAmount: state.weightAmount,
-      dimensionUnit: state.dimensionUnit,
-      dimensionLength: state.dimensionLength,
-      dimensionHeight: state.dimensionHeight,
-      dimensionWidth: state.dimensionWidth,
+      weight_unit: state.weight_unit,
+      weight_amount: state.weight_amount,
+      dimension_unit: state.dimension_unit,
+      length: state.length,
+      height: state.height,
+      width: state.width,
     }),
 
     GET_TAB_PRICE: (state) => ({
@@ -87,16 +87,9 @@ export const useProductStore = defineStore('product', {
     }),
 
     IS_MISSING_FIELDS: (state) => {
-      console.log(
-        state.images.length,
-        state.department.length,
-        state.name.length,
-        state.description.length,
-        state.branches.length
-      )
       return (
         (state.images.length > 0 &&
-          state.department.length > 0 &&
+          state.department_id.length > 0 &&
           state.name.length > 0 &&
           state.description.length > 0 &&
           state.branches.length > 0) ??
@@ -109,7 +102,7 @@ export const useProductStore = defineStore('product', {
     FILL_TAB_INFO(data: any) {
       ;(this.sku = data.sku),
         (this.name = data.name),
-        (this.department = data.department),
+        (this.department_id = data.department_id),
         (this.description = data.description),
         (this.images = data.images),
         (this.brand = data.brand)
@@ -119,17 +112,17 @@ export const useProductStore = defineStore('product', {
       ;(this.options = data.options),
         (this.branches = data.branches),
         (this.quantity = data.quantity),
-        (this.quantityWarn = data.quantityWarn),
+        (this.quantity_warn = data.quantity_warn),
         (this.tags = data.tags),
         (this.colors = data.colors),
         (this.sizes = data.sizes),
         (this.materials = data.materials),
-        (this.weightUnit = data.weightUnit),
-        (this.weightAmount = data.weightAmount),
-        (this.dimensionUnit = data.dimensionUnit),
-        (this.dimensionHeight = data.dimensionHeight),
-        (this.dimensionLength = data.dimensionLength),
-        (this.dimensionWidth = data.dimensionLength)
+        (this.weight_unit = data.weight_unit),
+        (this.weight_amount = data.weight_amount),
+        (this.dimension_unit = data.dimension_unit),
+        (this.height = data.height),
+        (this.length = data.length),
+        (this.width = data.width)
     },
 
     FILL_TAB_PRICE(data: any) {

@@ -13,6 +13,7 @@ const BranchSchema = yup.object().shape({
   country: yup.string().nullable().required('Country is required'),
   state: yup.string().nullable().required('Region or state is required'),
   city: yup.string().nullable().required('City is required'),
+  barangay: yup.string().nullable().required('Barangay is required'),
   address_line_1: yup
     .string()
     .nullable()
@@ -30,6 +31,7 @@ export const BranchForm = BranchSchema.pick([
   'country',
   'state',
   'city',
+  'barangay',
   'address_line_1',
   'address_line_2',
   'postal',

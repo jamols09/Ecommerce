@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
 import { onMounted, ref } from 'vue'
 import { ProductPricingForm } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
+import { useItem } from '/@src/composable/api/useItem'
 
+const api = useItem()
 const notyf = useNotyf()
 const product = useProductStore()
 const isSubmitting = ref(false)
@@ -19,11 +20,12 @@ const onUpdate = async (inputs: any) => {
 const onSubmit = async () => {
   isSubmitting.value = true
   if (product.IS_MISSING_FIELDS) {
-    notyf.success(`Product <b><u>${product.name}</u></b> added.`)
-    product.$dispose()
-    product.$reset()
-    await sleep(1500)
-    location.reload()
+    console.log(product.GET_TAB_INFO)
+    console.log(product.GET_TAB_SPECS)
+    // await api.create()
+    // product.$dispose()
+    // product.$reset()
+    // location.reload()
   } else {
     notyf.error('Please save data by pressing update.')
   }

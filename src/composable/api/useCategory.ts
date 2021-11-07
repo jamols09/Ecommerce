@@ -18,8 +18,7 @@ export function useCategory() {
   const api = useApi()
 
   /**
-   * @param string name
-   * @param number parent_id
+   * @param object name, parent_id
    * @returns HTTP status or error message
    */
   const create = async (category: any): Promise<any> => {
