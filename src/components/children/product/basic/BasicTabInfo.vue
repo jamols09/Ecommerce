@@ -12,13 +12,19 @@ import { onMounted } from 'vue-demi'
 import { ref } from 'vue'
 import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
+import { useDepartment } from '/@src/composable/api/useDepartment'
 
+const api = useDepartment()
 const notyf = useNotyf()
 const { images, onUploadImg } = usePreviewImages()
 const product = useProductStore()
 const stateImage = ref<Array<string>>([])
 const isSubmitting = ref(false)
 const stateValue = product.GET_TAB_INFO
+
+const onGetDepartment = async () => {
+  await api.dropdown()
+}
 
 const onUpdate = async (inputs: any) => {
   isSubmitting.value = true
@@ -120,14 +126,16 @@ onMounted(() => {
         v-model="stateValue.department_id"
         :validate-on-input="false"
         name="department_id"
-      >
+        >``
         <div class="column is-6">
           <VField>
             <label>Department *</label>
             <VControl>
               <Multiselect
                 v-model="stateValue.department_id"
-                :options="department.options"
+                :options="api.dropdownResponse.value"
+                :loading="api.isLoading.value"
+                @open="onGetDepartment"
               />
               <p v-if="errors.department_id" class="help is-danger">
                 <b>{{ errors.department_id }}</b>
