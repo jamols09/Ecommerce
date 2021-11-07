@@ -63,7 +63,7 @@ const onUpdate = async (inputs: any) => {
   isSubmitting.value = true
   // Save data to state
   product.FILL_TAB_SPECS(inputs)
-  await sleep()
+
   isSubmitting.value = false
   notyf.success('Product updated.')
 }

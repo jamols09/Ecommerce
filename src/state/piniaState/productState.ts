@@ -3,10 +3,10 @@ import { defineStore } from 'pinia'
 interface Product {
   sku: string
   name: string
-  department_id: string
+  department_id: number
   description: string
   images: Array<string>
-  brand: string
+  brand: number
 
   options: Array<string>
   branches: Array<string>
@@ -31,11 +31,11 @@ export const useProductStore = defineStore('product', {
     ({
       sku: '',
       name: '',
-      department_id: '',
+      department_id: 0,
       description: '',
       images: [],
       branches: [],
-      brand: '',
+      brand: 0,
 
       options: [],
       quantity: 0,
@@ -87,9 +87,16 @@ export const useProductStore = defineStore('product', {
     }),
 
     IS_MISSING_FIELDS: (state) => {
+      console.log(
+        state.images.length,
+        state.department_id,
+        state.name.length,
+        state.description.length,
+        state.branches.length
+      )
       return (
         (state.images.length > 0 &&
-          state.department_id.length > 0 &&
+          state.department_id > 0 &&
           state.name.length > 0 &&
           state.description.length > 0 &&
           state.branches.length > 0) ??

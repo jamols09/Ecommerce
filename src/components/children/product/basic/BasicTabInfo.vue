@@ -9,12 +9,14 @@ import { carouselConfig } from '/@src/configs/'
 import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { onMounted } from 'vue-demi'
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
 import { useDepartment } from '/@src/composable/api/useDepartment'
+import { useBrand } from '/@src/composable/api/useBrand'
 
-const api = useDepartment()
+const apiBrand = useBrand()
+const apiDepartment = useDepartment()
 const notyf = useNotyf()
 const { images, onUploadImg } = usePreviewImages()
 const product = useProductStore()
@@ -22,8 +24,11 @@ const stateImage = ref<Array<string>>([])
 const isSubmitting = ref(false)
 const stateValue = product.GET_TAB_INFO
 
+const onGetBrand = async () => {
+  await apiBrand.dropdown()
+}
 const onGetDepartment = async () => {
-  await api.dropdown()
+  await apiDepartment.dropdown()
 }
 
 const onUpdate = async (inputs: any) => {
@@ -33,13 +38,13 @@ const onUpdate = async (inputs: any) => {
   inputs.images.forEach((e: any) => {
     stateImage.value.push(URL.createObjectURL(e))
   })
-  // Save data to state
   product.FILL_TAB_INFO({ ...inputs, images: stateImage.value })
 
   await sleep()
   isSubmitting.value = false
   notyf.success('Product updated')
 }
+
 onMounted(() => {
   stateValue.images.length > 0 ? (images.value = stateValue.images) : false
 })
@@ -133,8 +138,8 @@ onMounted(() => {
             <VControl>
               <Multiselect
                 v-model="stateValue.department_id"
-                :options="api.dropdownResponse.value"
-                :loading="api.isLoading.value"
+                :options="apiDepartment.dropdownResponse.value"
+                :loading="apiDepartment.isLoading.value"
                 @open="onGetDepartment"
               />
               <p v-if="errors.department_id" class="help is-danger">
@@ -157,7 +162,9 @@ onMounted(() => {
             <VControl>
               <Multiselect
                 v-model="stateValue.brand"
-                :options="department.options"
+                :options="apiBrand.dropdownResponse.value"
+                :loading="apiBrand.isLoading.value"
+                @open="onGetBrand"
               />
               <p v-if="errors.brand" class="help is-danger">
                 <b>{{ errors.brand }}</b>

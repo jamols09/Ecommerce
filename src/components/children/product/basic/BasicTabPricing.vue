@@ -20,8 +20,6 @@ const onUpdate = async (inputs: any) => {
 const onSubmit = async () => {
   isSubmitting.value = true
   if (product.IS_MISSING_FIELDS) {
-    console.log(product.GET_TAB_INFO)
-    console.log(product.GET_TAB_SPECS)
     // await api.create()
     // product.$dispose()
     // product.$reset()
