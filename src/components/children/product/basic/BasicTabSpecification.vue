@@ -174,9 +174,9 @@ watchEffect(() => {
 
       <ValidationField
         v-slot="{ field }"
-        v-model="stateValue.quantityWarn"
+        v-model="stateValue.quantity_warn"
         :validate-on-input="false"
-        name="quantityWarn"
+        name="quantity_warn"
       >
         <!-- Quantity Warn -->
         <div class="column is-6">
@@ -196,8 +196,8 @@ watchEffect(() => {
             </label>
             <VControl>
               <input v-bind="field" type="number" class="input is-info-focus" />
-              <p v-if="errors.quantityWarn" class="help is-danger">
-                <b>{{ errors.quantityWarn }}</b>
+              <p v-if="errors.quantity_warn" class="help is-danger">
+                <b>{{ errors.quantity_warn }}</b>
               </p>
             </VControl>
           </VField>
@@ -376,9 +376,9 @@ watchEffect(() => {
 
     <div class="columns">
       <ValidationField
-        v-model="stateValue.weightUnit"
+        v-model="stateValue.weight_unit"
         :validate-on-input="false"
-        name="weightUnit"
+        name="weight_unit"
       >
         <!-- Weight Unit -->
         <div class="column is-6">
@@ -386,7 +386,7 @@ watchEffect(() => {
             <label>Weight Unit</label>
             <VControl>
               <Multiselect
-                v-model="stateValue.weightUnit"
+                v-model="stateValue.weight_unit"
                 :options="weight.options"
               />
             </VControl>
@@ -396,9 +396,9 @@ watchEffect(() => {
 
       <ValidationField
         v-slot="{ field }"
-        v-model="stateValue.weightAmount"
+        v-model="stateValue.weight_amount"
         :validate-on-input="false"
-        name="weightAmount"
+        name="weight_amount"
       >
         <!-- Weight Amount -->
         <div class="column is-6">
@@ -406,8 +406,8 @@ watchEffect(() => {
             <label>Weight Amount</label>
             <VControl>
               <input v-bind="field" type="number" class="input is-info-focus" />
-              <p v-if="errors.weightAmount" class="help is-danger">
-                <b>{{ errors.weightAmount }}</b>
+              <p v-if="errors.weight_amount" class="help is-danger">
+                <b>{{ errors.weight_amount }}</b>
               </p>
             </VControl>
           </VField>
@@ -417,9 +417,9 @@ watchEffect(() => {
 
     <div class="columns">
       <ValidationField
-        v-model="stateValue.dimensionUnit"
+        v-model="stateValue.dimension_unit"
         :validate-on-input="false"
-        name="dimensionUnit"
+        name="dimension_unit"
       >
         <!-- Dimension Unit -->
         <div class="column is-6">
@@ -427,7 +427,7 @@ watchEffect(() => {
             <label>Dimension Unit</label>
             <VControl>
               <Multiselect
-                v-model="stateValue.dimensionUnit"
+                v-model="stateValue.dimension_unit"
                 :options="dimension.options"
               />
             </VControl>
@@ -437,9 +437,9 @@ watchEffect(() => {
 
       <ValidationField
         v-slot="{ field }"
-        v-model="stateValue.dimensionLength"
+        v-model="stateValue.length"
         :validate-on-input="false"
-        name="dimensionLength"
+        name="length"
       >
         <!-- Length -->
         <div class="column is-6">
@@ -447,8 +447,8 @@ watchEffect(() => {
             <label>Length</label>
             <VControl>
               <input v-bind="field" type="number" class="input is-info-focus" />
-              <p v-if="errors.dimensionLength" class="help is-danger">
-                <b>{{ errors.dimensionLength }}</b>
+              <p v-if="errors.length" class="help is-danger">
+                <b>{{ errors.length }}</b>
               </p>
             </VControl>
           </VField>
@@ -460,9 +460,9 @@ watchEffect(() => {
       <div class="column is-6"></div>
       <ValidationField
         v-slot="{ field }"
-        v-model="stateValue.dimensionWidth"
+        v-model="stateValue.width"
         :validate-on-input="false"
-        name="dimensionWidth"
+        name="width"
       >
         <!-- Width -->
         <div class="column is-6">
@@ -470,8 +470,8 @@ watchEffect(() => {
             <label>Width</label>
             <VControl>
               <input v-bind="field" type="number" class="input is-info-focus" />
-              <p v-if="errors.dimensionWidth" class="help is-danger">
-                <b>{{ errors.dimensionWidth }}</b>
+              <p v-if="errors.width" class="help is-danger">
+                <b>{{ errors.width }}</b>
               </p>
             </VControl>
           </VField>
@@ -483,9 +483,9 @@ watchEffect(() => {
       <div class="column is-6"></div>
       <ValidationField
         v-slot="{ field }"
-        v-model="stateValue.dimensionHeight"
+        v-model="stateValue.height"
         :validate-on-input="false"
-        name="dimensionHeight"
+        name="height"
       >
         <!-- Height -->
         <div class="column is-6">
@@ -493,8 +493,8 @@ watchEffect(() => {
             <label>Height</label>
             <VControl>
               <input v-bind="field" type="number" class="input is-info-focus" />
-              <p v-if="errors.dimensionHeight" class="help is-danger">
-                <b>{{ errors.dimensionHeight }}</b>
+              <p v-if="errors.height" class="help is-danger">
+                <b>{{ errors.height }}</b>
               </p>
             </VControl>
           </VField>

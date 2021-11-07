@@ -3,7 +3,7 @@ import * as yup from 'yup'
 const ProductSchema = yup.object().shape({
   name: yup.string().min(3).required('Product name is required'),
   sku: yup.string(),
-  department: yup.string().nullable().required('Please select department'),
+  department_id: yup.string().nullable().required('Please select department'),
   description: yup.string().required('Product description is required'),
   images: yup.mixed().required('Please select an image'),
 
@@ -14,16 +14,16 @@ const ProductSchema = yup.object().shape({
     .nullable()
     .required('Please select a branch'),
   quantity: yup.number().typeError('Empty field not allowed'),
-  quantityWarn: yup.number().typeError('Empty field not allowed'),
+  quantity_warn: yup.number().typeError('Empty field not allowed'),
   tags: yup.array().of(yup.string()).nullable().notRequired(),
   colors: yup.array().of(yup.string()).nullable().notRequired(),
   sizes: yup.array().of(yup.string()).nullable().notRequired(),
-  weightUnit: yup.string().nullable(),
-  weightAmount: yup.number().typeError('Empty field not allowed'),
-  dimensionUnit: yup.string().nullable(),
-  dimensionLength: yup.number().typeError('Empty field not allowed'),
-  dimensionHeight: yup.number().typeError('Empty field not allowed'),
-  dimensionWidth: yup.number().typeError('Empty field not allowed'),
+  weight_unit: yup.string().nullable(),
+  weight_amount: yup.number().typeError('Empty field not allowed'),
+  dimension_unit: yup.string().nullable(),
+  length: yup.number().typeError('Empty field not allowed'),
+  height: yup.number().typeError('Empty field not allowed'),
+  width: yup.number().typeError('Empty field not allowed'),
 
   price: yup.number().typeError('Empty field not allowed'),
 })
@@ -32,23 +32,23 @@ export const ProductInfoForm = ProductSchema.pick([
   'name',
   'sku',
   'description',
-  'department',
+  'department_id',
   'images',
 ])
 
 export const ProductSpecsForm = ProductSchema.pick([
   'branches',
   'quantity',
-  'quantityWarn',
+  'quantity_warn',
   'tags',
   'colors',
   'sizes',
-  'weightUnit',
-  'weightAmount',
-  'dimensionUnit',
-  'dimensionLength',
-  'dimensionHeight',
-  'dimensionWidth',
+  'weight_unit',
+  'weight_amount',
+  'dimension_unit',
+  'length',
+  'height',
+  'width',
 ])
 
 export const ProductPricingForm = ProductSchema.pick(['price'])

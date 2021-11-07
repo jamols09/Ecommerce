@@ -117,20 +117,20 @@ onMounted(() => {
     <div class="columns">
       <!-- Department -->
       <ValidationField
-        v-model="stateValue.department"
+        v-model="stateValue.department_id"
         :validate-on-input="false"
-        name="department"
+        name="department_id"
       >
         <div class="column is-6">
           <VField>
             <label>Department *</label>
             <VControl>
               <Multiselect
-                v-model="stateValue.department"
+                v-model="stateValue.department_id"
                 :options="department.options"
               />
-              <p v-if="errors.department" class="help is-danger">
-                <b>{{ errors.department }}</b>
+              <p v-if="errors.department_id" class="help is-danger">
+                <b>{{ errors.department_id }}</b>
               </p>
             </VControl>
           </VField>
