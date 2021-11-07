@@ -7,13 +7,13 @@ const createResponse = ref()
 const dropdownResponse = ref()
 const isLoading = ref(false)
 
-interface IRDepartment {
+interface IRBrand {
   //interface response
   id: number
   name: string
 }
 
-export function useDepartment() {
+export function useBrand() {
   const api = useApi()
 
   /**
@@ -22,22 +22,22 @@ export function useDepartment() {
    */
   const create = async (e: any): Promise<any> => {
     try {
-      const { data } = await api.post('/v1/department', e)
+      const { data } = await api.post('/v1/brand', e)
       createResponse.value = data
-      useNotyf().success(`Department <b>${data.body.name}</b> added.`)
+      useNotyf().success(`Brand <b>${data.body.name}</b> added.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
   }
 
   /**
-   * @returns Department or error message
+   * @returns Brand or error message
    */
   const dropdown = async (): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.get('/v1/department/dropdown')
-      dropdownResponse.value = data.body.map((e: IRDepartment) => {
+      const { data } = await api.get('/v1/brand/dropdown')
+      dropdownResponse.value = data.body.map((e: IRBrand) => {
         return { value: e.id, label: e.name }
       })
     } catch (err: any) {

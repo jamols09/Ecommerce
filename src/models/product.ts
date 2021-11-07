@@ -2,12 +2,10 @@
  * INVENTORY & CATEGORY TYPES DECLARATION *
  ****************************************/
 
-export type WeightUnit = 'kg' | 'g' | null
-export type DimensionUnit = 'inch' | 'cm' | null
+export type WeightUnit = 'GRAM' | 'KILOGRAM' | null
+export type DimensionUnit = 'INCH' | 'CENTIMETER' | null
 export type GenderOptions = 'm' | 'f' | 'u' | null
-export type ProductOptions = 'active' | 'displayQuantity' | 'discountable'
 export type DynamicFieldsAray = Array<DynamicField>
-export type ProductOptionsArray = Array<ProductOptions>
 
 interface DynamicField {
   attribute: string
@@ -57,22 +55,4 @@ export interface WeightDropdown {
 export interface BranchDropdown {
   options: Options[]
   value: BranchObj[] | null
-}
-export interface Product {
-  active: boolean
-  discountable: boolean
-  displayQuantity: boolean
-  quantity: number
-  quantityWarn: number
-  price: number
-  image: Array<string>
-  name: string | null
-  sku: string | null
-  description: string | null
-  weight: Weight
-  dimension: Dimension
-  category?: string
-  tag?: Array<String>
-  gender: GenderOptions
-  department: string | null
 }

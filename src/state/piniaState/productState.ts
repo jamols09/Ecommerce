@@ -3,19 +3,19 @@ import { defineStore } from 'pinia'
 interface Product {
   sku: string
   name: string
-  department_id: string
+  department_id: number
   description: string
   images: Array<string>
-  brand: string
+  brand_id: number
 
   options: Array<string>
   branches: Array<string>
   quantity: number
   quantity_warn: number
   tags: Array<string>
-  colors: Array<string>
-  sizes: Array<string>
-  materials: Array<string>
+  color: Array<string>
+  size: Array<string>
+  material: Array<string>
   weight_unit: string
   weight_amount: number
   dimension_unit: string
@@ -31,19 +31,19 @@ export const useProductStore = defineStore('product', {
     ({
       sku: '',
       name: '',
-      department_id: '',
+      department_id: 0,
       description: '',
       images: [],
       branches: [],
-      brand: '',
+      brand_id: 0,
 
       options: [],
       quantity: 0,
       quantity_warn: 0,
       tags: [],
-      colors: [],
-      sizes: [],
-      materials: [],
+      color: [],
+      size: [],
+      material: [],
       weight_unit: '',
       weight_amount: 0,
       dimension_unit: '',
@@ -61,7 +61,7 @@ export const useProductStore = defineStore('product', {
       department_id: state.department_id,
       description: state.description,
       images: state.images,
-      brand: state.brand,
+      brand_id: state.brand_id,
     }),
 
     GET_TAB_SPECS: (state) => ({
@@ -70,9 +70,9 @@ export const useProductStore = defineStore('product', {
       quantity: state.quantity,
       quantity_warn: state.quantity_warn,
       tags: state.tags,
-      colors: state.colors,
-      sizes: state.sizes,
-      materials: state.materials,
+      color: state.color,
+      size: state.size,
+      material: state.material,
       weight_unit: state.weight_unit,
       weight_amount: state.weight_amount,
       dimension_unit: state.dimension_unit,
@@ -82,14 +82,13 @@ export const useProductStore = defineStore('product', {
     }),
 
     GET_TAB_PRICE: (state) => ({
-      options: state.options,
       price: state.price,
     }),
 
     IS_MISSING_FIELDS: (state) => {
       return (
         (state.images.length > 0 &&
-          state.department_id.length > 0 &&
+          state.department_id > 0 &&
           state.name.length > 0 &&
           state.description.length > 0 &&
           state.branches.length > 0) ??
@@ -105,7 +104,7 @@ export const useProductStore = defineStore('product', {
         (this.department_id = data.department_id),
         (this.description = data.description),
         (this.images = data.images),
-        (this.brand = data.brand)
+        (this.brand_id = data.brand_id)
     },
 
     FILL_TAB_SPECS(data: any) {
@@ -114,9 +113,9 @@ export const useProductStore = defineStore('product', {
         (this.quantity = data.quantity),
         (this.quantity_warn = data.quantity_warn),
         (this.tags = data.tags),
-        (this.colors = data.colors),
-        (this.sizes = data.sizes),
-        (this.materials = data.materials),
+        (this.color = data.color),
+        (this.size = data.size),
+        (this.material = data.material),
         (this.weight_unit = data.weight_unit),
         (this.weight_amount = data.weight_amount),
         (this.dimension_unit = data.dimension_unit),
