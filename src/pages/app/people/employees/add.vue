@@ -59,9 +59,9 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                         color="info"
                       />
                       <VueTooltip
-                        label="Determine when account is verified."
+                        label="Set account state."
                         abbreviation
-                        :multiline="true"
+                        :multiline="false"
                         size="is-small"
                         class="light-text"
                         position="is-bottom"

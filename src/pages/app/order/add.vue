@@ -1,39 +1,11 @@
 <script setup lang="ts">
-import { popovers } from '/@src/data/users/userPopovers'
-import { ref, reactive, computed } from 'vue'
+import { ref } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import type { OrderTabs } from '/@src/models/order'
-import useNotyf from '/@src/composable/useNotyf'
 
 pageTitle.value = 'Create Order'
 
-const notyf = useNotyf()
-const autofill = ref('')
 const selected = ref<OrderTabs>('customer')
-
-//should do axios call
-const itemTree = reactive({
-  options: [
-    {
-      id: 'team-i',
-      label: 'Team I ',
-      children: [
-        { id: 'person-a', label: 'Person A ' },
-        { id: 'person-b', label: 'Person B ' },
-      ],
-    },
-    {
-      id: 'team-ii',
-      label: 'Team II ',
-      children: [
-        { id: 'person-c', label: 'Person C ' },
-        { id: 'person-d', label: 'Person D ' },
-      ],
-    },
-    { id: 'person-e', label: 'Person E ' },
-  ],
-  value: null,
-})
 </script>
 
 <template>

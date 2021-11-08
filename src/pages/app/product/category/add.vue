@@ -77,7 +77,7 @@ const onSubmit = async (e: typeof CategoryForm) => {
                         <VueTooltip
                           label="Restricted to 1 parent for each node."
                           abbreviation
-                          :multiline="true"
+                          :multiline="false"
                           size="is-small"
                           class="light-text mr-3"
                           position="is-bottom"

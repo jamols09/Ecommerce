@@ -25,7 +25,7 @@ export function useCategory() {
     try {
       const { data } = await api.post('/v1/category', category)
       createResponse.value = data
-      useNotyf().success(`Category <b>${data.body.name}</b> added.`)
+      useNotyf().success(`Category <b>${data.body}</b> added.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }

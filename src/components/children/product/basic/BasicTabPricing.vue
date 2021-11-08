@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useNotyf from '/@src/composable/useNotyf'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { ProductPricingForm } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
@@ -9,16 +9,12 @@ import { useItem } from '/@src/composable/api/useItem'
 const api = useItem()
 const notyf = useNotyf()
 const product = useProductStore()
-const isSubmitting = ref(false)
-const isUpdating = ref(false)
 const options = ref<Array<string>>([])
-
-const onUpdate = async (inputs: any) => {
-  product.FILL_TAB_PRICE(inputs)
+const onUpdate = async (e: any) => {
+  product.FILL_TAB_PRICE(e)
   notyf.success('Product updated')
 }
 const onSubmit = async () => {
-  isSubmitting.value = true
   if (product.IS_MISSING_FIELDS) {
     const state = {
       ...product.GET_TAB_INFO,
@@ -30,13 +26,12 @@ const onSubmit = async () => {
     }
     const { options, ...data } = state
     await api.create(data)
-    product.$dispose()
-    product.$reset()
-    location.reload()
+    // product.$dispose()
+    // product.$reset()
+    // location.reload()
   } else {
     notyf.error('Please save data by pressing update.')
   }
-  isSubmitting.value = false
 }
 onMounted(() => {
   options.value = product.options
@@ -69,7 +64,7 @@ onMounted(() => {
             <VueTooltip
               label="Allow product to be discounted"
               abbreviation
-              :multiline="true"
+              :multiline="false"
               size="is-small"
               class="light-text mr-3"
               position="is-bottom"
@@ -106,19 +101,12 @@ onMounted(() => {
     <!-- Button -->
     <VField class="fixed-buttons is-active two">
       <VControl class="fixed-buttons-inner">
-        <VButton
-          color="info"
-          type="submit"
-          :loading="isUpdating"
-          bold
-          fullwidth
-          raised
-        >
+        <VButton color="info" type="submit" bold fullwidth raised>
           Update
         </VButton>
         <VButton
           color="primary"
-          :loading="isSubmitting"
+          :loading="api.isLoading.value"
           bold
           fullwidth
           raised

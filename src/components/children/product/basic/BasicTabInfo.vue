@@ -9,8 +9,7 @@ import { carouselConfig } from '/@src/configs/'
 import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { onMounted } from 'vue-demi'
-import { ref, watchEffect } from 'vue'
-import sleep from '/@src/utils/sleep'
+import { ref } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
 import { useDepartment } from '/@src/composable/api/useDepartment'
 import { useBrand } from '/@src/composable/api/useBrand'
@@ -21,7 +20,6 @@ const notyf = useNotyf()
 const { images, onUploadImg } = usePreviewImages()
 const product = useProductStore()
 const stateImage = ref<Array<string>>([])
-const isSubmitting = ref(false)
 const stateValue = product.GET_TAB_INFO
 
 const onGetBrand = async () => {
@@ -32,7 +30,6 @@ const onGetDepartment = async () => {
 }
 
 const onUpdate = async (inputs: any) => {
-  isSubmitting.value = true
   // Convert uploaded image to blob and save it on state
   stateImage.value.length = 0
   inputs.images.forEach((e: any) => {
@@ -40,8 +37,6 @@ const onUpdate = async (inputs: any) => {
   })
   product.FILL_TAB_INFO({ ...inputs, images: stateImage.value })
 
-  await sleep()
-  isSubmitting.value = false
   notyf.success('Product updated')
 }
 
@@ -208,9 +203,9 @@ onMounted(() => {
             <label>
               Stock Keep Unit (SKU)
               <VueTooltip
-                label="Auto generated when empty."
+                label="Must be unique. Auto generated when empty."
                 abbreviation
-                :multiline="true"
+                :multiline="false"
                 size="is-small"
                 class="light-text mr-3"
                 position="is-bottom"
@@ -258,14 +253,7 @@ onMounted(() => {
     <!-- Button -->
     <VField class="fixed-buttons is-active">
       <VControl class="fixed-buttons-inner">
-        <VButton
-          type="submit"
-          color="info"
-          :loading="isSubmitting"
-          bold
-          fullwidth
-          raised
-        >
+        <VButton type="submit" color="info" bold fullwidth raised>
           Update
         </VButton>
       </VControl>
