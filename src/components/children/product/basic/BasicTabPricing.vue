@@ -26,8 +26,9 @@ const onSubmit = async () => {
     }
     const { options, ...data } = state
     await api.create(data)
-    product.$dispose()
-    product.$reset()
+    // product.$dispose()
+    // product.$reset()
+    // location.reload()
   } else {
     notyf.error('Please save data by pressing update.')
   }
