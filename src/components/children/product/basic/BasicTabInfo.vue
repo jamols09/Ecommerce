@@ -10,7 +10,6 @@ import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { onMounted } from 'vue-demi'
 import { ref, watchEffect } from 'vue'
-import sleep from '/@src/utils/sleep'
 import useNotyf from '/@src/composable/useNotyf'
 import { useDepartment } from '/@src/composable/api/useDepartment'
 import { useBrand } from '/@src/composable/api/useBrand'
@@ -40,7 +39,6 @@ const onUpdate = async (inputs: any) => {
   })
   product.FILL_TAB_INFO({ ...inputs, images: stateImage.value })
 
-  await sleep()
   isSubmitting.value = false
   notyf.success('Product updated')
 }

@@ -14,7 +14,6 @@ import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { ProductSpecsForm } from '/@src/schema/ProductSchema'
 import { useProductStore } from '/@src/state/piniaState/productState'
 import useNotyf from '/@src/composable/useNotyf'
-import sleep from '/@src/utils/sleep'
 import { useBranch } from '/@src/composable/api/useBranch'
 
 const api = useBranch()
@@ -63,7 +62,6 @@ const onUpdate = async (inputs: any) => {
   isSubmitting.value = true
   // Save data to state
   product.FILL_TAB_SPECS(inputs)
-
   isSubmitting.value = false
   notyf.success('Product updated.')
 }
