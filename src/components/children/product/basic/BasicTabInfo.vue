@@ -9,7 +9,7 @@ import { carouselConfig } from '/@src/configs/'
 import { useProductStore } from '/@src/state/piniaState/productState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { onMounted } from 'vue-demi'
-import { ref, watchEffect } from 'vue'
+import { ref } from 'vue'
 import useNotyf from '/@src/composable/useNotyf'
 import { useDepartment } from '/@src/composable/api/useDepartment'
 import { useBrand } from '/@src/composable/api/useBrand'
@@ -31,7 +31,6 @@ const onGetDepartment = async () => {
 }
 
 const onUpdate = async (inputs: any) => {
-  isSubmitting.value = true
   // Convert uploaded image to blob and save it on state
   stateImage.value.length = 0
   inputs.images.forEach((e: any) => {
@@ -39,7 +38,6 @@ const onUpdate = async (inputs: any) => {
   })
   product.FILL_TAB_INFO({ ...inputs, images: stateImage.value })
 
-  isSubmitting.value = false
   notyf.success('Product updated')
 }
 
@@ -256,14 +254,7 @@ onMounted(() => {
     <!-- Button -->
     <VField class="fixed-buttons is-active">
       <VControl class="fixed-buttons-inner">
-        <VButton
-          type="submit"
-          color="info"
-          :loading="isSubmitting"
-          bold
-          fullwidth
-          raised
-        >
+        <VButton type="submit" color="info" bold fullwidth raised>
           Update
         </VButton>
       </VControl>
