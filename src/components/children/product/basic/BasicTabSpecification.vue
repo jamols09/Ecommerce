@@ -184,7 +184,7 @@ watchEffect(() => {
               <VueTooltip
                 label="Notify when quantity is reached."
                 abbreviation
-                :multiline="true"
+                :multiline="false"
                 size="is-small"
                 class="light-text mr-3"
                 position="is-bottom"
@@ -259,7 +259,7 @@ watchEffect(() => {
               <VueTooltip
                 label="Type and press enter to add color."
                 abbreviation
-                :multiline="true"
+                :multiline="false"
                 size="is-small"
                 class="light-text mr-3"
                 position="is-bottom"
@@ -296,7 +296,7 @@ watchEffect(() => {
               <VueTooltip
                 label="Type and press enter to add size."
                 abbreviation
-                :multiline="true"
+                :multiline="false"
                 size="is-small"
                 class="light-text mr-3"
                 position="is-bottom"
@@ -332,7 +332,7 @@ watchEffect(() => {
               <VueTooltip
                 label="Type and press enter to add material"
                 abbreviation
-                :multiline="true"
+                :multiline="false"
                 size="is-small"
                 class="light-text mr-3"
                 position="is-bottom"

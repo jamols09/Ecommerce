@@ -63,7 +63,7 @@ watchEffect(() => {
                         <VueTooltip
                           label="Make products sellable in this branch"
                           abbreviation
-                          :multiline="true"
+                          :multiline="false"
                           size="is-small"
                           class="light-text mr-3"
                           position="is-bottom"
@@ -116,7 +116,7 @@ watchEffect(() => {
                   >
                     <V-Field>
                       <VueTooltip
-                        label="Define the code for branch. Required and must be unique."
+                        label="Must be unique. Auto generated when empty."
                         abbreviation
                         :multiline="true"
                         size="is-small"

@@ -63,7 +63,7 @@ onMounted(() => {
             <VueTooltip
               label="Allow product to be discounted"
               abbreviation
-              :multiline="true"
+              :multiline="false"
               size="is-small"
               class="light-text mr-3"
               position="is-bottom"

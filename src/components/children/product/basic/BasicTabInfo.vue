@@ -20,7 +20,6 @@ const notyf = useNotyf()
 const { images, onUploadImg } = usePreviewImages()
 const product = useProductStore()
 const stateImage = ref<Array<string>>([])
-const isSubmitting = ref(false)
 const stateValue = product.GET_TAB_INFO
 
 const onGetBrand = async () => {
@@ -204,9 +203,9 @@ onMounted(() => {
             <label>
               Stock Keep Unit (SKU)
               <VueTooltip
-                label="Auto generated when empty."
+                label="Must be unique. Auto generated when empty."
                 abbreviation
-                :multiline="true"
+                :multiline="false"
                 size="is-small"
                 class="light-text mr-3"
                 position="is-bottom"
