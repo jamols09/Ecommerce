@@ -20,7 +20,7 @@ export function initApi(session: UserSessionData) {
   // include Bearer token to the request if user is logged in
   api.interceptors.request.use((config) => {
     if (session.token) {
-      config.headers.Authorization = `Bearer ${session.token}`
+      config.headers!.Authorization = `Bearer ${session.token}`
       config.withCredentials = true
     }
 
