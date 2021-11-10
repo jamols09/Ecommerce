@@ -188,7 +188,10 @@ onMounted(() => {
                 scope="col"
                 @click="
                   !sortException.includes(index)
-                    ? emit('sort', header.name)
+                    ? emit(
+                        'sort',
+                        header.name === 'Active' ? 'Is Active' : header.name
+                      )
                     : null
                 "
               >
