@@ -17,7 +17,8 @@ export function useBrand() {
   const api = useApi()
 
   /**
-   * @param object item
+   * @description Generate brand
+   * @param object
    * @returns HTTP status or error message
    */
   const create = async (e: any): Promise<any> => {
@@ -31,7 +32,8 @@ export function useBrand() {
   }
 
   /**
-   * @returns Brand or error message
+   * @description Gets all of brand for dropdown
+   * @returns Brand list
    */
   const dropdown = async (): Promise<any> => {
     isLoading.value = true

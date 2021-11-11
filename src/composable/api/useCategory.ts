@@ -18,6 +18,7 @@ export function useCategory() {
   const api = useApi()
 
   /**
+   * @description Generate category
    * @param object name, parent_id
    * @returns HTTP status or error message
    */
@@ -32,7 +33,8 @@ export function useCategory() {
   }
 
   /**
-   * @returns Category or error message
+   * @description Gets all of category for dropdown
+   * @returns Category list
    */
   const dropdown = async (): Promise<any> => {
     isLoading.value = true
@@ -48,9 +50,8 @@ export function useCategory() {
   }
 
   /**
-   * @param string search
-   * @param number rowCount
-   * @param string type
+   * @description Get list of paginated category
+   * @param object
    * @returns Paginated category
    */
   const table = async (e?: any): Promise<any> => {
@@ -65,14 +66,16 @@ export function useCategory() {
   }
 
   /**
+   * @description Soft deletes selected category
    * @param array id
-   * @returns Paginated category
+   * @returns name
    */
   const remove = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
       const { data } = await api.post(`/v1/category/delete`, e)
       removeResponse.value = data
+      useNotyf().warning(`Category removed.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }

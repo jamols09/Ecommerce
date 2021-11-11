@@ -77,6 +77,7 @@ export function useBranch() {
     try {
       const { data } = await api.post(`/v1/branch/delete`, e)
       removeResponse.value = data
+      notif.warning(`Branch(es) successfully removed.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -93,7 +94,7 @@ export function useBranch() {
     try {
       const { data } = await api.post(`/v1/branch/status`, e)
       statusResponse.value = data
-      notif.success(`Account(s) successfully ${e?.status}d.`)
+      notif.success(`Branch(es) successfully ${e?.status}d.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
