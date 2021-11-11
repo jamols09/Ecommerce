@@ -73,7 +73,6 @@ const calltable = async () => {
   await api.table({
     row: rowCount.value ?? table.totalRows[0],
     [`filter[${query}]`]: search.value,
-    [`filter[account]`]: 'admin',
     page: page.value ?? '1',
     sort: sort,
   })
