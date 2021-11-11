@@ -49,7 +49,7 @@ const emit = defineEmits([
   'deactivate',
 ])
 
-const sortException = [0, 8]
+const sortException = [8]
 const type = ref()
 const search = ref()
 const rowCount = ref<number>()
@@ -185,7 +185,14 @@ onMounted(() => {
                 scope="col"
                 @click="
                   !sortException.includes(index)
-                    ? emit('sort', header.name)
+                    ? emit(
+                        'sort',
+                        header.name === 'Active'
+                          ? 'Is Active'
+                          : header.name === 'Line 1'
+                          ? 'Address Line 1'
+                          : header.name
+                      )
                     : null
                 "
               >

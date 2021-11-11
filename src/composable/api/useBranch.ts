@@ -56,9 +56,7 @@ export function useBranch() {
   const table = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.get(
-        `/v1/branch?page=${e.page}&row=${e.row}&type=${e.type}&q=${e.query}&col=${e.column}&order=${e.order}`
-      )
+      const { data } = await api.get(`/v1/branch`, { params: e })
       tableResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)

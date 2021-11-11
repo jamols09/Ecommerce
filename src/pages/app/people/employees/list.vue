@@ -143,13 +143,3 @@ const calltable = async () => {
     </EmployeeTable>
   </div>
 </template>
-
-<!-- <style lang="scss" scoped>
-@media screen and (max-width: 2048px) {
-  .page-content-wrapper {
-    width: 100%;
-    max-width: 2048px !important;
-    margin: 0 auto;
-  }
-}
-</style> -->
