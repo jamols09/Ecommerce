@@ -3,9 +3,8 @@ import 'simple-datatables/src/style.css'
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
-import CategoryActionDropdown from '../../../partials/dropdowns/GenericActionDropdown.vue'
 
 interface IHeader {
   name: string
