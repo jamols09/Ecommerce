@@ -14,6 +14,7 @@ export function useUser() {
   const api = useApi()
 
   /**
+   * @description Generate account for admin or client
    * @param object user
    * @returns HTTP status or error message
    */
@@ -29,6 +30,10 @@ export function useUser() {
     isLoading.value = false
   }
 
+  /**
+   * @description Get list of paginated users for table
+   * @param object
+   */
   const table = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
@@ -41,6 +46,7 @@ export function useUser() {
   }
 
   /**
+   * @description Set account to active or inactive
    * @param array id
    * @returns Paginated category
    */
@@ -56,6 +62,10 @@ export function useUser() {
     isLoading.value = false
   }
 
+  /**
+   * @description Removes list of selected users
+   * @param object
+   */
   const remove = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
