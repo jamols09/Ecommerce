@@ -27,7 +27,9 @@ const stateValue = product.GET_TAB_SPECS
 const onGetBranch = async () => {
   await api.dropdown()
   option.value = api.dropdownResponse.value
-  option.value.push({ value: '-1', label: 'All' })
+  api.dropdownResponse.value.length > 0
+    ? option.value.push({ value: '-1', label: 'All' })
+    : false
 }
 const onUpdateBranch = (e: any) => {
   e == '-1' && branch.value?.length
