@@ -20,7 +20,7 @@ const table = reactive({
     { name: 'Action', sortable: false },
   ],
   data: [],
-  order: 'asc',
+  order: '',
   column: '',
 })
 
@@ -61,8 +61,8 @@ const onRemove = async (e?: any) => {
 }
 
 const onSort = (e?: any) => {
-  table.order = table.order === 'asc' ? 'desc' : 'asc'
-  table.column = encodeURIComponent(e)
+  table.order = table.order === '' ? '-' : ''
+  table.column = e?.toLocaleLowerCase().replace(/ /g, '_')
   calltable()
 }
 
@@ -73,34 +73,40 @@ const onSetStatus = async (e: any, a?: string) => {
 }
 
 const calltable = async () => {
+  const query = (type.value ?? table.searchType[0])
+    .replace(/ /g, '_')
+    .toLocaleLowerCase()
+
+  const sort = (table.order + table.column ?? '' + table.column)
+    .replace(/ /g, '_')
+    .toLocaleLowerCase()
+
   await api.table({
-    page: page.value ?? '1',
     row: rowCount.value ?? table.totalRows[0],
-    query: search.value ?? '',
-    type: type.value ?? table.searchType[0],
-    column: table.column ?? '',
-    order: table.order ?? '',
-    account: null,
+    [`filter[${query}]`]: search.value,
+    [`filter[account]`]: 'client',
+    page: page.value ?? '1',
+    sort: sort,
   })
   const { body } = api.tableResponse.value
   table.data = body.data
   pagination.value = body //reactive() Object.assign(pagination, body)
 }
 
-watchEffect(async () => {
-  await api.table({
-    page: (page.value = 1),
-    row: rowCount.value ?? table.totalRows[0],
-    query: '',
-    type: table.searchType[0],
-    column: '',
-    order: '',
-    account: null,
-  })
-  const { body } = api.tableResponse.value
-  table.data = body.data
-  pagination.value = body //reactive() Object.assign(pagination, body)
-})
+// watchEffect(async () => {
+//   await api.table({
+//     page: (page.value = 1),
+//     row: rowCount.value ?? table.totalRows[0],
+//     query: '',
+//     type: table.searchType[0],
+//     column: '',
+//     order: '',
+//     account: null,
+//   })
+//   const { body } = api.tableResponse.value
+//   table.data = body.data
+//   pagination.value = body //reactive() Object.assign(pagination, body)
+// })
 </script>
 
 <template>

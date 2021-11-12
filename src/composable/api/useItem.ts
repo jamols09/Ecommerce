@@ -4,13 +4,15 @@ import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
 
 const createResponse = ref()
+const tableResponse = ref()
 const isLoading = ref(false)
 
 export function useItem() {
   const api = useApi()
 
   /**
-   * @param object item
+   * @description Generate item for list selected of branch
+   * @param object
    * @returns HTTP status or error message
    */
   const create = async (e: any): Promise<any> => {
@@ -25,9 +27,27 @@ export function useItem() {
     isLoading.value = false
   }
 
+  /**
+   * @description Get list of paginated items for selected branch
+   * @param object
+   * @returns Paginated item
+   */
+  const table = async (e?: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.get(`/v1/item`, { params: e })
+      tableResponse.value = data
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
+    tableResponse,
     createResponse,
     isLoading,
     create,
+    table,
   }
 }

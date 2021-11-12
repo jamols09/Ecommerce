@@ -15,7 +15,7 @@ const table = reactive({
     { name: 'Action', sortable: false },
   ],
   data: [],
-  order: 'asc',
+  order: '',
   column: '',
 })
 
@@ -49,45 +49,38 @@ const onChangePage = (e?: any) => {
   calltable()
 }
 
-const onSort = (e?: any) => {
-  table.order = table.order === 'asc' ? 'desc' : 'asc'
-  table.column = encodeURIComponent(e)
-  calltable()
-}
-
 const onRemove = async (e: any) => {
   await api.remove({ id: e })
   page.value = 1
   calltable()
 }
 
+const onSort = (e?: any) => {
+  table.order = table.order === '' ? '-' : ''
+  table.column = e?.toLocaleLowerCase().replace(/ /g, '_')
+  calltable()
+}
+
 const calltable = async () => {
+  const query = (type.value ?? table.searchType[0])
+    .replace(/ /g, '_')
+    .toLocaleLowerCase()
+
+  const sort = (table.order + table.column ?? '' + table.column)
+    .replace(/ /g, '_')
+    .toLocaleLowerCase()
+
   await api.table({
-    page: page.value ?? '1',
     row: rowCount.value ?? table.totalRows[0],
-    query: search.value ?? '',
-    type: type.value ?? table.searchType[0],
-    column: table.column ?? '',
-    order: table.order ?? '',
+    [`filter[${query}]`]: search.value,
+    page: page.value ?? '1',
+    sort: sort,
   })
+
   const { body } = api.tableResponse.value
   table.data = body.data
   pagination.value = body //reactive() Object.assign(pagination, body)
 }
-
-watchEffect(async () => {
-  await api.table({
-    page: (page.value = 1),
-    row: rowCount.value ?? table.totalRows[0],
-    query: '',
-    type: table.searchType[0],
-    column: '',
-    order: '',
-  })
-  const { body } = api.tableResponse.value
-  table.data = body.data
-  pagination.value = body //reactive() Object.assign(pagination, body)
-})
 </script>
 
 <template>

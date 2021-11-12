@@ -20,7 +20,8 @@ export function useBranch() {
   const api = useApi()
 
   /**
-   * @param object branch
+   * @description Generate branch
+   * @param object
    * @returns HTTP status or error message
    */
   const create = async (e: any): Promise<any> => {
@@ -34,7 +35,8 @@ export function useBranch() {
   }
 
   /**
-   * @returns Branch or error message
+   * @description Gets all of branch for dropdown
+   * @returns Branch list
    */
   const dropdown = async (): Promise<any> => {
     isLoading.value = true
@@ -50,15 +52,14 @@ export function useBranch() {
   }
 
   /**
-   * @param object branch
+   * @description Gets a list of paginated branch for table
+   * @param object
    * @returns Paginated branch
    */
   const table = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.get(
-        `/v1/branch?page=${e.page}&row=${e.row}&type=${e.type}&q=${e.query}&col=${e.column}&order=${e.order}`
-      )
+      const { data } = await api.get(`/v1/branch`, { params: e })
       tableResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
@@ -67,7 +68,8 @@ export function useBranch() {
   }
 
   /**
-   * @param array id
+   * @description Soft deletes list of branches; will fail if branch contains an item
+   * @param array
    * @returns Paginated branch
    */
   const remove = async (e?: any): Promise<any> => {
@@ -75,6 +77,7 @@ export function useBranch() {
     try {
       const { data } = await api.post(`/v1/branch/delete`, e)
       removeResponse.value = data
+      notif.warning(`Branch(es) successfully removed.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -82,7 +85,8 @@ export function useBranch() {
   }
 
   /**
-   * @param array id
+   * @description Set branch status to active or inactive
+   * @param array
    * @returns Paginated branch
    */
   const status = async (e?: any): Promise<any> => {
@@ -90,7 +94,7 @@ export function useBranch() {
     try {
       const { data } = await api.post(`/v1/branch/status`, e)
       statusResponse.value = data
-      notif.success(`Account(s) successfully ${e?.status}d.`)
+      notif.success(`Branch(es) successfully ${e?.status}d.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }

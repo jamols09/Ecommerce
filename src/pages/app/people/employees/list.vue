@@ -82,35 +82,35 @@ const calltable = async () => {
     .toLocaleLowerCase()
 
   await api.table({
-    page: page.value ?? '1',
     row: rowCount.value ?? table.totalRows[0],
-    sort: sort,
     [`filter[${query}]`]: search.value,
     [`filter[account]`]: 'admin',
+    page: page.value ?? '1',
+    sort: sort,
   })
   const { body } = api.tableResponse.value
   table.data = body.data
   pagination.value = body //reactive() Object.assign(pagination, body)
 }
-watchEffect(async () => {
-  const query = (type.value ?? table.searchType[0])
-    .replace(/ /g, '_')
-    .toLocaleLowerCase()
+// watchEffect(async () => {
+//   const query = (type.value ?? table.searchType[0])
+//     .replace(/ /g, '_')
+//     .toLocaleLowerCase()
 
-  const sort = (table.order + table.column ?? '' + table.column)
-    .replace(/ /g, '_')
-    .toLocaleLowerCase()
-  await api.table({
-    page: (page.value = 1),
-    row: rowCount.value ?? table.totalRows[0],
-    sort: sort,
-    [`filter[${query}]`]: search.value,
-    [`filter[account]`]: 'admin',
-  })
-  const { body } = api.tableResponse.value
-  table.data = body.data
-  pagination.value = body //reactive() Object.assign(pagination, body)
-})
+//   const sort = (table.order + table.column ?? '' + table.column)
+//     .replace(/ /g, '_')
+//     .toLocaleLowerCase()
+//   await api.table({
+//     page: (page.value = 1),
+//     row: rowCount.value ?? table.totalRows[0],
+//     sort: sort,
+//     [`filter[${query}]`]: search.value,
+//     [`filter[account]`]: 'admin',
+//   })
+//   const { body } = api.tableResponse.value
+//   table.data = body.data
+//   pagination.value = body //reactive() Object.assign(pagination, body)
+// })
 </script>
 
 <template>
@@ -143,13 +143,3 @@ watchEffect(async () => {
     </EmployeeTable>
   </div>
 </template>
-
-<!-- <style lang="scss" scoped>
-@media screen and (max-width: 2048px) {
-  .page-content-wrapper {
-    width: 100%;
-    max-width: 2048px !important;
-    margin: 0 auto;
-  }
-}
-</style> -->
