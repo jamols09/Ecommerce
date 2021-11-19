@@ -5,25 +5,8 @@ import 'simple-datatables/src/style.css'
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
+import type { IData, IHeader } from '/@src/models/table'
 
-interface IHeader {
-  name: string
-  sortable?: boolean
-}
-interface IData {
-  id: number
-  username: string
-  first_name: string
-  middle_name: string | null
-  last_name: string | null
-  birthdate: string
-  thumbnail: string | null
-  is_active: number
-  email: string
-  account_type: string
-  email_verified_at: string
-  created_at?: string
-}
 interface ITableProps {
   headers: IHeader[]
   totalRows?: Array<number>
