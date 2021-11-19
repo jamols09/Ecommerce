@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, watchEffect } from 'vue'
+import { onMounted, reactive, ref, watchEffect } from 'vue'
 import { useBranch } from '/@src/composable/api/useBranch'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 pageTitle.value = 'List of Branch'
@@ -41,7 +41,7 @@ const page = ref(1)
 const reset = ref(false)
 const onSearch = (e: any) => {
   search.value = e
-  calltable()
+  onCallTable()
 }
 
 const onChangePage = (e?: any) => {
@@ -51,28 +51,28 @@ const onChangePage = (e?: any) => {
     e > 0 ? (page.value += 1) : (page.value -= 1)
   }
   reset.value = !reset.value
-  calltable()
+  onCallTable()
 }
 
 const onRemove = async (e?: any) => {
   await api.remove({ id: e })
   page.value = 1
-  calltable()
+  onCallTable()
 }
 
 const onSort = (e?: any) => {
   table.order = table.order === '' ? '-' : ''
   table.column = e?.toLocaleLowerCase().replace(/ /g, '_')
-  calltable()
+  onCallTable()
 }
 
 const onSetStatus = async (e: any, a?: string) => {
   await api.status({ id: e, status: a })
   page.value = 1
-  calltable()
+  onCallTable()
 }
 
-const calltable = async () => {
+const onCallTable = async () => {
   const query = (type.value ?? table.searchType[0])
     .replace(/ /g, '_')
     .toLocaleLowerCase()
@@ -91,6 +91,7 @@ const calltable = async () => {
   table.data = body.data
   pagination.value = body //reactive() Object.assign(pagination, body)
 }
+onMounted(() => onCallTable())
 </script>
 
 <template>
