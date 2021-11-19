@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, watchEffect } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useUser } from '/@src/composable/api/useUser'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 pageTitle.value = 'List of Employee'
@@ -9,15 +9,15 @@ const table = reactive({
   searchType: ['Username', 'Created At'],
   totalRows: [10, 15, 30, 50],
   headers: [
-    { name: '', sortable: false },
-    { name: 'Active', sortable: false },
-    { name: 'Username', sortable: true },
-    { name: 'First Name', sortable: true },
-    { name: 'Middle Name', sortable: false },
-    { name: 'Last Name', sortable: false },
-    { name: 'Email', sortable: false },
-    { name: 'Created At', sortable: false },
-    { name: 'Action', sortable: false },
+    { name: '' },
+    { name: 'Active' },
+    { name: 'Username' },
+    { name: 'First Name' },
+    { name: 'Middle Name' },
+    { name: 'Last Name' },
+    { name: 'Email' },
+    { name: 'Created At' },
+    { name: 'Action' },
   ],
   data: [],
   order: '',
@@ -41,7 +41,7 @@ const page = ref(1)
 const reset = ref(false)
 const onSearch = (e: any) => {
   search.value = e
-  calltable()
+  onCallTable()
 }
 
 const onChangePage = (e?: any) => {
@@ -51,28 +51,28 @@ const onChangePage = (e?: any) => {
     e > 0 ? (page.value += 1) : (page.value -= 1)
   }
   reset.value = !reset.value
-  calltable()
+  onCallTable()
 }
 
 const onRemove = async (e?: any) => {
   await api.remove({ id: e })
   page.value = 1
-  calltable()
+  onCallTable()
 }
 
 const onSort = (e: string) => {
   table.order = table.order === '' ? '-' : ''
   table.column = e?.toLocaleLowerCase().replace(/ /g, '_')
-  calltable()
+  onCallTable()
 }
 
 const onSetStatus = async (e: any, a?: string) => {
   await api.status({ id: e, status: a })
   page.value = 1
-  calltable()
+  onCallTable()
 }
 
-const calltable = async () => {
+const onCallTable = async () => {
   const query = (type.value ?? table.searchType[0])
     .replace(/ /g, '_')
     .toLocaleLowerCase()
@@ -92,25 +92,7 @@ const calltable = async () => {
   table.data = body.data
   pagination.value = body //reactive() Object.assign(pagination, body)
 }
-// watchEffect(async () => {
-//   const query = (type.value ?? table.searchType[0])
-//     .replace(/ /g, '_')
-//     .toLocaleLowerCase()
-
-//   const sort = (table.order + table.column ?? '' + table.column)
-//     .replace(/ /g, '_')
-//     .toLocaleLowerCase()
-//   await api.table({
-//     page: (page.value = 1),
-//     row: rowCount.value ?? table.totalRows[0],
-//     sort: sort,
-//     [`filter[${query}]`]: search.value,
-//     [`filter[account]`]: 'admin',
-//   })
-//   const { body } = api.tableResponse.value
-//   table.data = body.data
-//   pagination.value = body //reactive() Object.assign(pagination, body)
-// })
+onMounted(() => onCallTable())
 </script>
 
 <template>
