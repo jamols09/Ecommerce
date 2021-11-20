@@ -53,6 +53,7 @@ export function useItem() {
     try {
       const { data } = await api.post(`/v1/item/status`, e)
       tableResponse.value = data
+      useNotyf().success(`Product successfully made ${e.state}.`)
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
