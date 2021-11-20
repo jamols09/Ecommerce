@@ -5,12 +5,14 @@ interface IActionDropdown {
   actionId: number
   titleRemove: string
   messageRemove?: string
+  titleEdit?: string
   messageEdit?: string
 }
 const props = withDefaults(defineProps<IActionDropdown>(), {
   actionId: 0,
   titleRemove: '',
   messageRemove: '',
+  titleEdit: '',
   messageEdit: '',
 })
 const emit = defineEmits(['remove'])
@@ -29,8 +31,10 @@ const onRemove = async (e: number) => {
           <i aria-hidden="true" class="lnil lnil-cog"></i>
         </div>
         <div class="meta">
-          <span>Edit</span>
-          <span><small>Make Category changes</small></span>
+          <span>{{ props.titleEdit }}</span>
+          <span
+            ><small>{{ props.messageEdit }}</small></span
+          >
         </div>
       </a>
 

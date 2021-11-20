@@ -215,6 +215,8 @@ onMounted(() => {
               <GenericActionDropdown
                 :action-id="row.id"
                 :message-remove="'Remove'"
+                title-edit="Edit"
+                message-edit="Edit category config"
                 @click="reset()"
                 @remove="emit('remove', (checked = $event)), reset()"
               />

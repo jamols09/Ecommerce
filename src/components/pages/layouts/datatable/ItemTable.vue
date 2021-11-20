@@ -220,6 +220,8 @@ onMounted(() => {
                 :title-remove="
                   row.is_discountable ? 'Undiscountable' : 'Discountable'
                 "
+                title-edit="Edit"
+                message-edit="Edit product config"
                 @click="reset()"
                 @remove="
                   emit('setStatus', {

@@ -4,11 +4,13 @@ import { ref } from 'vue'
 interface IActionDropdown {
   actionId: number
   messageRemove?: string
+  titleEdit?: string
   messageEdit?: string
 }
 const props = withDefaults(defineProps<IActionDropdown>(), {
   actionId: 0,
   messageRemove: '',
+  titleEdit: '',
   messageEdit: '',
 })
 const emit = defineEmits(['remove'])
@@ -27,9 +29,9 @@ const onRemove = async (e: number) => {
           <i aria-hidden="true" class="lnil lnil-cog"></i>
         </div>
         <div class="meta">
-          <span>Edit</span>
+          <span>{{ props.titleEdit }}</span>
           <span>
-            <small> Make Category changes </small>
+            <small>{{ props.messageEdit }}</small>
           </span>
         </div>
       </a>

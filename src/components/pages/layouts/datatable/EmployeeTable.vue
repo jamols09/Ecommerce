@@ -229,6 +229,8 @@ onMounted(() => {
               <GenericActionDropdown
                 :action-id="row.id"
                 :message-remove="row.is_active ? 'Deactivate' : 'Activate'"
+                title-edit="Edit"
+                message-edit="Edit employee account"
                 @click="reset()"
                 @remove="
                   emit(
