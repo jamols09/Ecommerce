@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useCategory } from '/@src/composable/api/useCategory'
 
 interface IActionDropdown {
   actionId: number
   messageRemove?: string
   messageEdit?: string
 }
-const api = useCategory()
 const props = withDefaults(defineProps<IActionDropdown>(), {
   actionId: 0,
   messageRemove: '',
@@ -30,7 +28,9 @@ const onRemove = async (e: number) => {
         </div>
         <div class="meta">
           <span>Edit</span>
-          <span>Make Category changes</span>
+          <span>
+            <small> Make Category changes </small>
+          </span>
         </div>
       </a>
 
