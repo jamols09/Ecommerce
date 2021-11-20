@@ -5,6 +5,7 @@ import useNotyf from '../useNotyf'
 
 const createResponse = ref()
 const tableResponse = ref()
+const statusResponse = ref()
 const isLoading = ref(false)
 
 export function useItem() {
@@ -43,11 +44,28 @@ export function useItem() {
     isLoading.value = false
   }
 
+  /**
+   * @description Apply status change to column: is_discountable
+   * @param object
+   */
+  const status = async (e?: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.post(`/v1/item/status`, e)
+      tableResponse.value = data
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
     tableResponse,
     createResponse,
+    statusResponse,
     isLoading,
     create,
     table,
+    status,
   }
 }
