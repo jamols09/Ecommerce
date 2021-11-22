@@ -62,11 +62,16 @@ const isLoadState = computed(() => props.isLoading)
 const isReset = ref(() => {
   return props.resetChecked
 })
-
+const onRemove = (id: number, discountable: number) => {
+  emit('setStatus', {
+    id: id,
+    state: discountable ? 'undiscountable' : 'discountable',
+  })
+  reset()
+}
 watch(isReset.value, (current, prev) => {
   reset()
 })
-
 debouncedWatch(
   search,
   () => {
@@ -216,22 +221,14 @@ onMounted(() => {
             <td>
               <DiscountableActionDropdown
                 :action-id="row.id"
-                :message-remove="'Applies to all branches'"
-                :title-remove="
-                  row.is_discountable ? 'Undiscountable' : 'Discountable'
-                "
                 title-edit="Edit"
                 message-edit="Edit product config"
-                @click="reset()"
-                @remove="
-                  emit('setStatus', {
-                    id: row.id,
-                    state: row.is_discountable
-                      ? 'undiscountable'
-                      : 'discountable',
-                  }),
-                    reset()
+                :title-discountable="
+                  row.is_discountable ? 'Undiscountable' : 'Discountable'
                 "
+                :message-discountable="'Applies to all branches'"
+                @click="reset()"
+                @remove="onRemove(row.id, row.is_discountable)"
               />
             </td>
           </tr>

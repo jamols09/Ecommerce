@@ -2,7 +2,9 @@ import { ref } from 'vue'
 import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
+import useNotificationType from './useNotificationType'
 
+const notifType = useNotificationType.notifType
 const createResponse = ref()
 const tableResponse = ref()
 const statusResponse = ref()
@@ -21,7 +23,7 @@ export function useItem() {
     try {
       const { data } = await api.post('/v1/item', e)
       createResponse.value = data
-      useNotyf().success(`Product <b>${data.body}</b> added.`)
+      notifType(`Product <b>${data.body}</b> added.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -53,7 +55,10 @@ export function useItem() {
     try {
       const { data } = await api.post(`/v1/item/status`, e)
       tableResponse.value = data
-      useNotyf().success(`Product successfully made ${e.state}.`)
+      notifType(
+        `Product successfully made ${e.state}.`,
+        e.state === 'discountable' ? 'success' : 'warning'
+      )
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
