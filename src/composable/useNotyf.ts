@@ -12,7 +12,7 @@ const notyf = new Notyf({
       type: 'warning',
       background: themeColors.warning,
       icon: {
-        className: 'fas fa-hand-paper',
+        className: 'fas fa-exclamation',
         tagName: 'i',
         text: '',
       },

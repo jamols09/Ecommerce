@@ -2,9 +2,12 @@ import { ref } from 'vue'
 import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
+import useNotificationType from './useNotificationType'
 
+const notifType = useNotificationType.notifType
 const createResponse = ref()
 const tableResponse = ref()
+const statusResponse = ref()
 const isLoading = ref(false)
 
 export function useItem() {
@@ -20,7 +23,7 @@ export function useItem() {
     try {
       const { data } = await api.post('/v1/item', e)
       createResponse.value = data
-      useNotyf().success(`Product <b>${data.body}</b> added.`)
+      notifType(`Product <b>${data.body}</b> added.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -43,11 +46,32 @@ export function useItem() {
     isLoading.value = false
   }
 
+  /**
+   * @description Apply status change to column: is_discountable
+   * @param object
+   */
+  const status = async (e?: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.post(`/v1/item/status`, e)
+      tableResponse.value = data
+      notifType(
+        `Product successfully made ${e.state}.`,
+        e.state === 'discountable' ? 'success' : 'warning'
+      )
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
     tableResponse,
     createResponse,
+    statusResponse,
     isLoading,
     create,
     table,
+    status,
   }
 }

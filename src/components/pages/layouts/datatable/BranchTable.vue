@@ -230,6 +230,8 @@ onMounted(() => {
               <GenericActionDropdown
                 :action-id="row.id"
                 :message-remove="row.is_active ? 'Deactivate' : 'Activate'"
+                title-edit="Edit"
+                message-edit="Edit branch config"
                 @click="reset()"
                 @remove="
                   emit(

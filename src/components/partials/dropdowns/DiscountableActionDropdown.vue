@@ -3,13 +3,15 @@ import { ref } from 'vue'
 
 interface IActionDropdown {
   actionId: number
-  messageRemove?: string
+  titleDiscountable: string
+  messageDiscountable?: string
   titleEdit?: string
   messageEdit?: string
 }
 const props = withDefaults(defineProps<IActionDropdown>(), {
   actionId: 0,
-  messageRemove: '',
+  titleDiscountable: '',
+  messageDiscountable: '',
   titleEdit: '',
   messageEdit: '',
 })
@@ -30,9 +32,9 @@ const onRemove = async (e: number) => {
         </div>
         <div class="meta">
           <span>{{ props.titleEdit }}</span>
-          <span>
-            <small>{{ props.messageEdit }}</small>
-          </span>
+          <span
+            ><small>{{ props.messageEdit }}</small></span
+          >
         </div>
       </a>
 
@@ -48,7 +50,12 @@ const onRemove = async (e: number) => {
           <i aria-hidden="true" class="lnil lnil-trash-can-alt"></i>
         </div>
         <div class="meta">
-          <span>{{ props.messageRemove }}</span>
+          <span>
+            {{ props.titleDiscountable }}
+          </span>
+          <span>
+            <small>{{ props.messageDiscountable }}</small>
+          </span>
         </div>
       </a>
     </template>

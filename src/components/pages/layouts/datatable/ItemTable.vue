@@ -1,7 +1,6 @@
 <script lang="ts">
 import 'simple-datatables/src/style.css'
 </script>
-
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
@@ -31,9 +30,15 @@ const emit = defineEmits([
   'sort',
   'remove',
   'reload',
+  'activate',
+  'deactivate',
+
+  'discountable',
+  'undiscountable',
+  'setStatus',
 ])
 
-const sortException = [3, 1]
+const sortException = [3]
 const type = ref()
 const search = ref()
 const rowCount = ref<number>()
@@ -57,11 +62,16 @@ const isLoadState = computed(() => props.isLoading)
 const isReset = ref(() => {
   return props.resetChecked
 })
-
+const onRemove = (id: number, discountable: number) => {
+  emit('setStatus', {
+    id: id,
+    state: discountable ? 'undiscountable' : 'discountable',
+  })
+  reset()
+}
 watch(isReset.value, (current, prev) => {
   reset()
 })
-
 debouncedWatch(
   search,
   () => {
@@ -75,7 +85,6 @@ onMounted(() => {
   type.value = props.searchType[0]
 })
 </script>
-
 <template>
   <div ref="wrapperElement" class="table-wrapper">
     <!-- Header -->
@@ -169,7 +178,12 @@ onMounted(() => {
                 scope="col"
                 @click="
                   !sortException.includes(index)
-                    ? emit('sort', header.name)
+                    ? emit(
+                        'sort',
+                        header.name === 'Discountable'
+                          ? 'Is Discountable'
+                          : header.name
+                      )
                     : null
                 "
               >
@@ -194,38 +208,34 @@ onMounted(() => {
               </VControl>
             </td>
             <td>
-              <span
-                class="
-                  has-dark-text
-                  dark-inverted
-                  is-font-alt is-weight-600
-                  rem-90
-                "
-              >
-                {{ row.name }}
+              <span class="light-text">
+                {{ row.is_discountable ? 'Yes' : 'No' }}
               </span>
             </td>
             <td>
-              <span class="light-text">{{ row.parent?.name }}</span>
+              <span class="light-text">{{ row.name }}</span>
             </td>
             <td>
-              <span class="light-text">{{ row.created_at }}</span>
+              <span class="light-text">{{ row.sku }}</span>
             </td>
             <td>
-              <GenericActionDropdown
+              <DiscountableActionDropdown
                 :action-id="row.id"
-                :message-remove="'Remove'"
                 title-edit="Edit"
-                message-edit="Edit category config"
+                message-edit="Edit product config"
+                :title-discountable="
+                  row.is_discountable ? 'Undiscountable' : 'Discountable'
+                "
+                :message-discountable="'Applies to all branches'"
                 @click="reset()"
-                @remove="emit('remove', (checked = $event)), reset()"
+                @remove="onRemove(row.id, row.is_discountable)"
               />
             </td>
           </tr>
         </tbody>
         <tbody v-else>
           <tr>
-            <td colspan="7">
+            <td colspan="12">
               <VLoader
                 size="large"
                 class="project-preview-wrapper"
