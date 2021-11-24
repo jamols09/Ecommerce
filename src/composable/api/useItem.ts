@@ -1,7 +1,6 @@
 import { ref } from 'vue'
 import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
-import useNotyf from '../useNotyf'
 import useNotificationType from './useNotificationType'
 
 const notifType = useNotificationType.notifType
@@ -53,8 +52,7 @@ export function useItem() {
   const status = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.post(`/v1/item/status`, e)
-      tableResponse.value = data
+      await api.post(`/v1/item/status`, e)
       notifType(
         `Product successfully made ${e.state}.`,
         e.state === 'discountable' ? 'success' : 'warning'
