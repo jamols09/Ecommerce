@@ -25,13 +25,22 @@ const table = reactive({
 })
 
 const pagination = ref({
-  total: 0,
-  current_page: 0,
-  from: 0,
-  to: 0,
-  next_page_url: '',
-  prev_page_url: '',
-  links: [],
+  links: {
+    first: '',
+    last: '',
+    prev: '',
+    next: '',
+  },
+  meta: {
+    current_page: 0,
+    from: 0,
+    last_page: 0,
+    links: [{ url: '', label: '', active: false }],
+    path: '',
+    per_page: 0,
+    to: 0,
+    total: 0,
+  },
 })
 
 const rowCount = ref()
@@ -87,9 +96,10 @@ const onCallTable = async () => {
     page: page.value ?? '1',
     sort: sort,
   })
-  const { body } = api.tableResponse.value
-  table.data = body.data
-  pagination.value = body //reactive() Object.assign(pagination, body)
+
+  const { data } = api.tableResponse.value
+  table.data = data
+  pagination.value = api.tableResponse.value
 }
 onMounted(() => onCallTable())
 </script>
