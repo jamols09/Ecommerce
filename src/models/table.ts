@@ -1,6 +1,7 @@
 export interface IHeader {
   name: string
 }
+
 export interface IData {
   id: number
   is_discountable?: number
@@ -24,4 +25,28 @@ export interface IData {
   telephone?: string
   mobile?: string
   parent: any
+}
+
+export interface ILinksUri {
+  first: string | null
+  last: string | null
+  prev: string | null
+  next: string | null
+}
+
+interface ILinks {
+  url: string
+  label: string
+  active: boolean
+}
+
+export interface IMeta {
+  current_page: number | null
+  from: number | null
+  last_page: number | null
+  links: ILinks[]
+  path: string
+  per_page: number | null
+  to: number | null
+  total: number | null
 }

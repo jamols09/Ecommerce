@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { ILinksUri, IMeta } from '/@src/models/table'
 
 interface IPagination {
   total: number
@@ -11,18 +12,26 @@ interface IPagination {
   links: any
 }
 
+interface IPagination1 {
+  links: ILinksUri
+  meta: IMeta
+}
+
 interface IPaginationProps {
   isLoading: boolean
-  pagination: IPagination
+  // pagination: IPagination
+  pagination: IPagination1
 }
+
 const props = withDefaults(defineProps<IPaginationProps>(), {
   isLoading: false,
 })
+
 const linksList = computed(() => {
-  if (props.pagination.links.length > 1) {
-    return props.pagination.links.slice(1, -1)
+  if (props.pagination.meta.links.length > 1) {
+    return props.pagination.meta.links.slice(1, -1)
   } else {
-    return props.pagination.links
+    return props.pagination.meta.links
   }
 })
 const isLoadState = computed(() => props.isLoading)
@@ -31,8 +40,8 @@ const emit = defineEmits(['change', 'setLink'])
 
 <template>
   <div class="dataTable-info">
-    Showing {{ props.pagination.from }} to {{ props.pagination.to }} of
-    {{ props.pagination.total }} result
+    Showing {{ props.pagination.meta.from }} to
+    {{ props.pagination.meta.to }} of {{ props.pagination.meta.total }} result
   </div>
   <nav
     class="flex-pagination pagination is-rounded"
@@ -42,7 +51,7 @@ const emit = defineEmits(['change', 'setLink'])
   >
     <!-- Previous Btn -->
     <a
-      v-if="props.pagination.prev_page_url"
+      v-if="props.pagination.links.prev"
       class="pagination-previous has-chevron"
       @click="isLoadState === false ? emit('change', -1) : false"
     >
@@ -54,7 +63,7 @@ const emit = defineEmits(['change', 'setLink'])
     </a>
     <!-- Next Btn -->
     <a
-      v-if="props.pagination.next_page_url"
+      v-if="props.pagination.links.next"
       :disable="isLoadState"
       class="pagination-next has-chevron"
       @click="isLoadState === false ? emit('change', 1) : false"
@@ -71,11 +80,14 @@ const emit = defineEmits(['change', 'setLink'])
         <a
           class="pagination-link"
           :aria-current="
-            pagination.current_page === +page.label ? 'page' : undefined
+            pagination.meta.current_page === +page.label ? 'page' : undefined
           "
-          :class="[pagination.current_page === +page.label && 'is-current']"
+          :class="[
+            pagination.meta.current_page === +page.label && 'is-current',
+          ]"
           @click="
-            isLoadState === false && pagination.current_page !== +page.label
+            isLoadState === false &&
+            pagination.meta.current_page !== +page.label
               ? emit('setLink', +page.label)
               : false
           "

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watchEffect } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useItem } from '/@src/composable/api/useItem'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 pageTitle.value = 'List of Products'
@@ -20,13 +20,22 @@ const table = reactive({
 })
 
 const pagination = ref({
-  total: 0,
-  current_page: 0,
-  from: 0,
-  to: 0,
-  next_page_url: '',
-  prev_page_url: '',
-  links: [],
+  links: {
+    first: '',
+    last: '',
+    prev: '',
+    next: '',
+  },
+  meta: {
+    current_page: 0,
+    from: 0,
+    last_page: 0,
+    links: [{ url: '', label: '', active: false }],
+    path: '',
+    per_page: 0,
+    to: 0,
+    total: 0,
+  },
 })
 
 const rowCount = ref()
@@ -63,7 +72,6 @@ const onSort = (e?: any) => {
 }
 
 const onSetStatus = async (e: any) => {
-  console.log(e)
   await api.status({ id: e.id, state: e.state })
   page.value = 1
   onCallTable()
@@ -84,9 +92,10 @@ const onCallTable = async () => {
     page: page.value ?? '1',
     sort: sort,
   })
-  const { body } = api.tableResponse.value
-  table.data = body.data
-  pagination.value = body //reactive() Object.assign(pagination, body)
+
+  const { data } = api.tableResponse.value
+  table.data = data
+  pagination.value = api.tableResponse.value
 }
 onMounted(() => onCallTable())
 </script>
