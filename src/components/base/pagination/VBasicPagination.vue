@@ -3,24 +3,13 @@ import { computed } from 'vue'
 import type { ILinksUri, IMeta } from '/@src/models/table'
 
 interface IPagination {
-  total: number
-  current_page: number
-  from: number
-  to: number
-  next_page_url: string
-  prev_page_url: string
-  links: any
-}
-
-interface IPagination1 {
   links: ILinksUri
   meta: IMeta
 }
 
 interface IPaginationProps {
   isLoading: boolean
-  // pagination: IPagination
-  pagination: IPagination1
+  pagination: IPagination
 }
 
 const props = withDefaults(defineProps<IPaginationProps>(), {
