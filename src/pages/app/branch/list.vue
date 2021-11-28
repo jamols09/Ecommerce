@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watchEffect } from 'vue'
+import { onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import { useBranch } from '/@src/composable/api/useBranch'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 pageTitle.value = 'List of Branch'
@@ -101,6 +101,9 @@ const onCallTable = async () => {
   table.data = data
   pagination.value = api.tableResponse.value
 }
+watch(rowCount, (next, prev) => {
+  onCallTable()
+})
 onMounted(() => onCallTable())
 </script>
 
