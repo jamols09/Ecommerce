@@ -62,6 +62,14 @@ const isLoadState = computed(() => props.isLoading)
 const isReset = ref(() => {
   return props.resetChecked
 })
+const onHeaderEmit = (header: IHeader, index: number) => {
+  !sortException.includes(index)
+    ? emit(
+        'sort',
+        header.name === 'Discountable' ? 'Is Discountable' : header.name
+      )
+    : null
+}
 const onRemove = (id: number, discountable: number) => {
   emit('setStatus', {
     id: id,
@@ -174,20 +182,10 @@ onMounted(() => {
               </VControl>
             </th>
             <template v-for="(header, index) in props.headers" :key="index">
-              <th
-                scope="col"
-                @click="
-                  !sortException.includes(index)
-                    ? emit(
-                        'sort',
-                        header.name === 'Discountable'
-                          ? 'Is Discountable'
-                          : header.name
-                      )
-                    : null
-                "
-              >
-                <a href="#" class="table-sorter"> {{ header.name }} </a>
+              <th scope="col" @click="onHeaderEmit(header, index)">
+                <a href="#" class="table-sorter">
+                  {{ header.name }} {{ header }}</a
+                >
               </th>
             </template>
           </tr>

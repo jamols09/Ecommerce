@@ -58,6 +58,10 @@ const isReset = ref(() => {
   return props.resetChecked
 })
 
+const onHeaderEmit = (header: IHeader, index: number) => {
+  !sortException.includes(index) ? emit('sort', header.name) : null
+}
+
 watch(isReset.value, (current, prev) => {
   reset()
 })
@@ -165,14 +169,7 @@ onMounted(() => {
               </VControl>
             </th>
             <template v-for="(header, index) in props.headers" :key="index">
-              <th
-                scope="col"
-                @click="
-                  !sortException.includes(index)
-                    ? emit('sort', header.name)
-                    : null
-                "
-              >
+              <th scope="col" @click="onHeaderEmit(header, index)">
                 <a href="#" class="table-sorter"> {{ header.name }} </a>
               </th>
             </template>
