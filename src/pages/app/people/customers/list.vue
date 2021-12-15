@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watchEffect } from 'vue'
+import { onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import { useUser } from '/@src/composable/api/useUser'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 pageTitle.value = 'List of Customer'
@@ -102,6 +102,9 @@ const onCallTable = async () => {
   table.data = data
   pagination.value = api.tableResponse.value
 }
+watch(rowCount, (next, prev) => {
+  onCallTable()
+})
 onMounted(() => onCallTable())
 </script>
 
