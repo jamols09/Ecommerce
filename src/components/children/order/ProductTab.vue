@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import useNotyf from '/@src/composable/useNotyf'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { products, branch } from '/@src/static/product'
 import { useOrderStore } from '/@src/state/piniaState/orderState'
 import { useBranch } from '/@src/composable/api/useBranch'
 import sleep from '/@src/utils/sleep'
+import { useItem } from '/@src/composable/api/useItem'
 
-const api = useBranch()
+const branchApi = useBranch()
+const itemApi = useItem()
 const notyf = useNotyf()
 const order = useOrderStore()
 const orderItem = computed(() => order.GET_ITEMS_ORDER)
 const isAdd = computed(() => products.value === null || branch.value === null)
 const isGenerateComp = computed(() => orderItem.value.length < 1)
 const isLoadingCalc = ref(false)
+const productDropdown = ref(null)
 
 const onGenerateComputation = async () => {
   isLoadingCalc.value = true
@@ -30,11 +33,24 @@ const onAddItem = () => {
       })
     : false
 }
+
 const onRemoveItem = async (e: number) => {
   order.REMOVE_ITEM_ORDER(e)
 }
+
 const onGetBranch = async () => {
-  await api.dropdown()
+  products.value = null
+  await branchApi.dropdown()
+}
+
+const onGetProductByBranch = async (e: any) => {
+  if (e) {
+    productDropdown.value = null
+    await itemApi.dropdown(e)
+    productDropdown.value = itemApi.dropdownResponse.value
+  } else {
+    console.error('Please select a branch.')
+  }
 }
 </script>
 
@@ -47,9 +63,9 @@ const onGetBranch = async () => {
           <VControl>
             <Multiselect
               v-model="branch.value"
-              :options="api.dropdownResponse.value"
+              :options="branchApi.dropdownResponse.value"
               :searchable="true"
-              :loading="api.isLoading.value"
+              :loading="branchApi.isLoading.value"
               track-by="label"
               @open="onGetBranch"
             />
@@ -60,12 +76,15 @@ const onGetBranch = async () => {
         <VField>
           <label> Product </label>
           <VControl>
+            <!-- Get items by selected branch -->
             <Multiselect
               v-model="products.value"
-              :options="products.options"
+              :options="productDropdown"
               :searchable="true"
               :object="true"
+              :loading="itemApi.isLoading.value"
               track-by="label"
+              @open="onGetProductByBranch(branch.value)"
             />
           </VControl>
         </VField>

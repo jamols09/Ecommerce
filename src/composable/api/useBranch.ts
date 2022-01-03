@@ -11,7 +11,7 @@ const removeResponse = ref()
 const isLoading = ref(false)
 const notif = useNotyf()
 
-interface IRBranch {
+interface IRBranchDropdown {
   id: number
   name: string
 }
@@ -42,7 +42,7 @@ export function useBranch() {
     isLoading.value = true
     try {
       const { data } = await api.get(`/v1/branch/dropdown`)
-      dropdownResponse.value = data.body.map((e: IRBranch) => {
+      dropdownResponse.value = data.body.map((e: IRBranchDropdown) => {
         return { value: e.id, label: e.name }
       })
     } catch (err: any) {
