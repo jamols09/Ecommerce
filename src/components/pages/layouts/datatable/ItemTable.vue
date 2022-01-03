@@ -184,8 +184,8 @@ onMounted(() => {
             <template v-for="(header, index) in props.headers" :key="index">
               <th scope="col" @click="onHeaderEmit(header, index)">
                 <a href="#" class="table-sorter">
-                  {{ header.name }} {{ header }}</a
-                >
+                  {{ header.name }}
+                </a>
               </th>
             </template>
           </tr>

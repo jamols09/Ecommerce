@@ -4,10 +4,16 @@ import useErrorNotification from './useErrorNotification'
 import useNotificationType from './useNotificationType'
 
 const notifType = useNotificationType.notifType
+const dropdownResponse = ref()
 const createResponse = ref()
 const tableResponse = ref()
 const statusResponse = ref()
 const isLoading = ref(false)
+
+interface IRItemDropdown {
+  id: number
+  name: string
+}
 
 export function useItem() {
   const api = useApi()
@@ -63,11 +69,30 @@ export function useItem() {
     isLoading.value = false
   }
 
+  /**
+   * @description Get product dropdown by selected branch
+   * @param int
+   */
+  const dropdown = async (e?: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.get(`/v1/item/dropdown/${e}`)
+      dropdownResponse.value = data.result.map((e: IRItemDropdown) => {
+        return { value: e.id, label: e.name }
+      })
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
+    dropdownResponse,
     tableResponse,
     createResponse,
     statusResponse,
     isLoading,
+    dropdown,
     create,
     table,
     status,
