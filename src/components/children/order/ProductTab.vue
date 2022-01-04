@@ -16,6 +16,7 @@ const isAdd = computed(() => products.value === null || branch.value === null)
 const isGenerateComp = computed(() => orderItem.value.length < 1)
 const isLoadingCalc = ref(false)
 const productDropdown = ref(null)
+const productPlaceholder = ref('')
 
 const onGenerateComputation = async () => {
   isLoadingCalc.value = true
@@ -40,16 +41,18 @@ const onRemoveItem = async (e: number) => {
 
 const onGetBranch = async () => {
   products.value = null
+  productDropdown.value = null
   await branchApi.dropdown()
 }
 
 const onGetProductByBranch = async (e: any) => {
   if (e) {
-    productDropdown.value = null
+    productPlaceholder.value = ''
     await itemApi.dropdown(e)
     productDropdown.value = itemApi.dropdownResponse.value
   } else {
     console.error('Please select a branch.')
+    productPlaceholder.value = 'Please select a branch'
   }
 }
 </script>
@@ -67,6 +70,7 @@ const onGetProductByBranch = async (e: any) => {
               :searchable="true"
               :loading="branchApi.isLoading.value"
               track-by="label"
+              :placeholder="productPlaceholder"
               @open="onGetBranch"
             />
           </VControl>
@@ -84,6 +88,7 @@ const onGetProductByBranch = async (e: any) => {
               :object="true"
               :loading="itemApi.isLoading.value"
               track-by="label"
+              :placeholder="productPlaceholder"
               @open="onGetProductByBranch(branch.value)"
             />
           </VControl>
