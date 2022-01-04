@@ -42,7 +42,7 @@ export function useBranch() {
     isLoading.value = true
     try {
       const { data } = await api.get(`/v1/branch/dropdown`)
-      dropdownResponse.value = data.body.map((e: IRBranchDropdown) => {
+      dropdownResponse.value = data.result.map((e: IRBranchDropdown) => {
         return { value: e.id, label: e.name }
       })
     } catch (err: any) {
