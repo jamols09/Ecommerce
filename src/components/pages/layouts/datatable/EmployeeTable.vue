@@ -217,11 +217,9 @@ onMounted(() => {
             <td>
               <span class="light-text">{{ row.email }}</span>
             </td>
-
             <td>
               <span class="light-text">{{ row.created_at }}</span>
             </td>
-
             <td>
               <GenericActionDropdown
                 edit-route="/app/people/employees/"

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
 interface IActionDropdown {
   actionId: number
@@ -27,22 +26,6 @@ const onRemove = async (e: number) => {
 <template>
   <VDropdown icon="feather:more-vertical" right spaced>
     <template #content>
-      <!-- <a
-        href="#"
-        role="menuitem"
-        class="dropdown-item is-media"
-        @click="onRedirect(props.actionId)"
-      >
-        <div class="icon">
-          <i aria-hidden="true" class="lnil lnil-cog"></i>
-        </div>
-        <div class="meta">
-          <span>{{ props.titleEdit }}</span>
-          <span>
-            <small>{{ props.messageEdit }}</small>
-          </span>
-        </div>
-      </a> -->
       <RouterLink
         :to="{
           path: props.editRoute + props.actionId,
