@@ -233,15 +233,15 @@ watchEffect(() => {
                     name="barangay"
                   >
                     <V-Field>
-                      <label>City *</label>
+                      <label>Barangay *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
                           v-bind="field"
                           type="text"
                           class="input is-info-focus"
                         />
-                        <p v-if="errors.city" class="help is-danger">
-                          <b>{{ errors.city }}</b>
+                        <p v-if="errors.barangay" class="help is-danger">
+                          <b>{{ errors.barangay }}</b>
                         </p>
                       </V-Control>
                     </V-Field>
