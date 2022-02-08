@@ -33,7 +33,7 @@ const tabs = [
 
 const tab = ref(null)
 
-const onChangeTab = (e: any) => {
+const onChangeTab = (e: string) => {
   const lookup = {
     BasicTabInfo,
     BasicTabPricing,
@@ -91,12 +91,12 @@ const create = async () => {
 
 <style lang="scss">
 /* Separated treeselect due to conflict */
-@import '../../../../scss/extensions/_treeselect.scss';
+@import '../../../../../scss/extensions/_treeselect.scss';
 </style>
 <style scoped lang="scss">
-@import '../../../../scss/abstracts/_variables.scss';
-@import '../../../../scss/abstracts/_mixins.scss';
-@import '../../../../scss/pages/generic/_forms.scss';
+@import '../../../../../scss/abstracts/_variables.scss';
+@import '../../../../../scss/abstracts/_mixins.scss';
+@import '../../../../../scss/pages/generic/_forms.scss';
 
 .form-layout {
   max-width: unset;
