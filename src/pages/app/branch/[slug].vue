@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { BranchForm } from '/@src/schema/BranchSchema'
 import { useBranch } from '/@src/composable/api/useBranch'
+import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 
-pageTitle.value = 'Create Branch'
+pageTitle.value = 'Edit Branch'
 
 const api = useBranch()
 const options = ref([])
