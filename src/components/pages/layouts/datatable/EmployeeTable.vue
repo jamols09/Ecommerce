@@ -224,6 +224,7 @@ onMounted(() => {
 
             <td>
               <GenericActionDropdown
+                edit-route="/app/people/employees/"
                 :action-id="row.id"
                 :message-remove="row.is_active ? 'Deactivate' : 'Activate'"
                 title-edit="Edit"

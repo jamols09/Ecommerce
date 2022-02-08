@@ -210,6 +210,7 @@ onMounted(() => {
             </td>
             <td>
               <GenericActionDropdown
+                edit-route="/app/product/category/"
                 :action-id="row.id"
                 :message-remove="'Remove'"
                 title-edit="Edit"
