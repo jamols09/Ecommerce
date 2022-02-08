@@ -110,7 +110,7 @@ onMounted(() => onCallTable())
 
 <template>
   <div>
-    <EmployeeTable
+    <CustomerTable
       :total-rows="
         table.totalRows.sort(function (a, b) {
           return a - b
@@ -135,7 +135,7 @@ onMounted(() => onCallTable())
         @change="onChangePage"
         @set-link="onChangePage({ select: $event })"
       />
-    </EmployeeTable>
+    </CustomerTable>
   </div>
 </template>
 
