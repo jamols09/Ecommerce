@@ -8,6 +8,7 @@ const tableResponse = ref()
 const createResponse = ref()
 const dropdownResponse = ref()
 const removeResponse = ref()
+const detailsResponse = ref()
 const isLoading = ref(false)
 const notif = useNotyf()
 
@@ -68,9 +69,9 @@ export function useBranch() {
   }
 
   /**
-   * @description Soft deletes list of branches; will fail if branch contains an item
+   * @description Soft deletes list of branches; will not fail if branch contains an item
    * @param array
-   * @returns Paginated branch
+   * @returns branch
    */
   const remove = async (e?: any): Promise<any> => {
     isLoading.value = true
@@ -87,7 +88,7 @@ export function useBranch() {
   /**
    * @description Set branch status to active or inactive
    * @param array
-   * @returns Paginated branch
+   * @returns branch status
    */
   const status = async (e?: any): Promise<any> => {
     isLoading.value = true
@@ -101,16 +102,34 @@ export function useBranch() {
     isLoading.value = false
   }
 
+  /**
+   * @description Get branch details by id
+   * @param id number
+   */
+
+  const details = async (e: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data }: any = await api.get(`/v1/branch/${e}`)
+      detailsResponse.value = data
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
     removeResponse,
     tableResponse,
     createResponse,
     dropdownResponse,
+    detailsResponse,
     isLoading,
     dropdown,
     create,
     table,
     remove,
     status,
+    details,
   } as const // as const is a typescript keyword to prevent from updating
 }

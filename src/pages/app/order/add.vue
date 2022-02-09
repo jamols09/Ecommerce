@@ -4,7 +4,23 @@ import { pageTitle } from '/@src/state/sidebarLayoutState'
 import type { OrderTabs } from '/@src/models/order'
 
 pageTitle.value = 'Create Order'
-
+const tabs = [
+  {
+    label: 'Customer',
+    value: 'customer',
+    icon: 'fas fa-users',
+  },
+  {
+    label: 'Product',
+    value: 'product',
+    icon: 'feather:box',
+  },
+  {
+    label: 'Computation',
+    value: 'computation',
+    icon: 'si-glyph:money-coin',
+  },
+]
 const selected = ref<OrderTabs>('customer')
 </script>
 
@@ -25,23 +41,7 @@ const selected = ref<OrderTabs>('customer')
               <div class="column is-full">
                 <VTabs
                   :selected="selected"
-                  :tabs="[
-                    {
-                      label: 'Customer',
-                      value: 'customer',
-                      icon: 'fas fa-users',
-                    },
-                    {
-                      label: 'Product',
-                      value: 'product',
-                      icon: 'feather:box',
-                    },
-                    {
-                      label: 'Computation',
-                      value: 'computation',
-                      icon: 'si-glyph:money-coin',
-                    },
-                  ]"
+                  :tabs="tabs"
                   @clicked-tab="selected = $event"
                 >
                   <template #tab="{ activeValue }">
