@@ -20,10 +20,6 @@ const onSubmit = async (inputs: any) => {
   await api.create(inputs)
   isSubmitting.value = false
 }
-
-watchEffect(() => {
-  code.value.length > 0 ? (code.value = code.value.toUpperCase()) : code.value
-})
 </script>
 
 <template>
