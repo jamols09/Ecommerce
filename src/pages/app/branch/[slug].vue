@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { BranchForm } from '/@src/schema/BranchSchema'
 import { useBranch } from '/@src/composable/api/useBranch'
@@ -8,21 +8,47 @@ import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 pageTitle.value = 'Edit Branch'
 
 const api = useBranch()
-const options = ref([])
+const options = ref<string[]>([])
 const isSubmitting = ref(false)
 const autofill = ref('')
 const mobile = ref('')
 const code = ref('')
+const name = ref('')
+const country = ref('')
+const state = ref('')
+const city = ref('')
+const barangay = ref('')
+const address_line_1 = ref('')
+const address_line_2 = ref('')
+const postal = ref('')
+const longitude = ref<number>()
+const latitude = ref<number>()
+const telephone = ref('')
 
 const onSubmit = async (inputs: any) => {
   isSubmitting.value = true
   inputs.is_active = options.value.length > 0 ? true : false
-  await api.create(inputs)
+  // await api.create(inputs)
   isSubmitting.value = false
 }
 
-watchEffect(() => {
-  code.value.length > 0 ? (code.value = code.value.toUpperCase()) : code.value
+onMounted(async () => {
+  await api.details(11)
+  const { data } = api.detailsResponse.value
+  data.is_active === 1 ? options.value.push('active') : ''
+  name.value = data.name
+  code.value = data.code
+  country.value = data.country
+  state.value = data.state
+  city.value = data.city
+  barangay.value = data.barangay
+  address_line_1.value = data.address_line_1
+  address_line_2.value = data.address_line_2
+  postal.value = data.postal
+  longitude.value = data.longitude
+  latitude.value = data.latitude
+  telephone.value = data.telephone === null ? '' : data.telephone
+  mobile.value = data.mobile === null ? '' : data.mobile
 })
 </script>
 
@@ -88,7 +114,7 @@ watchEffect(() => {
                 <!-- Branch Name -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="name"
                     :validate-on-input="false"
                     name="name"
                   >
@@ -96,7 +122,7 @@ watchEffect(() => {
                       <label>Name *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="name"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -162,7 +188,7 @@ watchEffect(() => {
                 <!-- Branch Country -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="country"
                     :validate-on-input="false"
                     name="country"
                   >
@@ -170,7 +196,7 @@ watchEffect(() => {
                       <label>Country *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="country"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -184,7 +210,7 @@ watchEffect(() => {
                 <!-- Branch Region / State -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="state"
                     :validate-on-input="false"
                     name="state"
                   >
@@ -192,7 +218,7 @@ watchEffect(() => {
                       <label>Region / State *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="state"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -206,7 +232,7 @@ watchEffect(() => {
                 <!-- Branch City -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="city"
                     :validate-on-input="false"
                     name="city"
                   >
@@ -214,7 +240,7 @@ watchEffect(() => {
                       <label>City *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="city"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -228,7 +254,7 @@ watchEffect(() => {
                 <!-- Branch Barangay -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="barangay"
                     :validate-on-input="false"
                     name="barangay"
                   >
@@ -236,7 +262,7 @@ watchEffect(() => {
                       <label>Barangay *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="barangay"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -250,7 +276,7 @@ watchEffect(() => {
                 <!-- Branch Address Line 1 -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="address_line_1"
                     :validate-on-input="false"
                     name="address_line_1"
                   >
@@ -266,7 +292,7 @@ watchEffect(() => {
                       </VueTooltip>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="address_line_1"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -280,7 +306,7 @@ watchEffect(() => {
                 <!-- Branch Address Line 2 -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="address_line_2"
                     :validate-on-input="false"
                     name="address_line_2"
                   >
@@ -296,7 +322,7 @@ watchEffect(() => {
                       </VueTooltip>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="address_line_2"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -310,7 +336,7 @@ watchEffect(() => {
                 <!-- Branch Postal / Zip -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="postal"
                     :validate-on-input="false"
                     name="postal"
                   >
@@ -318,7 +344,7 @@ watchEffect(() => {
                       <label>Postal / Zip</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="postal"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -332,7 +358,7 @@ watchEffect(() => {
                 <!-- Branch Longitude -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="longitude"
                     :validate-on-input="false"
                     name="longitude"
                   >
@@ -340,7 +366,7 @@ watchEffect(() => {
                       <label>Longitude</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="longitude"
                           type="number"
                           class="input is-info-focus"
                         />
@@ -354,7 +380,7 @@ watchEffect(() => {
                 <!-- Branch Latitude -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="latitude"
                     :validate-on-input="false"
                     name="latitude"
                   >
@@ -362,7 +388,7 @@ watchEffect(() => {
                       <label>Latitude</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-bind="field"
+                          v-model="latitude"
                           type="number"
                           class="input is-info-focus"
                         />
@@ -388,7 +414,7 @@ watchEffect(() => {
                 <!-- Branch Telephone -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="telephone"
                     :validate-on-input="false"
                     name="telephone"
                   >
@@ -396,7 +422,7 @@ watchEffect(() => {
                       <label>Telephone</label>
                       <V-Control icon="ion:ios-telephone-outline">
                         <input
-                          v-bind="field"
+                          v-model="telephone"
                           type="number"
                           class="input is-info-focus"
                         />
