@@ -8,47 +8,41 @@ import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 pageTitle.value = 'Edit Branch'
 
 const api = useBranch()
-const options = ref<string[]>([])
 const isSubmitting = ref(false)
 const autofill = ref('')
-const mobile = ref('')
-const code = ref('')
-const name = ref('')
-const country = ref('')
-const state = ref('')
-const city = ref('')
-const barangay = ref('')
-const address_line_1 = ref('')
-const address_line_2 = ref('')
-const postal = ref('')
-const longitude = ref<number>()
-const latitude = ref<number>()
-const telephone = ref('')
+
+const branch = ref({
+  address_line_1: '',
+  address_line_2: '',
+  code: '',
+  country: '',
+  city: '',
+  barangay: '',
+  id: 0,
+  longitude: 0,
+  latitude: 0,
+  mobile: '',
+  name: '',
+  state: '',
+  postal: '',
+  telephone: '',
+  is_active: [],
+})
 
 const onSubmit = async (inputs: any) => {
   isSubmitting.value = true
-  inputs.is_active = options.value.length > 0 ? true : false
-  // await api.create(inputs)
+  inputs.is_active = branch.value.is_active.length > 0 ? true : false
+  await api.update(inputs, branch.value.id)
   isSubmitting.value = false
 }
 
 onMounted(async () => {
-  await api.details(11)
-  const { data } = api.detailsResponse.value
-  data.is_active === 1 ? options.value.push('active') : ''
-  name.value = data.name
-  code.value = data.code
-  country.value = data.country
-  state.value = data.state
-  city.value = data.city
-  barangay.value = data.barangay
-  address_line_1.value = data.address_line_1
-  address_line_2.value = data.address_line_2
-  postal.value = data.postal
-  longitude.value = data.longitude
-  latitude.value = data.latitude
-  telephone.value = data.telephone === null ? '' : data.telephone
-  mobile.value = data.mobile === null ? '' : data.mobile
+  const { data } = await api.details(11)
+  branch.value = {
+    ...data,
+    telephone: data.telephone !== null ? data.telephone : '',
+    is_active: data.is_active === 1 ? [1] : '', //spread operator
+  }
 })
 </script>
 
@@ -76,13 +70,13 @@ onMounted(async () => {
                   <V-Field>
                     <V-Control>
                       <ValidationField
-                        v-model="options"
+                        v-model="branch.is_active"
                         :validate-on-input="false"
-                        name="options"
+                        name="is_active"
                       >
                         <VCheckbox
-                          v-model="options"
-                          value="active"
+                          v-model="branch.is_active"
+                          :value="1"
                           label="Active"
                           color="info"
                         />
@@ -114,7 +108,7 @@ onMounted(async () => {
                 <!-- Branch Name -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="name"
+                    v-model="branch.name"
                     :validate-on-input="false"
                     name="name"
                   >
@@ -122,7 +116,7 @@ onMounted(async () => {
                       <label>Name *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="name"
+                          v-model="branch.name"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -136,7 +130,7 @@ onMounted(async () => {
                 <!-- Branch Code -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="code"
+                    v-model="branch.code"
                     :validate-on-input="false"
                     name="code"
                   >
@@ -151,7 +145,7 @@ onMounted(async () => {
                       >
                       <V-Control icon="mdi:code-braces">
                         <input
-                          v-model="code"
+                          v-model="branch.code"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -188,7 +182,7 @@ onMounted(async () => {
                 <!-- Branch Country -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="country"
+                    v-model="branch.country"
                     :validate-on-input="false"
                     name="country"
                   >
@@ -196,7 +190,7 @@ onMounted(async () => {
                       <label>Country *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="country"
+                          v-model="branch.country"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -210,7 +204,7 @@ onMounted(async () => {
                 <!-- Branch Region / State -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="state"
+                    v-model="branch.state"
                     :validate-on-input="false"
                     name="state"
                   >
@@ -218,7 +212,7 @@ onMounted(async () => {
                       <label>Region / State *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="state"
+                          v-model="branch.state"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -232,7 +226,7 @@ onMounted(async () => {
                 <!-- Branch City -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="city"
+                    v-model="branch.city"
                     :validate-on-input="false"
                     name="city"
                   >
@@ -240,7 +234,7 @@ onMounted(async () => {
                       <label>City *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="city"
+                          v-model="branch.city"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -254,7 +248,7 @@ onMounted(async () => {
                 <!-- Branch Barangay -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="barangay"
+                    v-model="branch.barangay"
                     :validate-on-input="false"
                     name="barangay"
                   >
@@ -262,7 +256,7 @@ onMounted(async () => {
                       <label>Barangay *</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="barangay"
+                          v-model="branch.barangay"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -276,7 +270,7 @@ onMounted(async () => {
                 <!-- Branch Address Line 1 -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="address_line_1"
+                    v-model="branch.address_line_1"
                     :validate-on-input="false"
                     name="address_line_1"
                   >
@@ -292,7 +286,7 @@ onMounted(async () => {
                       </VueTooltip>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="address_line_1"
+                          v-model="branch.address_line_1"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -306,7 +300,7 @@ onMounted(async () => {
                 <!-- Branch Address Line 2 -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="address_line_2"
+                    v-model="branch.address_line_2"
                     :validate-on-input="false"
                     name="address_line_2"
                   >
@@ -322,7 +316,7 @@ onMounted(async () => {
                       </VueTooltip>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="address_line_2"
+                          v-model="branch.address_line_2"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -336,7 +330,7 @@ onMounted(async () => {
                 <!-- Branch Postal / Zip -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="postal"
+                    v-model="branch.postal"
                     :validate-on-input="false"
                     name="postal"
                   >
@@ -344,7 +338,7 @@ onMounted(async () => {
                       <label>Postal / Zip</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="postal"
+                          v-model="branch.postal"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -358,7 +352,7 @@ onMounted(async () => {
                 <!-- Branch Longitude -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="longitude"
+                    v-model="branch.longitude"
                     :validate-on-input="false"
                     name="longitude"
                   >
@@ -366,7 +360,7 @@ onMounted(async () => {
                       <label>Longitude</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="longitude"
+                          v-model="branch.longitude"
                           type="number"
                           class="input is-info-focus"
                         />
@@ -380,7 +374,7 @@ onMounted(async () => {
                 <!-- Branch Latitude -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="latitude"
+                    v-model="branch.latitude"
                     :validate-on-input="false"
                     name="latitude"
                   >
@@ -388,7 +382,7 @@ onMounted(async () => {
                       <label>Latitude</label>
                       <V-Control icon="ic:baseline-drive-file-rename-outline">
                         <input
-                          v-model="latitude"
+                          v-model="branch.latitude"
                           type="number"
                           class="input is-info-focus"
                         />
@@ -414,7 +408,7 @@ onMounted(async () => {
                 <!-- Branch Telephone -->
                 <div class="column is-6">
                   <ValidationField
-                    v-model="telephone"
+                    v-model="branch.telephone"
                     :validate-on-input="false"
                     name="telephone"
                   >
@@ -422,7 +416,7 @@ onMounted(async () => {
                       <label>Telephone</label>
                       <V-Control icon="ion:ios-telephone-outline">
                         <input
-                          v-model="telephone"
+                          v-model="branch.telephone"
                           type="number"
                           class="input is-info-focus"
                         />
@@ -435,7 +429,7 @@ onMounted(async () => {
                 </div>
                 <div class="column is-6">
                   <ValidationField
-                    v-model="mobile"
+                    v-model="branch.mobile"
                     :validate-on-input="false"
                     name="mobile"
                   >
@@ -443,7 +437,7 @@ onMounted(async () => {
                       <label>Mobile</label>
                       <V-Control icon="ph:device-mobile">
                         <VIMaskInput
-                          v-model="mobile"
+                          v-model="branch.mobile"
                           class="input"
                           :options="{
                             mask: '{63} 0 000 000 000',

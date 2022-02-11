@@ -2,7 +2,9 @@ import { ref } from 'vue'
 import useNotyf from '../useNotyf'
 import useErrorNotification from './useErrorNotification'
 import { useApi } from '/@src/composable/useApi'
+import useNotificationType from './useNotificationType'
 
+const notifType = useNotificationType.notifType
 const statusResponse = ref()
 const tableResponse = ref()
 const createResponse = ref()
@@ -29,7 +31,7 @@ export function useBranch() {
     try {
       const { data } = await api.post('/v1/branch', e)
       createResponse.value = data
-      notif.success(`Branch <b>${e.name}</b> successfully added.`)
+      notifType(`Branch <b>${e.name}</b> successfully added.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -78,7 +80,7 @@ export function useBranch() {
     try {
       const { data } = await api.post(`/v1/branch/delete`, e)
       removeResponse.value = data
-      notif.warning(`Branch(es) successfully removed.`)
+      notifType(`Branch(es) successfully removed.`, 'warning')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -95,7 +97,7 @@ export function useBranch() {
     try {
       const { data } = await api.post(`/v1/branch/status`, e)
       statusResponse.value = data
-      notif.success(`Branch(es) successfully ${e?.status}d.`)
+      notifType(`Branch(es) successfully ${e?.status}d.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -105,17 +107,28 @@ export function useBranch() {
   /**
    * @description Get branch details by id
    * @param id number
+   * @returns branch details
    */
-
   const details = async (e: any): Promise<any> => {
-    isLoading.value = true
     try {
-      const { data }: any = await api.get(`/v1/branch/${e}`)
-      detailsResponse.value = data
+      const { data } = await api.get(`/v1/branch/${e}`)
+      return data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
-    isLoading.value = false
+  }
+
+  /**
+   * @description Update branch details by id
+   * @param object branch
+   */
+  const update = async (e: any, i: number): Promise<any> => {
+    try {
+      await api.patch(`/v1/branch/${i}`, e)
+      notifType(`Branch successfully updated.`, 'success')
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
   }
 
   return {
@@ -131,5 +144,6 @@ export function useBranch() {
     remove,
     status,
     details,
+    update,
   } as const // as const is a typescript keyword to prevent from updating
 }

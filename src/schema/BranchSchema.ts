@@ -8,7 +8,10 @@ const telError = {
 const BranchSchema = yup.object().shape({
   name: yup.string().nullable().required('Branch name is required'),
   code: yup.string().nullable().notRequired(),
-  telephone: yup.string().matches(new RegExp('^[0-9- ]{7,14}$'), telError),
+  telephone: yup
+    .string()
+    .nullable()
+    .matches(new RegExp('^[0-9- ]{7,14}$'), telError),
   mobile: yup.string().nullable().notRequired(),
   country: yup.string().nullable().required('Country is required'),
   state: yup.string().nullable().required('Region or state is required'),
@@ -22,7 +25,6 @@ const BranchSchema = yup.object().shape({
   postal: yup.string().nullable().notRequired(),
   longitude: yup.string().nullable().notRequired(),
   latitude: yup.string().nullable().notRequired(),
-  options: yup.array(yup.string()),
 })
 
 export const BranchForm = BranchSchema.pick([
