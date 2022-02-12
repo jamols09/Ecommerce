@@ -78,7 +78,7 @@ export function useBranch() {
   const remove = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.post(`/v1/branch/delete`, e)
+      const { data } = await api.delete(`/v1/branch/delete`, e)
       removeResponse.value = data
       notifType(`Branch(es) successfully removed.`, 'warning')
     } catch (err: any) {
@@ -110,12 +110,14 @@ export function useBranch() {
    * @returns branch details
    */
   const details = async (e: any): Promise<any> => {
+    isLoading.value = true
     try {
       const { data } = await api.get(`/v1/branch/${e}`)
-      return data
+      detailsResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
+    isLoading.value = false
   }
 
   /**
