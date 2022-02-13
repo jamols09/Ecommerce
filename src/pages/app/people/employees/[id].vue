@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { StatusArray } from '../../../../models/people'
@@ -10,13 +10,24 @@ import {
   onAddFileProgress,
 } from '/@src/composable/useFilePond'
 import { useUser } from '/@src/composable/api/useUser'
+import { useRoute } from 'vue-router'
 
 pageTitle.value = 'Create Employee'
 
-const users = useUser()
+const api = useUser()
+const route = useRoute()
 const statusOptions = ref<StatusArray>([])
 const isSubmitting = ref(false)
 const birthdate = ref(new Date())
+const employee = ref({
+  is_active: [],
+  first_name: '',
+  middle_name: '',
+  last_name: '',
+  birthdate: '',
+  username: '',
+  email: '',
+})
 
 const onSubmit = async (inputs: typeof EmployeeForm) => {
   isSubmitting.value = true
@@ -24,9 +35,19 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
   inputs.is_active = statusOptions.value.length > 0 ? true : false
   inputs.birthdate =
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
-  await users.create(inputs)
+  await api.create(inputs)
   isSubmitting.value = false
 }
+
+onMounted(async () => {
+  await api.details(route.params.id)
+  const { data } = api.detailsResponse.value
+  employee.value = {
+    ...data,
+    is_active: data.is_active === 1 ? [1] : [''], //spread operator
+  }
+  console.log(data)
+})
 </script>
 
 <template>
@@ -53,8 +74,8 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                   <V-Field>
                     <V-Control>
                       <V-Checkbox
-                        v-model="statusOptions"
-                        value="active"
+                        v-model="employee.is_active"
+                        :value="1"
                         label="Active"
                         color="info"
                       />
@@ -115,7 +136,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                 <!-- First name -->
                 <div class="column is-4">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="employee.first_name"
                     :validate-on-input="false"
                     name="first_name"
                   >
@@ -123,7 +144,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                       <label>First Name *</label>
                       <V-Control icon="feather:user">
                         <input
-                          v-bind="field"
+                          v-model="employee.first_name"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -138,7 +159,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                 <!-- Middle name -->
                 <div class="column is-4">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="employee.middle_name"
                     :validate-on-input="false"
                     name="middle_name"
                   >
@@ -146,7 +167,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                       <label>Middle Name</label>
                       <V-Control icon="feather:user">
                         <input
-                          v-bind="field"
+                          v-model="employee.middle_name"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -161,7 +182,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                 <!-- Last name -->
                 <div class="column is-4">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="employee.last_name"
                     :validate-on-input="false"
                     name="last_name"
                   >
@@ -169,7 +190,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                       <label>Last Name</label>
                       <V-Control icon="feather:user">
                         <input
-                          v-bind="field"
+                          v-model="employee.last_name"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -188,7 +209,11 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                     :validate-on-input="false"
                     name="birthdate"
                   >
-                    <v-date-picker v-model="birthdate" color="info" trim-weeks>
+                    <v-date-picker
+                      v-model="employee.birthdate"
+                      color="info"
+                      trim-weeks
+                    >
                       <template #default="{ inputValue, inputEvents }">
                         <V-Field>
                           <label>Birthdate *</label>
@@ -222,7 +247,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                 <!-- Username -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="employee.username"
                     :validate-on-input="false"
                     name="username"
                   >
@@ -230,7 +255,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                       <label>Username *</label>
                       <V-Control icon="feather:user">
                         <input
-                          v-bind="field"
+                          v-model="employee.username"
                           type="text"
                           class="input is-info-focus"
                         />
@@ -245,7 +270,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                 <!-- Email -->
                 <div class="column is-6">
                   <ValidationField
-                    v-slot="{ field }"
+                    v-model="employee.email"
                     :validate-on-input="false"
                     name="email"
                   >
@@ -253,7 +278,7 @@ const onSubmit = async (inputs: typeof EmployeeForm) => {
                       <label>Email</label>
                       <V-Control icon="feather:at-sign">
                         <input
-                          v-bind="field"
+                          v-model="employee.email"
                           type="text"
                           class="input is-info-focus"
                         />

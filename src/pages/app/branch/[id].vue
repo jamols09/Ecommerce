@@ -9,9 +9,9 @@ import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 pageTitle.value = 'Edit Branch'
 
 const api = useBranch()
+const route = useRoute()
 const isSubmitting = ref(false)
 const autofill = ref('')
-const route = useRoute()
 const branch = ref({
   address_line_1: '',
   address_line_2: '',
