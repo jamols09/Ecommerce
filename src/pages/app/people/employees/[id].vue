@@ -12,13 +12,12 @@ import {
 import { useUser } from '/@src/composable/api/useUser'
 import { useRoute } from 'vue-router'
 
-pageTitle.value = 'Create Employee'
+pageTitle.value = 'Edit Employee'
 
 const api = useUser()
 const route = useRoute()
 const statusOptions = ref<StatusArray>([])
 const isSubmitting = ref(false)
-const birthdate = ref(new Date())
 const employee = ref({
   is_active: [],
   first_name: '',
@@ -32,11 +31,9 @@ const employee = ref({
 const isLoadState = computed(() => api.isLoading.value)
 const onSubmit = async (inputs: typeof EmployeeForm) => {
   isSubmitting.value = true
-  inputs.account_type = 'ADMIN'
   inputs.is_active = statusOptions.value.length > 0 ? true : false
   inputs.birthdate =
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
-  await api.create(inputs)
   isSubmitting.value = false
 }
 
@@ -47,7 +44,6 @@ onMounted(async () => {
     ...data,
     is_active: data.is_active === 1 ? [1] : [''], //spread operator
   }
-  console.log(data)
 })
 </script>
 
@@ -213,7 +209,7 @@ onMounted(async () => {
                   <!-- Birthdate -->
                   <div class="column is-4">
                     <ValidationField
-                      v-model="birthdate"
+                      v-model="employee.birthdate"
                       :validate-on-input="false"
                       name="birthdate"
                     >
@@ -266,6 +262,7 @@ onMounted(async () => {
                             v-model="employee.username"
                             type="text"
                             class="input is-info-focus"
+                            disabled
                           />
                           <p v-if="errors.username" class="help is-danger">
                             <b>{{ errors.username }}</b>
@@ -289,6 +286,7 @@ onMounted(async () => {
                             v-model="employee.email"
                             type="text"
                             class="input is-info-focus"
+                            disabled
                           />
                           <p v-if="errors.email" class="help is-danger">
                             <b>{{ errors.email }}</b>
@@ -312,6 +310,7 @@ onMounted(async () => {
                             v-bind="field"
                             type="password"
                             class="input is-info-focus"
+                            disabled
                           />
                           <p v-if="errors.password" class="help is-danger">
                             <b>{{ errors.password }}</b>
@@ -335,6 +334,7 @@ onMounted(async () => {
                             v-bind="field"
                             type="password"
                             class="input is-info-focus"
+                            disabled
                           />
                           <p
                             v-if="errors.password_confirmation"

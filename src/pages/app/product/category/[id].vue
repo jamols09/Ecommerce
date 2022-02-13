@@ -7,7 +7,7 @@ import { parent } from '/@src/static/product'
 import { useCategory } from '/@src/composable/api/useCategory'
 import { useRoute } from 'vue-router'
 
-pageTitle.value = 'Create Category'
+pageTitle.value = 'Edit Category'
 
 const route = useRoute()
 const api = useCategory()
