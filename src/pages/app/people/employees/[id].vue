@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { StatusArray } from '../../../../models/people'
@@ -29,6 +29,7 @@ const employee = ref({
   email: '',
 })
 
+const isLoadState = computed(() => api.isLoading.value)
 const onSubmit = async (inputs: typeof EmployeeForm) => {
   isSubmitting.value = true
   inputs.account_type = 'ADMIN'
@@ -67,280 +68,287 @@ onMounted(async () => {
             </div>
           </div>
           <div class="form-body">
-            <div class="form-section is-grey">
-              <div class="columns is-multiline">
-                <!-- Is Active -->
-                <div class="column is-12">
-                  <V-Field>
-                    <V-Control>
-                      <V-Checkbox
-                        v-model="employee.is_active"
-                        :value="1"
-                        label="Active"
-                        color="info"
-                      />
-                      <VueTooltip
-                        label="Set account state."
-                        abbreviation
-                        :multiline="false"
-                        size="is-small"
-                        class="light-text"
-                        position="is-bottom"
-                      >
-                        <b>?</b>
-                      </VueTooltip>
-                    </V-Control>
-                  </V-Field>
-                </div>
-              </div>
-
-              <!-- Basic Details -->
-              <div class="fieldset-heading mb-5">
-                <h4
-                  class="has-text-weight-semibold"
-                  style="font-family: Montserrat, sans-serif"
-                >
-                  Basic details
-                </h4>
-              </div>
-              <div class="columns is-multiline is-centered mb-5">
-                <div class="column is-narrow has-text-centered">
-                  <!-- Avatar -->
-                  <V-Field>
-                    <label>Avatar</label>
-                    <V-Control>
-                      <V-FilePond
-                        class="profile-filepond"
-                        name="profile_filepond"
-                        :chunk-retry-delays="[500, 1000, 3000]"
-                        label-idle="<i class='lnil lnil-cloud-upload'></i>"
-                        :accepted-file-types="['image/png', 'image/jpeg']"
-                        :image-preview-height="140"
-                        :image-resize-target-width="140"
-                        :image-resize-target-height="140"
-                        image-crop-aspect-ratio="1:1"
-                        style-panel-layout="compact circle"
-                        style-load-indicator-position="center bottom"
-                        style-progress-indicator-position="right bottom"
-                        style-button-remove-item-position="left bottom"
-                        style-button-process-item-position="right bottom"
-                        @addfile="onAddFile"
-                        @removefile="onRemoveFile"
-                        @addfileprogress="onAddFileProgress"
-                      />
-                    </V-Control>
-                  </V-Field>
-                </div>
-              </div>
-              <div class="columns is-multiline">
-                <!-- First name -->
-                <div class="column is-4">
-                  <ValidationField
-                    v-model="employee.first_name"
-                    :validate-on-input="false"
-                    name="first_name"
-                  >
+            <VLoader
+              :active="isLoadState"
+              :translucent="true"
+              :grey="true"
+              card="regular"
+              size="large"
+            >
+              <div class="form-section is-grey">
+                <div class="columns is-multiline">
+                  <!-- Is Active -->
+                  <div class="column is-12">
                     <V-Field>
-                      <label>First Name *</label>
-                      <V-Control icon="feather:user">
-                        <input
-                          v-model="employee.first_name"
-                          type="text"
-                          class="input is-info-focus"
+                      <V-Control>
+                        <V-Checkbox
+                          v-model="employee.is_active"
+                          :value="1"
+                          label="Active"
+                          color="info"
                         />
-                        <p v-if="errors.first_name" class="help is-danger">
-                          <b>{{ errors.first_name }}</b>
-                        </p>
-                      </V-Control>
-                    </V-Field>
-                  </ValidationField>
-                </div>
-
-                <!-- Middle name -->
-                <div class="column is-4">
-                  <ValidationField
-                    v-model="employee.middle_name"
-                    :validate-on-input="false"
-                    name="middle_name"
-                  >
-                    <V-Field>
-                      <label>Middle Name</label>
-                      <V-Control icon="feather:user">
-                        <input
-                          v-model="employee.middle_name"
-                          type="text"
-                          class="input is-info-focus"
-                        />
-                        <p v-if="errors.middle_name" class="help is-danger">
-                          <b>{{ errors.middle_name }}</b>
-                        </p>
-                      </V-Control>
-                    </V-Field>
-                  </ValidationField>
-                </div>
-
-                <!-- Last name -->
-                <div class="column is-4">
-                  <ValidationField
-                    v-model="employee.last_name"
-                    :validate-on-input="false"
-                    name="last_name"
-                  >
-                    <V-Field>
-                      <label>Last Name</label>
-                      <V-Control icon="feather:user">
-                        <input
-                          v-model="employee.last_name"
-                          type="text"
-                          class="input is-info-focus"
-                        />
-                        <p v-if="errors.last_name" class="help is-danger">
-                          <b>{{ errors.last_name }}</b>
-                        </p>
-                      </V-Control>
-                    </V-Field>
-                  </ValidationField>
-                </div>
-
-                <!-- Birthdate -->
-                <div class="column is-4">
-                  <ValidationField
-                    v-model="birthdate"
-                    :validate-on-input="false"
-                    name="birthdate"
-                  >
-                    <v-date-picker
-                      v-model="employee.birthdate"
-                      color="info"
-                      trim-weeks
-                    >
-                      <template #default="{ inputValue, inputEvents }">
-                        <V-Field>
-                          <label>Birthdate *</label>
-                          <V-Control icon="feather:calendar">
-                            <input
-                              class="input is-info-focus"
-                              :value="inputValue"
-                              v-on="inputEvents"
-                            />
-                            <p v-if="errors.birthdate" class="help is-danger">
-                              <b>{{ errors.birthdate }}</b>
-                            </p>
-                          </V-Control>
-                        </V-Field>
-                      </template>
-                    </v-date-picker>
-                  </ValidationField>
-                </div>
-              </div>
-
-              <!-- Account Details -->
-              <div class="fieldset-heading mb-5">
-                <h4
-                  class="has-text-weight-semibold"
-                  style="font-family: Montserrat, sans-serif"
-                >
-                  Account details
-                </h4>
-              </div>
-              <div class="columns is-multiline">
-                <!-- Username -->
-                <div class="column is-6">
-                  <ValidationField
-                    v-model="employee.username"
-                    :validate-on-input="false"
-                    name="username"
-                  >
-                    <V-Field>
-                      <label>Username *</label>
-                      <V-Control icon="feather:user">
-                        <input
-                          v-model="employee.username"
-                          type="text"
-                          class="input is-info-focus"
-                        />
-                        <p v-if="errors.username" class="help is-danger">
-                          <b>{{ errors.username }}</b>
-                        </p>
-                      </V-Control>
-                    </V-Field>
-                  </ValidationField>
-                </div>
-
-                <!-- Email -->
-                <div class="column is-6">
-                  <ValidationField
-                    v-model="employee.email"
-                    :validate-on-input="false"
-                    name="email"
-                  >
-                    <V-Field>
-                      <label>Email</label>
-                      <V-Control icon="feather:at-sign">
-                        <input
-                          v-model="employee.email"
-                          type="text"
-                          class="input is-info-focus"
-                        />
-                        <p v-if="errors.email" class="help is-danger">
-                          <b>{{ errors.email }}</b>
-                        </p>
-                      </V-Control>
-                    </V-Field>
-                  </ValidationField>
-                </div>
-
-                <!-- Password -->
-                <div class="column is-6">
-                  <ValidationField
-                    v-slot="{ field }"
-                    :validate-on-input="false"
-                    name="password"
-                  >
-                    <V-Field>
-                      <label>Password</label>
-                      <V-Control icon="feather:lock">
-                        <input
-                          v-bind="field"
-                          type="password"
-                          class="input is-info-focus"
-                        />
-                        <p v-if="errors.password" class="help is-danger">
-                          <b>{{ errors.password }}</b>
-                        </p>
-                      </V-Control>
-                    </V-Field>
-                  </ValidationField>
-                </div>
-
-                <!-- Confirm Password -->
-                <div class="column is-6">
-                  <ValidationField
-                    v-slot="{ field }"
-                    :validate-on-input="false"
-                    name="password_confirmation"
-                  >
-                    <V-Field>
-                      <label>Confirm Password</label>
-                      <V-Control icon="feather:lock">
-                        <input
-                          v-bind="field"
-                          type="password"
-                          class="input is-info-focus"
-                        />
-                        <p
-                          v-if="errors.password_confirmation"
-                          class="help is-danger"
+                        <VueTooltip
+                          label="Set account state."
+                          abbreviation
+                          :multiline="false"
+                          size="is-small"
+                          class="light-text"
+                          position="is-bottom"
                         >
-                          <b>{{ errors.password_confirmation }}</b>
-                        </p>
+                          <b>?</b>
+                        </VueTooltip>
                       </V-Control>
                     </V-Field>
-                  </ValidationField>
+                  </div>
                 </div>
 
-                <!-- Role Options -->
-                <!-- <div class="column is-6">
+                <!-- Basic Details -->
+                <div class="fieldset-heading mb-5">
+                  <h4
+                    class="has-text-weight-semibold"
+                    style="font-family: Montserrat, sans-serif"
+                  >
+                    Basic details
+                  </h4>
+                </div>
+                <div class="columns is-multiline is-centered mb-5">
+                  <div class="column is-narrow has-text-centered">
+                    <!-- Avatar -->
+                    <V-Field>
+                      <label>Avatar</label>
+                      <V-Control>
+                        <V-FilePond
+                          class="profile-filepond"
+                          name="profile_filepond"
+                          :chunk-retry-delays="[500, 1000, 3000]"
+                          label-idle="<i class='lnil lnil-cloud-upload'></i>"
+                          :accepted-file-types="['image/png', 'image/jpeg']"
+                          :image-preview-height="140"
+                          :image-resize-target-width="140"
+                          :image-resize-target-height="140"
+                          image-crop-aspect-ratio="1:1"
+                          style-panel-layout="compact circle"
+                          style-load-indicator-position="center bottom"
+                          style-progress-indicator-position="right bottom"
+                          style-button-remove-item-position="left bottom"
+                          style-button-process-item-position="right bottom"
+                          @addfile="onAddFile"
+                          @removefile="onRemoveFile"
+                          @addfileprogress="onAddFileProgress"
+                        />
+                      </V-Control>
+                    </V-Field>
+                  </div>
+                </div>
+                <div class="columns is-multiline">
+                  <!-- First name -->
+                  <div class="column is-4">
+                    <ValidationField
+                      v-model="employee.first_name"
+                      :validate-on-input="false"
+                      name="first_name"
+                    >
+                      <V-Field>
+                        <label>First Name *</label>
+                        <V-Control icon="feather:user">
+                          <input
+                            v-model="employee.first_name"
+                            type="text"
+                            class="input is-info-focus"
+                          />
+                          <p v-if="errors.first_name" class="help is-danger">
+                            <b>{{ errors.first_name }}</b>
+                          </p>
+                        </V-Control>
+                      </V-Field>
+                    </ValidationField>
+                  </div>
+
+                  <!-- Middle name -->
+                  <div class="column is-4">
+                    <ValidationField
+                      v-model="employee.middle_name"
+                      :validate-on-input="false"
+                      name="middle_name"
+                    >
+                      <V-Field>
+                        <label>Middle Name</label>
+                        <V-Control icon="feather:user">
+                          <input
+                            v-model="employee.middle_name"
+                            type="text"
+                            class="input is-info-focus"
+                          />
+                          <p v-if="errors.middle_name" class="help is-danger">
+                            <b>{{ errors.middle_name }}</b>
+                          </p>
+                        </V-Control>
+                      </V-Field>
+                    </ValidationField>
+                  </div>
+
+                  <!-- Last name -->
+                  <div class="column is-4">
+                    <ValidationField
+                      v-model="employee.last_name"
+                      :validate-on-input="false"
+                      name="last_name"
+                    >
+                      <V-Field>
+                        <label>Last Name</label>
+                        <V-Control icon="feather:user">
+                          <input
+                            v-model="employee.last_name"
+                            type="text"
+                            class="input is-info-focus"
+                          />
+                          <p v-if="errors.last_name" class="help is-danger">
+                            <b>{{ errors.last_name }}</b>
+                          </p>
+                        </V-Control>
+                      </V-Field>
+                    </ValidationField>
+                  </div>
+
+                  <!-- Birthdate -->
+                  <div class="column is-4">
+                    <ValidationField
+                      v-model="birthdate"
+                      :validate-on-input="false"
+                      name="birthdate"
+                    >
+                      <v-date-picker
+                        v-model="employee.birthdate"
+                        color="info"
+                        trim-weeks
+                      >
+                        <template #default="{ inputValue, inputEvents }">
+                          <V-Field>
+                            <label>Birthdate *</label>
+                            <V-Control icon="feather:calendar">
+                              <input
+                                class="input is-info-focus"
+                                :value="inputValue"
+                                v-on="inputEvents"
+                              />
+                              <p v-if="errors.birthdate" class="help is-danger">
+                                <b>{{ errors.birthdate }}</b>
+                              </p>
+                            </V-Control>
+                          </V-Field>
+                        </template>
+                      </v-date-picker>
+                    </ValidationField>
+                  </div>
+                </div>
+
+                <!-- Account Details -->
+                <div class="fieldset-heading mb-5">
+                  <h4
+                    class="has-text-weight-semibold"
+                    style="font-family: Montserrat, sans-serif"
+                  >
+                    Account details
+                  </h4>
+                </div>
+                <div class="columns is-multiline">
+                  <!-- Username -->
+                  <div class="column is-6">
+                    <ValidationField
+                      v-model="employee.username"
+                      :validate-on-input="false"
+                      name="username"
+                    >
+                      <V-Field>
+                        <label>Username *</label>
+                        <V-Control icon="feather:user">
+                          <input
+                            v-model="employee.username"
+                            type="text"
+                            class="input is-info-focus"
+                          />
+                          <p v-if="errors.username" class="help is-danger">
+                            <b>{{ errors.username }}</b>
+                          </p>
+                        </V-Control>
+                      </V-Field>
+                    </ValidationField>
+                  </div>
+
+                  <!-- Email -->
+                  <div class="column is-6">
+                    <ValidationField
+                      v-model="employee.email"
+                      :validate-on-input="false"
+                      name="email"
+                    >
+                      <V-Field>
+                        <label>Email</label>
+                        <V-Control icon="feather:at-sign">
+                          <input
+                            v-model="employee.email"
+                            type="text"
+                            class="input is-info-focus"
+                          />
+                          <p v-if="errors.email" class="help is-danger">
+                            <b>{{ errors.email }}</b>
+                          </p>
+                        </V-Control>
+                      </V-Field>
+                    </ValidationField>
+                  </div>
+
+                  <!-- Password -->
+                  <div class="column is-6">
+                    <ValidationField
+                      v-slot="{ field }"
+                      :validate-on-input="false"
+                      name="password"
+                    >
+                      <V-Field>
+                        <label>Password</label>
+                        <V-Control icon="feather:lock">
+                          <input
+                            v-bind="field"
+                            type="password"
+                            class="input is-info-focus"
+                          />
+                          <p v-if="errors.password" class="help is-danger">
+                            <b>{{ errors.password }}</b>
+                          </p>
+                        </V-Control>
+                      </V-Field>
+                    </ValidationField>
+                  </div>
+
+                  <!-- Confirm Password -->
+                  <div class="column is-6">
+                    <ValidationField
+                      v-slot="{ field }"
+                      :validate-on-input="false"
+                      name="password_confirmation"
+                    >
+                      <V-Field>
+                        <label>Confirm Password</label>
+                        <V-Control icon="feather:lock">
+                          <input
+                            v-bind="field"
+                            type="password"
+                            class="input is-info-focus"
+                          />
+                          <p
+                            v-if="errors.password_confirmation"
+                            class="help is-danger"
+                          >
+                            <b>{{ errors.password_confirmation }}</b>
+                          </p>
+                        </V-Control>
+                      </V-Field>
+                    </ValidationField>
+                  </div>
+
+                  <!-- Role Options -->
+                  <!-- <div class="column is-6">
                   <V-Field>
                     <label>Role</label>
                     <V-Control>
@@ -352,8 +360,9 @@ onMounted(async () => {
                     </V-Control>
                   </V-Field>
                 </div> -->
+                </div>
               </div>
-            </div>
+            </VLoader>
           </div>
         </div>
       </div>
