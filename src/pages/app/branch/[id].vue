@@ -32,10 +32,8 @@ const branch = ref({
 
 const isLoadState = computed(() => api.isLoading.value)
 const onSubmit = async (inputs: any) => {
-  isSubmitting.value = true
   inputs.is_active = branch.value.is_active.length > 0 ? true : false
-  await api.update(inputs, branch.value.id)
-  isSubmitting.value = false
+  await api.update(inputs, route.params.id)
 }
 
 onMounted(async () => {
@@ -61,7 +59,7 @@ onMounted(async () => {
           <div class="form-header">
             <div class="form-header-inner">
               <div class="left">
-                <h3>Branch {{ isLoadState }}</h3>
+                <h3>Branch</h3>
               </div>
             </div>
           </div>
@@ -69,9 +67,9 @@ onMounted(async () => {
             <VLoader
               :active="isLoadState"
               :translucent="true"
-              size="small"
               :grey="true"
               card="regular"
+              size="large"
             >
               <div class="form-section is-grey">
                 <div class="columns is-multiline">
@@ -105,7 +103,6 @@ onMounted(async () => {
                     </V-Field>
                   </div>
                 </div>
-                <!-- Basic Details -->
                 <div class="fieldset-heading mb-5">
                   <h4
                     class="has-text-weight-semibold"
@@ -164,7 +161,6 @@ onMounted(async () => {
                     </ValidationField>
                   </div>
                 </div>
-                <!-- Basic Details -->
                 <div class="fieldset-heading mb-5">
                   <h4
                     class="has-text-weight-semibold"
@@ -410,8 +406,6 @@ onMounted(async () => {
                     </ValidationField>
                   </div>
                 </div>
-
-                <!-- Basic Details -->
                 <div class="fieldset-heading mb-5">
                   <h4
                     class="has-text-weight-semibold"

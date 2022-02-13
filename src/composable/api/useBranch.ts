@@ -12,7 +12,6 @@ const dropdownResponse = ref()
 const removeResponse = ref()
 const detailsResponse = ref()
 const isLoading = ref(false)
-const notif = useNotyf()
 
 interface IRBranchDropdown {
   id: number
@@ -90,7 +89,7 @@ export function useBranch() {
   /**
    * @description Set branch status to active or inactive
    * @param array
-   * @returns branch status
+   * @returns status
    */
   const status = async (e?: any): Promise<any> => {
     isLoading.value = true
@@ -106,8 +105,8 @@ export function useBranch() {
 
   /**
    * @description Get branch details by id
-   * @param id number
-   * @returns branch details
+   * @param number id
+   * @returns Branch model
    */
   const details = async (e: any): Promise<any> => {
     isLoading.value = true
@@ -124,7 +123,10 @@ export function useBranch() {
    * @description Update branch details by id
    * @param object branch
    */
-  const update = async (e: any, i: number): Promise<any> => {
+  const update = async (
+    e: any,
+    i: number | string | string[]
+  ): Promise<any> => {
     try {
       await api.patch(`/v1/branch/${i}`, e)
       notifType(`Branch successfully updated.`, 'success')
