@@ -3,6 +3,7 @@ import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
 
+const detailsResponse = ref()
 const removeResponse = ref()
 const statusResponse = ref()
 const createResponse = ref()
@@ -78,7 +79,23 @@ export function useUser() {
     isLoading.value = false
   }
 
+  /**
+   *
+   * @description Get category details by id
+   * @param number id
+   * @returns Category model
+   */
+  const details = async (e: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.get(`/v1/users/${e}`)
+      detailsResponse.value = data
+    } catch (err: any) {}
+    isLoading.value = false
+  }
+
   return {
+    detailsResponse,
     removeResponse,
     statusResponse,
     tableResponse,
@@ -88,5 +105,6 @@ export function useUser() {
     create,
     status,
     remove,
+    details,
   } as const // as const is a typescript keyword to prevent from updating
 }
