@@ -1,25 +1,33 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect, computed } from 'vue'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { CategoryForm } from '/@src/schema/CategorySchema'
 import { parent } from '/@src/static/product'
 import { useCategory } from '/@src/composable/api/useCategory'
+import { useRoute } from 'vue-router'
 
 pageTitle.value = 'Create Category'
 
+const route = useRoute()
 const api = useCategory()
 const isSubmitting = ref(false)
+const category = ref({
+  name: '',
+  parent_id: null,
+})
+const isLoadState = computed(() => api.isLoading.value)
+const onSubmit = async (inputs: typeof CategoryForm) => {
+  await api.update(inputs, route.params.id)
+}
 
-const onGetParents = async () => {
+onMounted(async () => {
   await api.dropdown()
-}
-
-const onSubmit = async (e: typeof CategoryForm) => {
-  isSubmitting.value = true
-  // await api.create(e)
-  isSubmitting.value = false
-}
+  await api.details(route.params.id)
+  const { data } = api.detailsResponse.value
+  category.value = data
+  category.value.parent_id ? (parent.value = category.value.parent_id) : null
+})
 </script>
 
 <template>
@@ -39,70 +47,77 @@ const onSubmit = async (e: typeof CategoryForm) => {
             </div>
           </div>
           <div class="form-body">
-            <div class="form-section is-grey">
-              <div class="columns is-multiline">
-                <!-- Name -->
-                <div class="column is-6">
-                  <ValidationField
-                    v-slot="{ field }"
-                    :validate-on-input="false"
-                    name="name"
-                  >
-                    <VField>
-                      <label> Name * </label>
-                      <VControl icon="ic:baseline-drive-file-rename-outline">
-                        <input
-                          v-bind="field"
-                          type="text"
-                          class="input is-info-focus"
-                        />
-                        <p v-if="errors.name" class="help is-danger">
-                          <b>{{ errors.name }}</b>
-                        </p>
-                      </VControl>
-                    </VField>
-                  </ValidationField>
-                </div>
+            <VLoader
+              :active="isLoadState"
+              :translucent="true"
+              :grey="true"
+              card="regular"
+              size="small"
+            >
+              <div class="form-section is-grey">
+                <div class="columns is-multiline">
+                  <!-- Name -->
+                  <div class="column is-6">
+                    <ValidationField
+                      v-model="category.name"
+                      :validate-on-input="false"
+                      name="name"
+                    >
+                      <VField>
+                        <label> Name * </label>
+                        <VControl icon="ic:baseline-drive-file-rename-outline">
+                          <input
+                            v-model="category.name"
+                            type="text"
+                            class="input is-info-focus"
+                          />
+                          <p v-if="errors.name" class="help is-danger">
+                            <b>{{ errors.name }}</b>
+                          </p>
+                        </VControl>
+                      </VField>
+                    </ValidationField>
+                  </div>
 
-                <!-- Parent -->
-                <div class="column is-6">
-                  <ValidationField
-                    v-model="parent.value"
-                    :validate-on-input="false"
-                    name="parent_id"
-                  >
-                    <VField>
-                      <label>
-                        Parent
-                        <VueTooltip
-                          label="Restricted to 1 parent for each node."
-                          abbreviation
-                          :multiline="false"
-                          size="is-small"
-                          class="light-text mr-3"
-                          position="is-bottom"
-                        >
-                          <b>?</b>
-                        </VueTooltip>
-                      </label>
-                      <VControl>
-                        <Multiselect
-                          v-model="parent.value"
-                          :options="api.dropdownResponse.value"
-                          :loading="api.isLoading.value"
-                          :searchable="true"
-                          @open="onGetParents"
-                        >
-                        </Multiselect>
-                        <p v-if="errors.parent" class="help is-danger">
-                          <b>{{ errors.parent }}</b>
-                        </p>
-                      </VControl>
-                    </VField>
-                  </ValidationField>
+                  <!-- Parent -->
+                  <div class="column is-6">
+                    <ValidationField
+                      v-model="parent.value"
+                      :validate-on-input="false"
+                      name="parent_id"
+                    >
+                      <VField>
+                        <label>
+                          Parent
+                          <VueTooltip
+                            label="Restricted to 1 parent for each node."
+                            abbreviation
+                            :multiline="false"
+                            size="is-small"
+                            class="light-text mr-3"
+                            position="is-bottom"
+                          >
+                            <b>?</b>
+                          </VueTooltip>
+                        </label>
+                        <VControl>
+                          <Multiselect
+                            v-model="parent.value"
+                            :options="api.dropdownResponse.value"
+                            :loading="api.isLoading.value"
+                            :searchable="true"
+                          >
+                          </Multiselect>
+                          <p v-if="errors.parent" class="help is-danger">
+                            <b>{{ errors.parent }}</b>
+                          </p>
+                        </VControl>
+                      </VField>
+                    </ValidationField>
+                  </div>
                 </div>
               </div>
-            </div>
+            </VLoader>
           </div>
         </div>
       </div>

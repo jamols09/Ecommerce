@@ -2,12 +2,15 @@ import { ref } from 'vue'
 import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
+import useNotificationType from './useNotificationType'
 
-const tableResponse = ref()
-const dropdownResponse = ref()
+const notifType = useNotificationType.notifType
 const createResponse = ref()
-const isLoading = ref(false)
+const dropdownResponse = ref()
+const detailsResponse = ref()
+const tableResponse = ref()
 const removeResponse = ref()
+const isLoading = ref(false)
 
 interface IRCategory {
   id: number
@@ -82,15 +85,49 @@ export function useCategory() {
     isLoading.value = false
   }
 
+  /**
+   *
+   * @description Get category details by id
+   * @param number id
+   * @returns Category model
+   */
+  const details = async (e: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.get(`/v1/category/${e}`)
+      detailsResponse.value = data
+    } catch (err: any) {}
+    isLoading.value = false
+  }
+
+  /**
+   * @description Update branch details by id
+   * @param object branch
+   */
+  const update = async (
+    e: any,
+    i: number | string | string[]
+  ): Promise<any> => {
+    try {
+      await api.patch(`/v1/category/${i}`, e)
+      notifType(`Category successfully updated.`, 'success')
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+  }
+
   return {
-    removeResponse,
-    tableResponse,
-    dropdownResponse,
     createResponse,
+    dropdownResponse,
+    tableResponse,
+    removeResponse,
+    detailsResponse,
     isLoading,
     dropdown,
     create,
     table,
     remove,
+    details,
+    update,
   } as const // as const is a typescript keyword to prevent from updating
 }
