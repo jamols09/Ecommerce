@@ -31,7 +31,6 @@ const employee = ref({
 const isLoadState = computed(() => api.isLoading.value)
 const onSubmit = async (inputs: typeof EmployeeForm) => {
   isSubmitting.value = true
-  inputs.account_type = 'ADMIN'
   inputs.is_active = statusOptions.value.length > 0 ? true : false
   inputs.birthdate =
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
@@ -263,6 +262,7 @@ onMounted(async () => {
                             v-model="employee.username"
                             type="text"
                             class="input is-info-focus"
+                            disabled
                           />
                           <p v-if="errors.username" class="help is-danger">
                             <b>{{ errors.username }}</b>
@@ -286,6 +286,7 @@ onMounted(async () => {
                             v-model="employee.email"
                             type="text"
                             class="input is-info-focus"
+                            disabled
                           />
                           <p v-if="errors.email" class="help is-danger">
                             <b>{{ errors.email }}</b>
@@ -309,6 +310,7 @@ onMounted(async () => {
                             v-bind="field"
                             type="password"
                             class="input is-info-focus"
+                            disabled
                           />
                           <p v-if="errors.password" class="help is-danger">
                             <b>{{ errors.password }}</b>
@@ -332,6 +334,7 @@ onMounted(async () => {
                             v-bind="field"
                             type="password"
                             class="input is-info-focus"
+                            disabled
                           />
                           <p
                             v-if="errors.password_confirmation"

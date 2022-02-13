@@ -26,7 +26,6 @@ const customer = ref({
 const isLoadState = computed(() => api.isLoading.value)
 const onSubmit = async (inputs: typeof CustomerForm) => {
   isSubmitting.value = true
-  inputs.account_type = 'CLIENT'
   inputs.is_active = statusOptions.value.length > 0 ? true : false
   inputs.birthdate =
     inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
