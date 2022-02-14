@@ -24,11 +24,10 @@ const customer = ref({
 })
 
 const isLoadState = computed(() => api.isLoading.value)
-const onSubmit = async (inputs: typeof CustomerForm) => {
+const onSubmit = async (inputs: typeof CustomerEditForm) => {
   isSubmitting.value = true
   inputs.is_active = statusOptions.value.length > 0 ? true : false
-  inputs.birthdate =
-    inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
+  await api.update(inputs, route.params.id)
   isSubmitting.value = false
 }
 
@@ -45,7 +44,7 @@ onMounted(async () => {
 <template>
   <ValidationForm
     v-slot="{ errors }"
-    :validation-schema="CustomerForm"
+    :validation-schema="CustomerEditForm"
     @submit="onSubmit"
   >
     <div class="page-content-inner">
@@ -246,7 +245,7 @@ onMounted(async () => {
                     </ValidationField>
                   </div>
                   <!-- Password -->
-                  <div class="column is-6">
+                  <!-- <div class="column is-6">
                     <ValidationField
                       v-slot="{ field }"
                       :validate-on-input="false"
@@ -267,9 +266,9 @@ onMounted(async () => {
                         </V-Control>
                       </V-Field>
                     </ValidationField>
-                  </div>
+                  </div> -->
                   <!-- Confirm Password -->
-                  <div class="column is-6">
+                  <!-- <div class="column is-6">
                     <ValidationField
                       v-slot="{ field }"
                       :validate-on-input="false"
@@ -293,7 +292,7 @@ onMounted(async () => {
                         </V-Control>
                       </V-Field>
                     </ValidationField>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </VLoader>
