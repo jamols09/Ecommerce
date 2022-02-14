@@ -34,3 +34,13 @@ export const CustomerForm = CustomerSchema.pick([
   'password',
   'password_confirmation',
 ])
+
+export const CustomerEditForm = CustomerSchema.pick([
+  'first_name',
+  'middle_name',
+  'last_name',
+  'birthdate',
+  'username',
+  'email',
+  'options',
+])

@@ -81,8 +81,8 @@ export function useUser() {
 
   /**
    *
-   * @description Get category details by id
-   * @param number id
+   * @description Get user details by id
+   * @param number
    * @returns Category model
    */
   const details = async (e: any): Promise<any> => {
@@ -90,7 +90,28 @@ export function useUser() {
     try {
       const { data } = await api.get(`/v1/users/${e}`)
       detailsResponse.value = data
-    } catch (err: any) {}
+    } catch (err: any) {
+      console.error(err)
+    }
+    isLoading.value = false
+  }
+
+  /**
+   *
+   * @description Update user details
+   * @param object details
+   * @param number id
+   */
+  const update = async (
+    e: any,
+    i: number | string | string[]
+  ): Promise<any> => {
+    isLoading.value = true
+    try {
+      await api.patch(`/v1/users/${i}`, e)
+    } catch (err: any) {
+      console.error(err)
+    }
     isLoading.value = false
   }
 
@@ -106,5 +127,6 @@ export function useUser() {
     status,
     remove,
     details,
+    update,
   } as const // as const is a typescript keyword to prevent from updating
 }

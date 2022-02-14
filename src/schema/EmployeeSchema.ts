@@ -34,3 +34,13 @@ export const EmployeeForm = EmployeeSchema.pick([
   'password',
   'password_confirmation',
 ])
+
+export const EmployeeEditForm = EmployeeSchema.pick([
+  'first_name',
+  'middle_name',
+  'last_name',
+  'birthdate',
+  'username',
+  'email',
+  'options',
+])

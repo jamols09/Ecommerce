@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
 import { StatusArray } from '../../../../models/people'
-import { EmployeeForm } from '/@src/schema/EmployeeSchema'
+import { EmployeeEditForm, EmployeeForm } from '/@src/schema/EmployeeSchema'
 import {
   onAddFile,
   onRemoveFile,
@@ -29,11 +29,10 @@ const employee = ref({
 })
 
 const isLoadState = computed(() => api.isLoading.value)
-const onSubmit = async (inputs: typeof EmployeeForm) => {
+const onSubmit = async (inputs: typeof EmployeeEditForm) => {
   isSubmitting.value = true
   inputs.is_active = statusOptions.value.length > 0 ? true : false
-  inputs.birthdate =
-    inputs.birthdate.toISOString().split('T')[0] + ' ' + '00:00:00'
+  await api.update(inputs, route.params.id)
   isSubmitting.value = false
 }
 
@@ -50,7 +49,7 @@ onMounted(async () => {
 <template>
   <ValidationForm
     v-slot="{ errors }"
-    :validation-schema="EmployeeForm"
+    :validation-schema="EmployeeEditForm"
     @submit="onSubmit"
   >
     <div class="page-content-inner">
@@ -297,7 +296,7 @@ onMounted(async () => {
                   </div>
 
                   <!-- Password -->
-                  <div class="column is-6">
+                  <!-- <div class="column is-6">
                     <ValidationField
                       v-slot="{ field }"
                       :validate-on-input="false"
@@ -318,10 +317,10 @@ onMounted(async () => {
                         </V-Control>
                       </V-Field>
                     </ValidationField>
-                  </div>
+                  </div> -->
 
                   <!-- Confirm Password -->
-                  <div class="column is-6">
+                  <!-- <div class="column is-6">
                     <ValidationField
                       v-slot="{ field }"
                       :validate-on-input="false"
@@ -345,7 +344,7 @@ onMounted(async () => {
                         </V-Control>
                       </V-Field>
                     </ValidationField>
-                  </div>
+                  </div> -->
 
                   <!-- Role Options -->
                   <!-- <div class="column is-6">
