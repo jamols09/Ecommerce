@@ -3,7 +3,7 @@ import { Form as ValidationForm, Field as ValidationField } from 'vee-validate'
 import { computed, onMounted, ref } from 'vue'
 import { StatusArray } from '/@src/models/people'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-import { CustomerForm } from '/@src/schema/CustomerSchema'
+import { CustomerEditForm, CustomerForm } from '/@src/schema/CustomerSchema'
 import { useUser } from '/@src/composable/api/useUser'
 import { useRoute } from 'vue-router'
 
