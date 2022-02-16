@@ -77,7 +77,7 @@ export function useBranch() {
   const remove = async (e?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.delete(`/v1/branch/delete`, e)
+      const { data } = await api.post(`/v1/branch/delete`, e)
       removeResponse.value = data
       notifType(`Branch(es) successfully removed.`, 'warning')
     } catch (err: any) {

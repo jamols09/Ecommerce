@@ -35,6 +35,7 @@ const emit = defineEmits([
   'deactivate',
 ])
 
+const isOpen = ref(false)
 const sortException = [0, 8]
 const type = ref()
 const search = ref()
@@ -114,11 +115,7 @@ onMounted(() => {
               v-if="checked.length > 0"
               color="danger"
               raised
-              @click="
-                emit('remove', checked),
-                  (checkAll = false),
-                  (checked.length = 0)
-              "
+              @click="isOpen = true"
             >
               Remove
             </VButton>
@@ -275,6 +272,36 @@ onMounted(() => {
     <div class="table-footer">
       <slot></slot>
     </div>
+    <!-- Modal -->
+    <VModal
+      :open="isOpen"
+      size="small"
+      actions="center"
+      noscroll
+      noclose
+      title="Confirmation"
+      @close="isOpen = false"
+    >
+      <template #content>
+        <VPlaceholderSection
+          title="Warning"
+          subtitle="Do you wan't to delete the selected fields?"
+        />
+      </template>
+      <template #action>
+        <VButton
+          color="danger"
+          raised
+          @click="
+            emit('remove', checked),
+              (checkAll = false),
+              (checked.length = 0),
+              (isOpen = false)
+          "
+          >Confirm</VButton
+        >
+      </template>
+    </VModal>
   </div>
 </template>
 

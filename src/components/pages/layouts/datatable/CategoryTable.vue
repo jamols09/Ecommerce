@@ -267,12 +267,12 @@ onMounted(() => {
       <template #content>
         <VPlaceholderSection
           title="Warning"
-          subtitle="Are you sure you wan't to delete these selected fields?"
+          subtitle="Do you wan't to delete the selected fields?"
         />
       </template>
       <template #action>
         <VButton
-          color="primary"
+          color="danger"
           raised
           @click="
             emit('remove', checked),
