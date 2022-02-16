@@ -2,13 +2,14 @@ import { ref } from 'vue'
 import { useApi } from '/@src/composable/useApi'
 import useErrorNotification from './useErrorNotification'
 import useNotyf from '../useNotyf'
+import useNotificationType from './useNotificationType'
 
+const notifType = useNotificationType.notifType
 const detailsResponse = ref()
 const removeResponse = ref()
 const statusResponse = ref()
 const createResponse = ref()
 const tableResponse = ref()
-const notif = useNotyf()
 const isLoading = ref(false)
 
 export function useUser() {
@@ -24,7 +25,7 @@ export function useUser() {
     try {
       const { data } = await api.post('/v1/users', user)
       createResponse.value = data
-      notif.success(`Account successfully added.`)
+      notifType(`Account successfully added.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -56,7 +57,7 @@ export function useUser() {
     try {
       const { data } = await api.post(`/v1/users/status`, e)
       statusResponse.value = data
-      notif.success(`Account(s) successfully ${e?.status}d.`)
+      notifType(`Account(s) successfully ${e?.status}d.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -72,7 +73,7 @@ export function useUser() {
     try {
       const { data } = await api.post(`/v1/users/delete`, e)
       removeResponse.value = data
-      notif.warning(`Account(s) removed.`)
+      notifType(`Account(s) removed.`, 'warning')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -109,8 +110,9 @@ export function useUser() {
     isLoading.value = true
     try {
       await api.patch(`/v1/users/${i}`, e)
+      notifType('Account updated sucessfully', 'success')
     } catch (err: any) {
-      console.error(err)
+      useErrorNotification.error(err.response.data)
     }
     isLoading.value = false
   }

@@ -11,7 +11,6 @@ pageTitle.value = 'Edit Category'
 
 const route = useRoute()
 const api = useCategory()
-const isSubmitting = ref(false)
 const category = ref({
   name: '',
   parent_id: null,
@@ -129,7 +128,7 @@ onMounted(async () => {
         <VButton
           type="submit"
           color="primary"
-          :loading="isSubmitting"
+          :loading="isLoadState"
           bold
           fullwidth
           raised
