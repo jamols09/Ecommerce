@@ -1,19 +1,23 @@
 import useNotyf from '../useNotyf'
 const notif = useNotyf()
 class useErrorNotification {
-  error({ errors }: any) {
+  error({ errors, error }: any) {
     console.log(errors)
     try {
-      const result = Object.keys(errors).map((key) => errors[key])
-      result.forEach((e) => {
-        if (e.length > 1) {
-          e.forEach((element: any) => {
-            notif.error(`${element}`)
-          })
-          return
-        }
-        notif.error(`${e}`)
-      })
+      if (error) {
+        notif.error(error)
+      } else {
+        const result = Object.keys(errors).map((key) => errors[key])
+        result.forEach((e) => {
+          if (e.length > 1) {
+            e.forEach((element: any) => {
+              notif.error(`${element}`)
+            })
+            return
+          }
+          notif.error(`${e}`)
+        })
+      }
     } catch (err) {
       console.error(err)
       notif.error(`${err}`)
