@@ -199,7 +199,11 @@ onMounted(() => {
               </VControl>
             </td>
             <td>
-              <span class="light-text">{{ row.is_active ? 'Yes' : 'No' }}</span>
+              <VTag
+                :color="row.is_active ? 'green' : 'danger'"
+                :label="row.is_active ? 'Active' : 'Inactive'"
+                rounded
+              />
             </td>
             <td>
               <span class="light-text">{{ row.name }}</span>
