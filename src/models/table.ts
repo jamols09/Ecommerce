@@ -5,7 +5,7 @@ export interface IHeader {
 export interface IData {
   id: number
   is_discountable?: number
-  name?: string
+  name: string
   sku?: string
   username?: string
   first_name?: string
