@@ -5,6 +5,7 @@ import { useApi } from '/@src/composable/useApi'
 import useNotificationType from './useNotificationType'
 
 const notifType = useNotificationType.notifType
+const itemsPerBranchTableResponse = ref()
 const statusResponse = ref()
 const tableResponse = ref()
 const createResponse = ref()
@@ -135,7 +136,19 @@ export function useBranch() {
     }
   }
 
+  const itemsPerBranchTable = async (e: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      const { data } = await api.get(`/v1/branch/items`, { params: e })
+      itemsPerBranchTableResponse.value = data
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
+    isLoading.value = false
+  }
+
   return {
+    itemsPerBranchTableResponse,
     removeResponse,
     tableResponse,
     createResponse,
@@ -149,5 +162,6 @@ export function useBranch() {
     status,
     details,
     update,
+    itemsPerBranchTable,
   } as const // as const is a typescript keyword to prevent from updating
 }
