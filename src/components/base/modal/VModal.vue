@@ -2,7 +2,7 @@
 import { computed, ref, watchEffect, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-export type VModalSize = 'small' | 'medium' | 'large' | 'big'
+export type VModalSize = 'small' | 'medium' | 'large' | 'big' | 'bigger'
 export type VModalAction = 'center' | 'right'
 
 export interface VModalEmits {
