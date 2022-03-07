@@ -14,6 +14,17 @@
 .modal {
   transition: all 0.5s;
 
+  &.is-huge {
+    .modal-content {
+      width: 100%;
+      max-width: 1440px;
+
+      .modal-card {
+        width: 100%;
+      }
+    }
+  }
+
   &.is-bigger {
     .modal-content {
       width: 100%;
