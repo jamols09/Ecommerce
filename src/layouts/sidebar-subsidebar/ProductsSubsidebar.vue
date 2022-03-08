@@ -12,18 +12,6 @@ const emit = defineEmits(['close'])
     </div>
     <div class="inner" data-simplebar>
       <ul>
-        <!-- <li>
-          <RouterLink :to="{ name: 'app-product-list' }" title="List products">
-            <i aria-hidden="true" class="lnil lnil-list pr-3"></i>
-            List
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink :to="{ name: 'app' }" title="Add products">
-            <i aria-hidden="true" class="lnil lnil-circle-plus pr-3"></i>
-            Add
-          </RouterLink>
-        </li> -->
         <li v-has-nested-router-link class="has-children">
           <div class="collapse-wrap">
             <a class="parent-link">
@@ -39,12 +27,22 @@ const emit = defineEmits(['close'])
           <ul>
             <li>
               <RouterLink
-                :to="{ name: 'app-product-inventory-list' }"
+                :to="{ name: 'app-product-inventory-branch' }"
                 class="is-submenu"
-                title="Inventory list"
+                title="Items per branch"
               >
                 <i aria-hidden="true" class="lnil lnil-list pr-3"></i>
-                <span>List</span>
+                By branch
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink
+                :to="{ name: 'app-product-inventory-list' }"
+                class="is-submenu"
+                title="Overall items"
+              >
+                <i aria-hidden="true" class="lnil lnil-list pr-3"></i>
+                <span>Overall</span>
               </RouterLink>
             </li>
             <li>

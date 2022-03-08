@@ -70,6 +70,7 @@ const onHeaderEmit = (header: IHeader, index: number) => {
       )
     : null
 }
+
 const onRemove = (id: number, discountable: number) => {
   emit('setStatus', {
     id: id,
@@ -77,9 +78,11 @@ const onRemove = (id: number, discountable: number) => {
   })
   reset()
 }
+
 watch(isReset.value, (current, prev) => {
   reset()
 })
+
 debouncedWatch(
   search,
   () => {
@@ -88,6 +91,7 @@ debouncedWatch(
   },
   { debounce: 700 }
 )
+
 onMounted(() => {
   rowCount.value = props.totalRows[0]
   type.value = props.searchType[0]
@@ -206,9 +210,11 @@ onMounted(() => {
               </VControl>
             </td>
             <td>
-              <span class="light-text">
-                {{ row.is_discountable ? 'Yes' : 'No' }}
-              </span>
+              <VTag
+                :color="row.is_discountable ? 'green' : 'danger'"
+                :label="row.is_discountable ? 'Yes' : 'No'"
+                rounded
+              />
             </td>
             <td>
               <span class="light-text">{{ row.name }}</span>
