@@ -5,7 +5,7 @@ import { useApi } from '/@src/composable/useApi'
 import useNotificationType from './useNotificationType'
 
 const notifType = useNotificationType.notifType
-const itemsPerBranchTableResponse = ref()
+const itemsOfBranchTableResponse = ref()
 const statusResponse = ref()
 const tableResponse = ref()
 const createResponse = ref()
@@ -13,6 +13,7 @@ const dropdownResponse = ref()
 const removeResponse = ref()
 const detailsResponse = ref()
 const isLoading = ref(false)
+const isModalLoading = ref(false)
 
 interface IRBranchDropdown {
   id: number
@@ -136,25 +137,30 @@ export function useBranch() {
     }
   }
 
-  const itemsPerBranchTable = async (e: any): Promise<any> => {
-    isLoading.value = true
+  /**
+   * @description Get all items from specific branch
+   * @param object items
+   */
+  const itemsOfBranchTable = async (e: number): Promise<any> => {
+    isModalLoading.value = true
     try {
-      const { data } = await api.get(`/v1/branch/items`, { params: e })
-      itemsPerBranchTableResponse.value = data
+      const { data } = await api.get(`/v1/branch/${e}/items`)
+      itemsOfBranchTableResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
-    isLoading.value = false
+    isModalLoading.value = false
   }
 
   return {
-    itemsPerBranchTableResponse,
+    itemsOfBranchTableResponse,
     removeResponse,
     tableResponse,
     createResponse,
     dropdownResponse,
     detailsResponse,
     isLoading,
+    isModalLoading,
     dropdown,
     create,
     table,
@@ -162,6 +168,6 @@ export function useBranch() {
     status,
     details,
     update,
-    itemsPerBranchTable,
+    itemsOfBranchTable,
   } as const // as const is a typescript keyword to prevent from updating
 }
