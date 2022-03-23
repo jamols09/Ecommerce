@@ -25,6 +25,10 @@ export interface IData {
   telephone?: string
   mobile?: string
   parent: any
+  details: Array<{
+    quantity: number
+    price: number
+  }>
 }
 
 export interface ILinksUri {
