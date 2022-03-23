@@ -141,15 +141,15 @@ export function useBranch() {
    * @description Get all items from specific branch
    * @param object items
    */
-  const itemsOfBranchTable = async (e: number): Promise<any> => {
-    isModalLoading.value = true
+  const itemsOfBranchTable = async (e?: number, b?: any): Promise<any> => {
+    isLoading.value = true
     try {
-      const { data } = await api.get(`/v1/branch/${e}/items`)
+      const { data } = await api.get(`/v1/branch/${e}/items`, { params: b })
       itemsOfBranchTableResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
-    isModalLoading.value = false
+    isLoading.value = false
   }
 
   return {
