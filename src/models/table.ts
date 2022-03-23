@@ -25,10 +25,18 @@ export interface IData {
   telephone?: string
   mobile?: string
   parent: any
-  details: Array<{
-    quantity: number
-    price: number
-  }>
+  details: IDetails[]
+}
+
+interface IDetails {
+  item_id: number
+  branch_id: number
+  id: number
+  is_active: number
+  is_display_qty: number
+  quantity: number
+  quantity_warn: number
+  price: number
 }
 
 export interface ILinksUri {
