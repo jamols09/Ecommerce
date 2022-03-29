@@ -2,16 +2,17 @@
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useBranch } from '/@src/composable/api/useBranch'
 import { pageTitle } from '/@src/state/sidebarLayoutState'
-pageTitle.value = 'Items per branch'
+pageTitle.value = 'Items of Branches'
 
 const api = useBranch()
 const table = reactive({
-  searchType: ['Name', 'Code'],
+  searchType: ['Name'],
   totalRows: [10, 15, 30, 50],
   headers: [
     { name: 'Active' },
     { name: 'Name' },
-    { name: 'Code' },
+    { name: 'Quantity' },
+    { name: 'Price' },
     { name: 'Action' },
   ],
   data: [],
@@ -43,9 +44,12 @@ const type = ref()
 const search = ref()
 const page = ref(1)
 const reset = ref(false)
+const branchDropdown = ref()
+const branchId = ref()
+
 const onSearch = (e: any) => {
   search.value = e
-  onCallTable()
+  // onCallTable()
 }
 
 const onChangePage = (e?: any) => {
@@ -55,25 +59,25 @@ const onChangePage = (e?: any) => {
     e > 0 ? (page.value += 1) : (page.value -= 1)
   }
   reset.value = !reset.value
-  onCallTable()
+  // onCallTable()
 }
 
 const onRemove = async (e?: any) => {
   await api.remove({ id: e })
   page.value = 1
-  onCallTable()
+  // onCallTable()
 }
 
 const onSort = (e?: any) => {
   table.order = table.order === '' ? '-' : ''
   table.column = e?.toLocaleLowerCase().replace(/ /g, '_')
-  onCallTable()
+  // onCallTable()
 }
 
 const onSetStatus = async (e: any, a?: string) => {
   await api.status({ id: e, status: a })
   page.value = 1
-  onCallTable()
+  // onCallTable()
 }
 
 const onCallTable = async () => {
@@ -85,23 +89,32 @@ const onCallTable = async () => {
     .replace(/ /g, '_')
     .toLocaleLowerCase()
 
-  await api.itemsPerBranchTable({
+  await api.itemsOfBranchTable(branchId.value, {
     row: rowCount.value ?? table.totalRows[0],
     [`filter[${query}]`]: search.value,
     page: page.value ?? '1',
     sort: sort,
   })
 
-  const { data } = api.itemsPerBranchTableResponse.value
+  const { data } = api.itemsOfBranchTableResponse.value
   table.data = data
-  pagination.value = api.itemsPerBranchTableResponse.value
+  pagination.value = api.itemsOfBranchTableResponse.value
 }
 
-watch(rowCount, (next, prev) => {
-  onCallTable()
-})
+const onCallBranch = async () => {
+  await api.dropdown()
+  branchDropdown.value = api.dropdownResponse.value
+}
 
-onMounted(() => onCallTable())
+const onEmittedValues = (data: { id: number; row: number }) => {
+  branchId.value = data.id
+  rowCount.value = data.row
+  onCallTable()
+}
+
+onMounted(() => {
+  onCallBranch()
+})
 </script>
 
 <template>
@@ -112,6 +125,7 @@ onMounted(() => onCallTable())
           return a - b
         })
       "
+      :branch="branchDropdown"
       :headers="table.headers"
       :data="table.data"
       :search-type="table.searchType"
@@ -119,10 +133,10 @@ onMounted(() => onCallTable())
       :reset-checked="reset"
       @set-status="onSetStatus($event)"
       @remove="onRemove($event)"
-      @rowCount="rowCount = $event"
       @type="type = $event"
       @search="onSearch"
       @sort="onSort"
+      @dropdown-values="onEmittedValues($event)"
     >
       <VBasicPagination
         :is-loading="api.isLoading.value"
