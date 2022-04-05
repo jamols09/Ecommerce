@@ -26,6 +26,12 @@ export interface IData {
   mobile?: string
   parent: any
   details: IDetails[]
+  item_id?: number
+  branch_id?: number
+  is_display_qty?: number
+  quantity?: number
+  quantity_warn?: number
+  price?: number
 }
 
 interface IDetails {
