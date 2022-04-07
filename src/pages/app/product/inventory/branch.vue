@@ -63,7 +63,7 @@ const onChangePage = (e?: any) => {
 }
 
 const onRemove = async (e?: any) => {
-  await api.remove({ id: e })
+  // await api.remove({ id: e })
   page.value = 1
   // onCallTable()
 }
@@ -106,6 +106,10 @@ const onCallBranch = async () => {
   branchDropdown.value = api.dropdownResponse.value
 }
 
+const onActivate = (data: { id: number; is_active: number }) => {
+  api.updateItemOfBranch(data.id, { is_active: data.is_active })
+}
+
 const onEmittedValues = (data: { id: number; row: number }) => {
   branchId.value = data.id
   rowCount.value = data.row
@@ -137,6 +141,7 @@ onMounted(() => {
       @search="onSearch"
       @sort="onSort"
       @dropdown-values="onEmittedValues($event)"
+      @activate="onActivate($event)"
     >
       <VBasicPagination
         :is-loading="api.isLoading.value"

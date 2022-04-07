@@ -28,11 +28,11 @@ export function useBranch() {
    * @param object
    * @returns HTTP status or error message
    */
-  const create = async (e: any): Promise<any> => {
+  const create = async (params: any): Promise<any> => {
     try {
-      const { data } = await api.post('/v1/branch', e)
+      const { data } = await api.post('/v1/branch', params)
       createResponse.value = data
-      notifType(`Branch <b>${e.name}</b> successfully added.`, 'success')
+      notifType(`Branch <b>${params.name}</b> successfully added.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -60,10 +60,10 @@ export function useBranch() {
    * @param object
    * @returns Paginated branch
    */
-  const table = async (e?: any): Promise<any> => {
+  const table = async (params?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.get(`/v1/branch`, { params: e })
+      const { data } = await api.get(`/v1/branch`, { params: params })
       tableResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
@@ -76,10 +76,10 @@ export function useBranch() {
    * @param array
    * @returns branch
    */
-  const remove = async (e?: any): Promise<any> => {
+  const remove = async (params?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.post(`/v1/branch/delete`, e)
+      const { data } = await api.post(`/v1/branch/delete`, params)
       removeResponse.value = data
       notifType(`Branch(es) successfully removed.`, 'warning')
     } catch (err: any) {
@@ -93,12 +93,12 @@ export function useBranch() {
    * @param array
    * @returns status
    */
-  const status = async (e?: any): Promise<any> => {
+  const status = async (params?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.post(`/v1/branch/status`, e)
+      const { data } = await api.post(`/v1/branch/status`, params)
       statusResponse.value = data
-      notifType(`Branch(es) successfully ${e?.status}d.`, 'success')
+      notifType(`Branch(es) successfully ${params?.status}d.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
@@ -110,10 +110,10 @@ export function useBranch() {
    * @param number id
    * @returns Branch model
    */
-  const details = async (e: any): Promise<any> => {
+  const details = async (id: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.get(`/v1/branch/${e}`)
+      const { data } = await api.get(`/v1/branch/${id}`)
       detailsResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
@@ -126,11 +126,11 @@ export function useBranch() {
    * @param object branch
    */
   const update = async (
-    e: any,
-    i: number | string | string[]
+    params: any,
+    id: number | string | string[]
   ): Promise<any> => {
     try {
-      await api.patch(`/v1/branch/${i}`, e)
+      await api.patch(`/v1/branch/${id}`, params)
       notifType(`Branch successfully updated.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
@@ -141,14 +141,24 @@ export function useBranch() {
    * @description Get all items from specific branch
    * @param object items
    */
-  const itemsOfBranchTable = async (e?: number, b?: any): Promise<any> => {
+  const itemsOfBranchTable = async (id: number, params?: any): Promise<any> => {
     isLoading.value = true
     try {
-      const { data } = await api.get(`/v1/branch/${e}/items`, { params: b })
+      const { data } = await api.get(`/v1/branch/${id}/items`, {
+        params: params,
+      })
       itemsOfBranchTableResponse.value = data
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
+    isLoading.value = false
+  }
+
+  const updateItemOfBranch = async (id: number, params: any): Promise<any> => {
+    isLoading.value = true
+    try {
+      await api.patch(`/v1/branch/${id}/items`, params)
+    } catch (err: any) {}
     isLoading.value = false
   }
 
@@ -161,6 +171,7 @@ export function useBranch() {
     detailsResponse,
     isLoading,
     isModalLoading,
+    updateItemOfBranch,
     dropdown,
     create,
     table,

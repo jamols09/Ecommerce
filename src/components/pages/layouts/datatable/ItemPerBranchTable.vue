@@ -98,6 +98,10 @@ const onSetRows = (count: number) => {
   emit('dropdownValues', { id: branchId.value, row: count })
 }
 
+const onActivate = (data: { id: number; is_active: number }) => {
+  emit('activate', data)
+}
+
 watch(isReset.value, (current, prev) => {
   reset()
 })
@@ -282,7 +286,16 @@ onMounted(() => {
             </td>
             <td class="is-end">
               <div class="is-flex is-justify-content-flex-end">
-                <!-- <ItemsPerBranchDropdown :details="row.details[0]" /> -->
+                <ItemsPerBranchDropdown
+                  :id="row.id"
+                  :is-active="row.is_active"
+                  :is-display-qty="row.is_display_qty"
+                  :item-id="row.item_id"
+                  :quantity="row.quantity"
+                  :quantity-warn="row.quantity_warn"
+                  :price="row.price"
+                  @activate="onActivate($event)"
+                />
               </div>
             </td>
           </tr>
