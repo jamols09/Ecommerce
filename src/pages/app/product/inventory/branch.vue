@@ -106,8 +106,9 @@ const onCallBranch = async () => {
   branchDropdown.value = api.dropdownResponse.value
 }
 
-const onActivate = (data: { id: number; is_active: number }) => {
+const onStatus = (data: { id: number; is_active: number }) => {
   api.updateItemOfBranch(data.id, { is_active: data.is_active })
+  onCallTable()
 }
 
 const onEmittedValues = (data: { id: number; row: number }) => {
@@ -141,7 +142,7 @@ onMounted(() => {
       @search="onSearch"
       @sort="onSort"
       @dropdown-values="onEmittedValues($event)"
-      @activate="onActivate($event)"
+      @status="onStatus($event)"
     >
       <VBasicPagination
         :is-loading="api.isLoading.value"

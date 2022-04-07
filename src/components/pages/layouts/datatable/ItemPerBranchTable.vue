@@ -33,8 +33,7 @@ const emit = defineEmits([
   'sort',
   'remove',
   'reload',
-  'activate',
-  'deactivate',
+  'status',
   'dropdownValues',
 ])
 
@@ -98,8 +97,8 @@ const onSetRows = (count: number) => {
   emit('dropdownValues', { id: branchId.value, row: count })
 }
 
-const onActivate = (data: { id: number; is_active: number }) => {
-  emit('activate', data)
+const onStatus = (data: any) => {
+  emit('status', data)
 }
 
 watch(isReset.value, (current, prev) => {
@@ -294,7 +293,7 @@ onMounted(() => {
                   :quantity="row.quantity"
                   :quantity-warn="row.quantity_warn"
                   :price="row.price"
-                  @activate="onActivate($event)"
+                  @status="onStatus($event)"
                 />
               </div>
             </td>
