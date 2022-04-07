@@ -16,8 +16,6 @@ interface IActionDropdownProps {
   price: number
 }
 
-let obj = {}
-
 const props = withDefaults(defineProps<IActionDropdownProps>(), {
   titleDeactivate: 'Deactivate',
   messageDeactivate: 'Change item status',
@@ -49,42 +47,24 @@ const onStatus = async (id: number) => {
 <template>
   <VDropdown icon="feather:more-vertical" right spaced>
     <template #content>
-      <template v-if="props.isActive === 1">
-        <a
-          href="#"
-          role="menuitem"
-          class="dropdown-item is-media"
-          @click="onStatus(props.id)"
-        >
-          <div class="icon">
-            <i aria-hidden="true" class="lnil lnil-trash-can-alt"></i>
-          </div>
-          <div class="meta">
-            <span>{{ props.titleDeactivate }}</span>
-            <span>
-              <small>{{ props.messageDeactivate }}</small>
-            </span>
-          </div>
-        </a>
-      </template>
-      <template v-else>
-        <a
-          href="#"
-          role="menuitem"
-          class="dropdown-item is-media"
-          @click="onStatus(props.id)"
-        >
-          <div class="icon">
-            <i aria-hidden="true" class="lnil lnil-trash-can-alt"></i>
-          </div>
-          <div class="meta">
-            <span> Activate </span>
-            <span>
-              <small>{{ props.messageDeactivate }}</small>
-            </span>
-          </div>
-        </a>
-      </template>
+      <a
+        href="#"
+        role="menuitem"
+        class="dropdown-item is-media"
+        @click="onStatus(props.id)"
+      >
+        <div class="icon">
+          <i aria-hidden="true" class="lnil lnil-trash-can-alt"></i>
+        </div>
+        <div class="meta">
+          <span>
+            {{ props.isActive === 1 ? props.titleDeactivate : 'Activate' }}
+          </span>
+          <span>
+            <small>{{ props.messageDeactivate }}</small>
+          </span>
+        </div>
+      </a>
     </template>
   </VDropdown>
 </template>

@@ -154,11 +154,19 @@ export function useBranch() {
     isLoading.value = false
   }
 
+  /**
+   * @description Update item from specific branch
+   * @param number id
+   * @param object params
+   */
   const updateItemOfBranch = async (id: number, params: any): Promise<any> => {
     isLoading.value = true
     try {
       await api.patch(`/v1/branch/${id}/items`, params)
-    } catch (err: any) {}
+      notifType(`Branch successfully updated.`, 'success')
+    } catch (err: any) {
+      useErrorNotification.error(err.response.data)
+    }
     isLoading.value = false
   }
 
