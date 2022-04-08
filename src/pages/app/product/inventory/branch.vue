@@ -11,6 +11,7 @@ const table = reactive({
   headers: [
     { name: 'Active' },
     { name: 'Name' },
+    { name: 'Warn' },
     { name: 'Quantity' },
     { name: 'Price' },
     { name: 'Action' },
@@ -74,12 +75,6 @@ const onSort = (e?: any) => {
   // onCallTable()
 }
 
-const onSetStatus = async (e: any, a?: string) => {
-  await api.status({ id: e, status: a })
-  page.value = 1
-  // onCallTable()
-}
-
 const onCallTable = async () => {
   const query = (type.value ?? table.searchType[0])
     .replace(/ /g, '_')
@@ -106,7 +101,7 @@ const onCallBranch = async () => {
   branchDropdown.value = api.dropdownResponse.value
 }
 
-const onStatus = (data: { id: number; is_active: number }) => {
+const onSetStatus = (data: { id: number; is_active: number }) => {
   api.updateItemOfBranch(data.id, { is_active: data.is_active })
   onCallTable()
 }
@@ -136,13 +131,12 @@ onMounted(() => {
       :search-type="table.searchType"
       :is-loading="api.isLoading.value"
       :reset-checked="reset"
-      @set-status="onSetStatus($event)"
       @remove="onRemove($event)"
       @type="type = $event"
       @search="onSearch"
       @sort="onSort"
       @dropdown-values="onEmittedValues($event)"
-      @status="onStatus($event)"
+      @status="onSetStatus($event)"
     >
       <VBasicPagination
         :is-loading="api.isLoading.value"
