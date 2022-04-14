@@ -11,7 +11,7 @@ const table = reactive({
   headers: [
     { name: 'Active' },
     { name: 'Name' },
-    { name: 'Warn' },
+    // { name: 'Warn' },
     { name: 'Quantity' },
     { name: 'Price' },
     { name: 'Action' },
@@ -47,6 +47,7 @@ const page = ref(1)
 const reset = ref(false)
 const branchDropdown = ref()
 const branchId = ref()
+const rows = table.totalRows.sort((a: number, b: number) => a - b)
 
 const onSearch = (e: any) => {
   search.value = e
@@ -72,7 +73,6 @@ const onRemove = async (e?: any) => {
 const onSort = (e?: any) => {
   table.order = table.order === '' ? '-' : ''
   table.column = e?.toLocaleLowerCase().replace(/ /g, '_')
-  // onCallTable()
 }
 
 const onCallTable = async () => {
@@ -120,11 +120,7 @@ onMounted(() => {
 <template>
   <div>
     <ItemPerBranchTable
-      :total-rows="
-        table.totalRows.sort(function (a, b) {
-          return a - b
-        })
-      "
+      :total-rows="rows"
       :branch="branchDropdown"
       :headers="table.headers"
       :data="table.data"

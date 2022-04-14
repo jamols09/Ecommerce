@@ -37,7 +37,6 @@ const onRedirect = async (e: string) => {
                   <img
                     class="dark-image is-larger"
                     src="/@src/assets/illustrations/placeholders/promotion-dark.svg"
-                    alt
                   />
                 </div>
               </div>
