@@ -283,15 +283,6 @@ onMounted(() => {
                 :class="{
                   'has-text-danger': row.quantity! < row.quantity_warn!,
                 }"
-                >{{ row.quantity_warn }}</span
-              >
-            </td>
-            <td>
-              <span
-                class="light-text"
-                :class="{
-                  'has-text-danger': row.quantity! < row.quantity_warn!,
-                }"
                 >{{ row.quantity }}</span
               >
             </td>
