@@ -11,6 +11,7 @@ const table = reactive({
   headers: [
     { name: 'Active' },
     { name: 'Name' },
+    // { name: 'Warn' },
     { name: 'Quantity' },
     { name: 'Price' },
     { name: 'Action' },
@@ -46,6 +47,7 @@ const page = ref(1)
 const reset = ref(false)
 const branchDropdown = ref()
 const branchId = ref()
+const rows = table.totalRows.sort((a: number, b: number) => a - b)
 
 const onSearch = (e: any) => {
   search.value = e
@@ -71,13 +73,6 @@ const onRemove = async (e?: any) => {
 const onSort = (e?: any) => {
   table.order = table.order === '' ? '-' : ''
   table.column = e?.toLocaleLowerCase().replace(/ /g, '_')
-  // onCallTable()
-}
-
-const onSetStatus = async (e: any, a?: string) => {
-  await api.status({ id: e, status: a })
-  page.value = 1
-  // onCallTable()
 }
 
 const onCallTable = async () => {
@@ -106,7 +101,7 @@ const onCallBranch = async () => {
   branchDropdown.value = api.dropdownResponse.value
 }
 
-const onStatus = (data: { id: number; is_active: number }) => {
+const onSetStatus = (data: { id: number; is_active: number }) => {
   api.updateItemOfBranch(data.id, { is_active: data.is_active })
   onCallTable()
 }
@@ -125,24 +120,19 @@ onMounted(() => {
 <template>
   <div>
     <ItemPerBranchTable
-      :total-rows="
-        table.totalRows.sort(function (a, b) {
-          return a - b
-        })
-      "
+      :total-rows="rows"
       :branch="branchDropdown"
       :headers="table.headers"
       :data="table.data"
       :search-type="table.searchType"
       :is-loading="api.isLoading.value"
       :reset-checked="reset"
-      @set-status="onSetStatus($event)"
       @remove="onRemove($event)"
       @type="type = $event"
       @search="onSearch"
       @sort="onSort"
       @dropdown-values="onEmittedValues($event)"
-      @status="onStatus($event)"
+      @status="onSetStatus($event)"
     >
       <VBasicPagination
         :is-loading="api.isLoading.value"

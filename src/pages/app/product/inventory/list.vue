@@ -43,6 +43,7 @@ const type = ref()
 const search = ref()
 const page = ref(1)
 const reset = ref(false)
+const rows = table.totalRows.sort((a, b) => a - b)
 const onSearch = (e: any) => {
   search.value = e
   onCallTable()
@@ -106,11 +107,7 @@ onMounted(() => onCallTable())
 <template>
   <div>
     <ItemTable
-      :total-rows="
-        table.totalRows.sort(function (a, b) {
-          return a - b
-        })
-      "
+      :total-rows="rows"
       :headers="table.headers"
       :data="table.data"
       :search-type="table.searchType"
