@@ -4,7 +4,7 @@ import 'simple-datatables/src/style.css'
 
 <script setup lang="ts">
 import { useStorage } from '@vueuse/core'
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
 import type { IData, IHeader } from '/@src/models/table'
 
@@ -49,6 +49,11 @@ const rowCount = ref(0)
 const checkAll = ref(false)
 const checked = ref<Array<number>>([])
 const options = ref([])
+const modal = reactive({
+  quantity_warning: 0,
+  quantity: 0,
+  price: 0,
+})
 
 const onCheckAll = () => {
   checked.value.length = 0
@@ -84,7 +89,7 @@ const onHeaderEmit = (header: IHeader, index: number) => {
 
 const onEditConfig = (id: number, name: string) => {
   isConfig.value = true
-  branchName.value = 'Item - ' + name
+  branchName.value = name
 }
 
 const onGetBranchItems = (id: number) => {
@@ -379,27 +384,60 @@ onMounted(() => {
     <VModal
       :open="isConfig"
       size="medium"
-      actions="center"
+      actions="right"
       noscroll
       noclose
       :title="branchName"
+      title-color="primary"
       @close="isConfig = false"
     >
       <template #content>
-        <div class="columns">
-          <!-- Checkboxes -->
-          <div class="column is-12">
-            <VCheckbox
-              v-model="options"
-              value="quantity_warn"
-              label="Quantity Warn"
-              color="info"
-            />
+        <form class="modal-form">
+          <div class="columns is-multiline">
+            <div class="column is-6">
+              <div class="field">
+                <label for="" class="label">Quantity </label>
+                <div class="control">
+                  <input
+                    v-model="modal.quantity"
+                    type="number"
+                    class="input"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label for="" class="label">Quantity Warning</label>
+                <div class="control">
+                  <input
+                    v-model="modal.quantity_warning"
+                    type="number"
+                    class="input"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label for="" class="label">Price</label>
+                <div class="control">
+                  <input
+                    v-model="modal.price"
+                    type="number"
+                    class="input"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </form>
       </template>
       <template #action>
-        <VButton>Save</VButton>
+        <VButton color="primary">Save</VButton>
       </template>
     </VModal>
   </div>
