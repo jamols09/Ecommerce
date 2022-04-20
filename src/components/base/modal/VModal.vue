@@ -11,6 +11,18 @@ export type VModalSize =
   | 'huge'
 export type VModalAction = 'center' | 'right'
 
+export type VModalTitleColor =
+  | 'primary'
+  | 'white'
+  | 'black'
+  | 'light'
+  | 'dark'
+  | 'link'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'danger'
+
 export interface VModalEmits {
   (e: 'close'): void
 }
@@ -24,6 +36,7 @@ export interface VModalProps {
   noclose?: boolean
   tabs?: boolean
   cancelLabel?: string
+  titleColor?: VModalTitleColor
 }
 
 const emit = defineEmits<VModalEmits>()
@@ -31,6 +44,7 @@ const props = withDefaults(defineProps<VModalProps>(), {
   size: undefined,
   actions: undefined,
   cancelLabel: undefined,
+  titleColor: undefined,
 })
 
 const { t } = useI18n()
@@ -81,7 +95,7 @@ zh-CN:
       <div class="modal-content">
         <div class="modal-card">
           <header class="modal-card-head">
-            <h3>{{ title }}</h3>
+            <h3 :class="[`has-text-${titleColor}`]">{{ title }}</h3>
             <button
               class="v-modal-close ml-auto"
               aria-label="close"
