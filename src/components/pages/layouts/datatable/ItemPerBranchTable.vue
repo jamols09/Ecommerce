@@ -4,7 +4,7 @@ import 'simple-datatables/src/style.css'
 
 <script setup lang="ts">
 import { useStorage } from '@vueuse/core'
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
 import type { IData, IHeader } from '/@src/models/table'
 
@@ -38,16 +38,22 @@ const emit = defineEmits([
 ])
 
 const storage = useStorage('/product/inventory/branch', { branch: 0, rows: 0 })
-const branchId = ref(0)
-const isItemModal = ref(false)
-const branchName = ref('')
 const isOpen = ref(false)
+const isConfig = ref(false)
+const branchId = ref(0)
+const branchName = ref('')
 const sortException = [4]
 const type = ref()
 const search = ref('')
 const rowCount = ref(0)
 const checkAll = ref(false)
 const checked = ref<Array<number>>([])
+const options = ref([])
+const modal = reactive({
+  quantity_warning: 0,
+  quantity: 0,
+  price: 0,
+})
 
 const onCheckAll = () => {
   checked.value.length = 0
@@ -81,10 +87,9 @@ const onHeaderEmit = (header: IHeader, index: number) => {
     : null
 }
 
-const openItemsModal = (e: number, b: string) => {
-  branchId.value = e
-  isItemModal.value = true
-  branchName.value = 'Branch ' + b
+const onEditConfig = (id: number, name: string) => {
+  isConfig.value = true
+  branchName.value = name
 }
 
 const onGetBranchItems = (id: number) => {
@@ -300,6 +305,7 @@ onMounted(() => {
                   :quantity-warn="row.quantity_warn"
                   :price="row.price"
                   @status="onStatus($event)"
+                  @edit="onEditConfig($event, row.name)"
                 />
               </div>
             </td>
@@ -337,10 +343,12 @@ onMounted(() => {
         </tbody>
       </table>
     </div>
+
     <!-- Footer -->
     <div class="table-footer">
       <slot></slot>
     </div>
+
     <!-- Modal -->
     <VModal
       :open="isOpen"
@@ -374,17 +382,62 @@ onMounted(() => {
 
     <!-- Modal -->
     <VModal
-      :open="isItemModal"
-      size="huge"
-      actions="center"
+      :open="isConfig"
+      size="medium"
+      actions="right"
       noscroll
       noclose
       :title="branchName"
-      @close="isItemModal = false"
+      title-color="primary"
+      @close="isConfig = false"
     >
-      <template #content> </template>
+      <template #content>
+        <form class="modal-form">
+          <div class="columns is-multiline">
+            <div class="column is-6">
+              <div class="field">
+                <label for="" class="label">Quantity </label>
+                <div class="control">
+                  <input
+                    v-model="modal.quantity"
+                    type="number"
+                    class="input"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label for="" class="label">Quantity Warning</label>
+                <div class="control">
+                  <input
+                    v-model="modal.quantity_warning"
+                    type="number"
+                    class="input"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label for="" class="label">Price</label>
+                <div class="control">
+                  <input
+                    v-model="modal.price"
+                    type="number"
+                    class="input"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </template>
       <template #action>
-        <VButton>Save</VButton>
+        <VButton color="primary">Save</VButton>
       </template>
     </VModal>
   </div>
