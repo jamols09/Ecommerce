@@ -38,16 +38,17 @@ const emit = defineEmits([
 ])
 
 const storage = useStorage('/product/inventory/branch', { branch: 0, rows: 0 })
-const branchId = ref(0)
-const isItemModal = ref(false)
-const branchName = ref('')
 const isOpen = ref(false)
+const isConfig = ref(false)
+const branchId = ref(0)
+const branchName = ref('')
 const sortException = [4]
 const type = ref()
 const search = ref('')
 const rowCount = ref(0)
 const checkAll = ref(false)
 const checked = ref<Array<number>>([])
+const options = ref([])
 
 const onCheckAll = () => {
   checked.value.length = 0
@@ -81,10 +82,9 @@ const onHeaderEmit = (header: IHeader, index: number) => {
     : null
 }
 
-const openItemsModal = (e: number, b: string) => {
-  branchId.value = e
-  isItemModal.value = true
-  branchName.value = 'Branch ' + b
+const onEditConfig = (id: number, name: string) => {
+  isConfig.value = true
+  branchName.value = 'Item - ' + name
 }
 
 const onGetBranchItems = (id: number) => {
@@ -300,6 +300,7 @@ onMounted(() => {
                   :quantity-warn="row.quantity_warn"
                   :price="row.price"
                   @status="onStatus($event)"
+                  @edit="onEditConfig($event, row.name)"
                 />
               </div>
             </td>
@@ -337,10 +338,12 @@ onMounted(() => {
         </tbody>
       </table>
     </div>
+
     <!-- Footer -->
     <div class="table-footer">
       <slot></slot>
     </div>
+
     <!-- Modal -->
     <VModal
       :open="isOpen"
@@ -374,15 +377,27 @@ onMounted(() => {
 
     <!-- Modal -->
     <VModal
-      :open="isItemModal"
-      size="huge"
+      :open="isConfig"
+      size="medium"
       actions="center"
       noscroll
       noclose
       :title="branchName"
-      @close="isItemModal = false"
+      @close="isConfig = false"
     >
-      <template #content> </template>
+      <template #content>
+        <div class="columns">
+          <!-- Checkboxes -->
+          <div class="column is-12">
+            <VCheckbox
+              v-model="options"
+              value="quantity_warn"
+              label="Quantity Warn"
+              color="info"
+            />
+          </div>
+        </div>
+      </template>
       <template #action>
         <VButton>Save</VButton>
       </template>

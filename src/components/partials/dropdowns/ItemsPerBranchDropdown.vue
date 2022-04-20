@@ -32,14 +32,18 @@ const props = withDefaults(defineProps<IActionDropdownProps>(), {
 })
 
 const action = ref<Array<number>>([])
-const emit = defineEmits(['remove', 'status'])
+const emit = defineEmits(['remove', 'status', 'status', 'edit'])
 
-const onRemove = async (e: number) => {
-  action.value.push(e)
-  emit('remove', action.value)
+// const onRemove = async (e: number) => {
+//   action.value.push(e)
+//   emit('remove', action.value)
+// }
+
+const onEditConfig = (id: number) => {
+  emit('edit', id)
 }
 
-const onStatus = async (id: number) => {
+const onStatus = (id: number) => {
   emit('status', { id: id, is_active: props.isActive === 1 ? 0 : 1 })
 }
 </script>
@@ -47,6 +51,25 @@ const onStatus = async (id: number) => {
 <template>
   <VDropdown icon="feather:more-vertical" right spaced>
     <template #content>
+      <a
+        href="#"
+        role="menuitem"
+        class="dropdown-item is-media"
+        @click="onEditConfig(props.id)"
+      >
+        <div class="icon">
+          <i aria-hidden="true" class="lnil lnil-cog"></i>
+        </div>
+        <div class="meta">
+          <span> Edit </span>
+          <span>
+            <small>Edit product configuration</small>
+          </span>
+        </div>
+      </a>
+
+      <hr class="dropdown-divider" />
+
       <a
         href="#"
         role="menuitem"
