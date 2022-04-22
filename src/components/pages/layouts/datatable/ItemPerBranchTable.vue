@@ -6,10 +6,10 @@ import 'simple-datatables/src/style.css'
 import { useStorage } from '@vueuse/core'
 import { computed, onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
-import type { IData, IHeader } from '/@src/models/table'
+import type { IDetails, IHeader } from '/@src/models/table'
 
 interface ITableProps {
-  data: IData[]
+  data: IDetails[]
   headers: IHeader[]
   totalRows?: Array<number>
   searchType: Array<any>
@@ -41,18 +41,17 @@ const storage = useStorage('/product/inventory/branch', { branch: 0, rows: 0 })
 const isOpen = ref(false)
 const isConfig = ref(false)
 const branchId = ref(0)
-const branchName = ref('')
 const sortException = [4]
 const type = ref()
 const search = ref('')
 const rowCount = ref(0)
 const checkAll = ref(false)
 const checked = ref<Array<number>>([])
-const options = ref([])
 const modal = reactive({
   quantity_warning: 0,
   quantity: 0,
   price: 0,
+  name: '',
 })
 
 const onCheckAll = () => {
@@ -89,7 +88,11 @@ const onHeaderEmit = (header: IHeader, index: number) => {
 
 const onEditConfig = (id: number, name: string) => {
   isConfig.value = true
-  branchName.value = name
+  modal.name = name
+  const item: IDetails = props.data.find((x) => x.id === id)!
+  modal.price = item.price
+  modal.quantity = item.quantity
+  modal.quantity_warning = item.quantity_warn
 }
 
 const onGetBranchItems = (id: number) => {
@@ -299,11 +302,6 @@ onMounted(() => {
                 <ItemsPerBranchDropdown
                   :id="row.id"
                   :is-active="row.is_active"
-                  :is-display-qty="row.is_display_qty"
-                  :item-id="row.item_id"
-                  :quantity="row.quantity"
-                  :quantity-warn="row.quantity_warn"
-                  :price="row.price"
                   @status="onStatus($event)"
                   @edit="onEditConfig($event, row.name)"
                 />
@@ -387,7 +385,7 @@ onMounted(() => {
       actions="right"
       noscroll
       noclose
-      :title="branchName"
+      :title="modal.name"
       title-color="primary"
       @close="isConfig = false"
     >

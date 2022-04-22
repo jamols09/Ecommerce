@@ -7,13 +7,8 @@ interface IActionDropdownProps {
   titleEdit?: string
   messageEdit?: string
   editRoute?: string
-  itemId?: number
   id: number
   isActive: number
-  isDisplayQty: number
-  quantity: number
-  quantityWarn: number
-  price: number
 }
 
 const props = withDefaults(defineProps<IActionDropdownProps>(), {
@@ -22,13 +17,8 @@ const props = withDefaults(defineProps<IActionDropdownProps>(), {
   titleEdit: 'Edit',
   messageEdit: 'Edit item',
   editRoute: '',
-  itemId: 0,
   id: 0,
   isActive: 0,
-  isDisplayQty: 0,
-  quantity: 0,
-  quantityWarn: 0,
-  price: 0,
 })
 
 const action = ref<Array<number>>([])
