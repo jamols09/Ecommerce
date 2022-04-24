@@ -30,7 +30,6 @@ const emit = defineEmits([
   'type',
   'sort',
   'remove',
-  'reload',
   'activate',
   'deactivate',
 ])
@@ -293,7 +292,7 @@ onMounted(() => {
       <template #content>
         <VPlaceholderSection
           title="Warning"
-          subtitle="Do you wan't to delete the selected fields?"
+          subtitle="Do you want to delete the selected fields?"
         />
       </template>
       <template #action>

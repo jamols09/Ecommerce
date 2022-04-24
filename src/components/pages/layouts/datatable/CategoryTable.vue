@@ -24,14 +24,7 @@ const props = withDefaults(defineProps<ITableProps>(), {
   resetChecked: false,
 })
 
-const emit = defineEmits([
-  'search',
-  'rowCount',
-  'type',
-  'sort',
-  'remove',
-  'reload',
-])
+const emit = defineEmits(['search', 'rowCount', 'type', 'sort', 'remove'])
 
 const isOpen = ref(false)
 const sortException = [3, 1]
@@ -267,7 +260,7 @@ onMounted(() => {
       <template #content>
         <VPlaceholderSection
           title="Warning"
-          subtitle="Do you wan't to delete the selected fields?"
+          subtitle="Do you want to delete the selected fields?"
         />
       </template>
       <template #action>

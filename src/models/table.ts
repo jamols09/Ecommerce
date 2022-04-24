@@ -34,7 +34,7 @@ export interface IData {
   price?: number
 }
 
-interface IDetails {
+export interface IDetails {
   item_id: number
   branch_id: number
   id: number
@@ -43,6 +43,7 @@ interface IDetails {
   quantity: number
   quantity_warn: number
   price: number
+  name: string
 }
 
 export interface ILinksUri {

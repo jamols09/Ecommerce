@@ -6,10 +6,10 @@ import 'simple-datatables/src/style.css'
 import { useStorage } from '@vueuse/core'
 import { computed, onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
-import type { IData, IHeader } from '/@src/models/table'
+import type { IDetails, IHeader } from '/@src/models/table'
 
 interface ITableProps {
-  data: IData[]
+  data: IDetails[]
   headers: IHeader[]
   totalRows?: Array<number>
   searchType: Array<any>
@@ -28,11 +28,11 @@ const props = withDefaults(defineProps<ITableProps>(), {
 })
 
 const emit = defineEmits([
+  'update',
   'search',
   'type',
   'sort',
   'remove',
-  'reload',
   'status',
   'dropdownValues',
 ])
@@ -41,18 +41,18 @@ const storage = useStorage('/product/inventory/branch', { branch: 0, rows: 0 })
 const isOpen = ref(false)
 const isConfig = ref(false)
 const branchId = ref(0)
-const branchName = ref('')
 const sortException = [4]
 const type = ref()
 const search = ref('')
 const rowCount = ref(0)
 const checkAll = ref(false)
 const checked = ref<Array<number>>([])
-const options = ref([])
+const title = ref('')
 const modal = reactive({
   quantity_warning: 0,
   quantity: 0,
   price: 0,
+  id: 0,
 })
 
 const onCheckAll = () => {
@@ -89,7 +89,12 @@ const onHeaderEmit = (header: IHeader, index: number) => {
 
 const onEditConfig = (id: number, name: string) => {
   isConfig.value = true
-  branchName.value = name
+  title.value = name
+  const item: IDetails = props.data.find((x) => x.id === id)!
+  modal.id = item.id
+  modal.price = item.price
+  modal.quantity = item.quantity
+  modal.quantity_warning = item.quantity_warn
 }
 
 const onGetBranchItems = (id: number) => {
@@ -104,6 +109,18 @@ const onSetRows = (count: number) => {
 
 const onStatus = (data: any) => {
   emit('status', data)
+}
+
+const onRemove = (checked: Array<number>) => {
+  emit('remove', checked),
+    (checkAll.value = false),
+    (checked.length = 0),
+    (isOpen.value = false)
+}
+
+const onUpdate = () => {
+  isConfig.value = false
+  emit('update', modal)
 }
 
 watch(isReset.value, (current, prev) => {
@@ -280,7 +297,9 @@ onMounted(() => {
               </span>
             </td>
             <td>
-              <span class="light-text">{{ row.name }}</span>
+              <span class="has-text-weight-semibold has-text-primary">{{
+                row.name
+              }}</span>
             </td>
             <td>
               <span
@@ -299,11 +318,6 @@ onMounted(() => {
                 <ItemsPerBranchDropdown
                   :id="row.id"
                   :is-active="row.is_active"
-                  :is-display-qty="row.is_display_qty"
-                  :item-id="row.item_id"
-                  :quantity="row.quantity"
-                  :quantity-warn="row.quantity_warn"
-                  :price="row.price"
                   @status="onStatus($event)"
                   @edit="onEditConfig($event, row.name)"
                 />
@@ -362,21 +376,13 @@ onMounted(() => {
       <template #content>
         <VPlaceholderSection
           title="Warning"
-          subtitle="Do you wan't to delete the selected fields?"
+          subtitle="Do you want to delete the selected fields?"
         />
       </template>
       <template #action>
-        <VButton
-          color="danger"
-          raised
-          @click="
-            emit('remove', checked),
-              (checkAll = false),
-              (checked.length = 0),
-              (isOpen = false)
-          "
-          >Confirm</VButton
-        >
+        <VButton color="danger" raised @click="onRemove(checked)">
+          Confirm
+        </VButton>
       </template>
     </VModal>
 
@@ -387,7 +393,7 @@ onMounted(() => {
       actions="right"
       noscroll
       noclose
-      :title="branchName"
+      :title="title"
       title-color="primary"
       @close="isConfig = false"
     >
@@ -437,7 +443,7 @@ onMounted(() => {
         </form>
       </template>
       <template #action>
-        <VButton color="primary">Save</VButton>
+        <VButton color="primary" @click="onUpdate()">Save</VButton>
       </template>
     </VModal>
   </div>
