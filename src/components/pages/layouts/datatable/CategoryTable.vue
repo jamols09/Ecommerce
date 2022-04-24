@@ -181,14 +181,7 @@ onMounted(() => {
               </VControl>
             </td>
             <td>
-              <span
-                class="
-                  has-dark-text
-                  dark-inverted
-                  is-font-alt is-weight-600
-                  rem-90
-                "
-              >
+              <span class="has-text-weight-semibold has-text-primary">
                 {{ row.name }}
               </span>
             </td>
