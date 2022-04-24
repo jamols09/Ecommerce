@@ -91,6 +91,7 @@
     "lodash": "^4.17.21",
     "mapbox-gl": "2.4.1",
     "markdown-it-emoji": "2.0.0",
+    "minimist": "^1.2.6",
     "notyf": "3.10.0",
     "nprogress": "0.2.0",
     "photoswipe": "4.1.3",
