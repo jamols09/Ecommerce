@@ -28,11 +28,11 @@ const props = withDefaults(defineProps<ITableProps>(), {
 })
 
 const emit = defineEmits([
+  'update',
   'search',
   'type',
   'sort',
   'remove',
-  'reload',
   'status',
   'dropdownValues',
 ])
@@ -47,11 +47,12 @@ const search = ref('')
 const rowCount = ref(0)
 const checkAll = ref(false)
 const checked = ref<Array<number>>([])
+const title = ref('')
 const modal = reactive({
   quantity_warning: 0,
   quantity: 0,
   price: 0,
-  name: '',
+  id: 0,
 })
 
 const onCheckAll = () => {
@@ -88,8 +89,9 @@ const onHeaderEmit = (header: IHeader, index: number) => {
 
 const onEditConfig = (id: number, name: string) => {
   isConfig.value = true
-  modal.name = name
+  title.value = name
   const item: IDetails = props.data.find((x) => x.id === id)!
+  modal.id = item.id
   modal.price = item.price
   modal.quantity = item.quantity
   modal.quantity_warning = item.quantity_warn
@@ -107,6 +109,18 @@ const onSetRows = (count: number) => {
 
 const onStatus = (data: any) => {
   emit('status', data)
+}
+
+const onRemove = (checked: Array<number>) => {
+  emit('remove', checked),
+    (checkAll.value = false),
+    (checked.length = 0),
+    (isOpen.value = false)
+}
+
+const onUpdate = () => {
+  isConfig.value = false
+  emit('update', modal)
 }
 
 watch(isReset.value, (current, prev) => {
@@ -283,7 +297,9 @@ onMounted(() => {
               </span>
             </td>
             <td>
-              <span class="light-text">{{ row.name }}</span>
+              <span class="has-text-weight-semibold has-text-primary">{{
+                row.name
+              }}</span>
             </td>
             <td>
               <span
@@ -360,21 +376,13 @@ onMounted(() => {
       <template #content>
         <VPlaceholderSection
           title="Warning"
-          subtitle="Do you wan't to delete the selected fields?"
+          subtitle="Do you want to delete the selected fields?"
         />
       </template>
       <template #action>
-        <VButton
-          color="danger"
-          raised
-          @click="
-            emit('remove', checked),
-              (checkAll = false),
-              (checked.length = 0),
-              (isOpen = false)
-          "
-          >Confirm</VButton
-        >
+        <VButton color="danger" raised @click="onRemove(checked)">
+          Confirm
+        </VButton>
       </template>
     </VModal>
 
@@ -385,7 +393,7 @@ onMounted(() => {
       actions="right"
       noscroll
       noclose
-      :title="modal.name"
+      :title="title"
       title-color="primary"
       @close="isConfig = false"
     >
@@ -435,7 +443,7 @@ onMounted(() => {
         </form>
       </template>
       <template #action>
-        <VButton color="primary">Save</VButton>
+        <VButton color="primary" @click="onUpdate()">Save</VButton>
       </template>
     </VModal>
   </div>

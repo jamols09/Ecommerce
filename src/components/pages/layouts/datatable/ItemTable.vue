@@ -29,7 +29,6 @@ const emit = defineEmits([
   'type',
   'sort',
   'remove',
-  'reload',
   'activate',
   'deactivate',
 

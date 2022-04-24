@@ -112,6 +112,20 @@ const onEmittedValues = (data: { id: number; row: number }) => {
   onCallTable()
 }
 
+const onUpdate = (data: {
+  id: number
+  price: number
+  quantity: number
+  quantity_warning: number
+}) => {
+  api.updateItemOfBranch(data.id, {
+    price: data.price,
+    quantity: data.quantity,
+    quantity_warning: data.quantity_warning,
+  })
+  onCallBranch()
+}
+
 onMounted(() => {
   onCallBranch()
 })
@@ -127,6 +141,7 @@ onMounted(() => {
       :search-type="table.searchType"
       :is-loading="api.isLoading.value"
       :reset-checked="reset"
+      @update="onUpdate($event)"
       @remove="onRemove($event)"
       @type="type = $event"
       @search="onSearch"
