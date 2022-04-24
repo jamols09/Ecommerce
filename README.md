@@ -557,9 +557,9 @@ Once again, thank you so much for purchasing this theme. As I said at the beginn
   When declaring a function name add `on` at the beginning of function name. Example: `onSubmit`
 
 - Variable
-  When declaring an array name it as <b>plural</b>. Example `options`, `addresses`, `items`.
-  When declaring a boolean name add `is` at the beginning of the variable name. Example: `isSubmitting`, `isLoading`, `isCancelled`
-  When naming a variable with primitive type except as mentioned above name it as <b>singular</b>. Example: `name`, `branch`
+  When declaring an array name it as <b>plural</b>. Example `options`, `addresses`, `items`. <br/>
+  When declaring a boolean name add `is` at the beginning of the variable name. Example: `isSubmitting`, `isLoading`, `isCancelled`<br/>
+  When naming a variable with primitive type except as mentioned above name it as <b>singular</b>. Example: `name`, `branch`<br/>
   When declaring a variable containing `two` or `more` words use <b>camel Casing</b>. Example: `isSubmitted`, `givenBy`, `lastItem`
 
 - Components
