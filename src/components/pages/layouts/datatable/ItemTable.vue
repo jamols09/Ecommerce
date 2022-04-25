@@ -210,13 +210,15 @@ onMounted(() => {
             </td>
             <td>
               <VTag
-                :color="row.is_discountable ? 'green' : 'danger'"
+                :color="row.is_discountable ? 'primary' : 'danger'"
                 :label="row.is_discountable ? 'Yes' : 'No'"
                 rounded
               />
             </td>
             <td>
-              <span class="light-text">{{ row.name }}</span>
+              <span class="has-text-weight-semibold has-text-primary">
+                {{ row.name }}
+              </span>
             </td>
             <td>
               <span class="light-text">{{ row.sku }}</span>

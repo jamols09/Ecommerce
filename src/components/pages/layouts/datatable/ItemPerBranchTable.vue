@@ -297,9 +297,9 @@ onMounted(() => {
               </span>
             </td>
             <td>
-              <span class="has-text-weight-semibold has-text-primary">{{
-                row.name
-              }}</span>
+              <span class="has-text-weight-semibold has-text-primary">
+                {{ row.name }}
+              </span>
             </td>
             <td>
               <span
