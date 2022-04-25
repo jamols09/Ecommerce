@@ -49,7 +49,7 @@ const checkAll = ref(false)
 const checked = ref<Array<number>>([])
 const title = ref('')
 const modal = reactive({
-  quantity_warning: 0,
+  quantity_warn: 0,
   quantity: 0,
   price: 0,
   id: 0,
@@ -94,7 +94,7 @@ const onEditConfig = (id: number, name: string) => {
   modal.id = item.id
   modal.price = item.price
   modal.quantity = item.quantity
-  modal.quantity_warning = item.quantity_warn
+  modal.quantity_warn = item.quantity_warn
 }
 
 const onGetBranchItems = (id: number) => {
@@ -418,7 +418,7 @@ onMounted(() => {
                 <label for="" class="label">Quantity Warning</label>
                 <div class="control">
                   <input
-                    v-model="modal.quantity_warning"
+                    v-model="modal.quantity_warn"
                     type="number"
                     class="input"
                     placeholder=""
