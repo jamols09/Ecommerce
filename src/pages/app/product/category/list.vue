@@ -90,9 +90,11 @@ const onCallTable = async () => {
   table.data = data
   pagination.value = api.tableResponse.value
 }
+
 watch(rowCount, (next, prev) => {
   onCallTable()
 })
+
 onMounted(() => onCallTable())
 </script>
 
