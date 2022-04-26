@@ -32,7 +32,7 @@ const emit = defineEmits(['close'])
                 title="Items per branch"
               >
                 <i aria-hidden="true" class="lnil lnil-list pr-3"></i>
-                Branches
+                Branch
               </RouterLink>
             </li>
             <li>

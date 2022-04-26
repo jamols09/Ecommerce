@@ -130,11 +130,13 @@ export function useBranch() {
     id: number | string | string[]
   ): Promise<any> => {
     try {
+      isLoading.value = true
       await api.patch(`/v1/branch/${id}`, params)
       notifType(`Branch successfully updated.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
+    isLoading.value = false
   }
 
   /**

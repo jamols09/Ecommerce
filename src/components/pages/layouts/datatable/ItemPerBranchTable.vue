@@ -49,7 +49,7 @@ const checkAll = ref(false)
 const checked = ref<Array<number>>([])
 const title = ref('')
 const modal = reactive({
-  quantity_warning: 0,
+  quantity_warn: 0,
   quantity: 0,
   price: 0,
   id: 0,
@@ -94,7 +94,7 @@ const onEditConfig = (id: number, name: string) => {
   modal.id = item.id
   modal.price = item.price
   modal.quantity = item.quantity
-  modal.quantity_warning = item.quantity_warn
+  modal.quantity_warn = item.quantity_warn
 }
 
 const onGetBranchItems = (id: number) => {
@@ -129,11 +129,10 @@ watch(isReset.value, (current, prev) => {
 
 watchEffect(() => {
   if (props.branch.length > 0) {
-    if (storage.value.branch === 0) {
-      branchId.value = props.branch[0].value
-    } else {
-      branchId.value = storage.value.branch
-    }
+    storage.value.branch === 0
+      ? (branchId.value = props.branch[0].value)
+      : (branchId.value = storage.value.branch)
+
     emit('dropdownValues', { id: branchId.value, row: rowCount.value })
   }
 })
@@ -148,11 +147,10 @@ debouncedWatch(
 )
 
 onMounted(() => {
-  if (storage.value.rows > 0) {
-    rowCount.value = storage.value.rows
-  } else {
-    rowCount.value = props.totalRows[0]
-  }
+  storage.value.rows > 0
+    ? (rowCount.value = storage.value.rows)
+    : (rowCount.value = props.totalRows[0])
+
   type.value = props.searchType[0]
 })
 </script>
@@ -297,9 +295,9 @@ onMounted(() => {
               </span>
             </td>
             <td>
-              <span class="has-text-weight-semibold has-text-primary">{{
-                row.name
-              }}</span>
+              <span class="has-text-weight-semibold has-text-primary">
+                {{ row.name }}
+              </span>
             </td>
             <td>
               <span
@@ -418,7 +416,7 @@ onMounted(() => {
                 <label for="" class="label">Quantity Warning</label>
                 <div class="control">
                   <input
-                    v-model="modal.quantity_warning"
+                    v-model="modal.quantity_warn"
                     type="number"
                     class="input"
                     placeholder=""

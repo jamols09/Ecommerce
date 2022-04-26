@@ -108,12 +108,14 @@ export function useCategory() {
     e: any,
     i: number | string | string[]
   ): Promise<any> => {
+    isLoading.value = true
     try {
       await api.patch(`/v1/category/${i}`, e)
       notifType(`Category successfully updated.`, 'success')
     } catch (err: any) {
       useErrorNotification.error(err.response.data)
     }
+    isLoading.value = false
   }
 
   return {

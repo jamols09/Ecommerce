@@ -10,7 +10,6 @@ pageTitle.value = 'Edit Branch'
 
 const api = useBranch()
 const route = useRoute()
-const isSubmitting = ref(false)
 const autofill = ref('')
 const branch = ref({
   address_line_1: '',
@@ -475,7 +474,7 @@ onMounted(async () => {
         <VButton
           type="submit"
           color="primary"
-          :loading="isSubmitting"
+          :loading="api.isLoading.value"
           bold
           fullwidth
           raised

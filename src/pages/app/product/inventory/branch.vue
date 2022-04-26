@@ -116,12 +116,12 @@ const onUpdate = (data: {
   id: number
   price: number
   quantity: number
-  quantity_warning: number
+  quantity_warn: number
 }) => {
   api.updateItemOfBranch(data.id, {
     price: data.price,
     quantity: data.quantity,
-    quantity_warning: data.quantity_warning,
+    quantity_warn: data.quantity_warn,
   })
   onCallBranch()
 }

@@ -15,7 +15,7 @@ const category = ref({
   name: '',
   parent_id: null,
 })
-const isLoadState = computed(() => api.isLoading.value)
+
 const onSubmit = async (inputs: typeof CategoryForm) => {
   await api.update(inputs, route.params.id)
 }
@@ -47,7 +47,7 @@ onMounted(async () => {
           </div>
           <div class="form-body">
             <VLoader
-              :active="isLoadState"
+              :active="api.isLoading.value"
               :translucent="true"
               :grey="true"
               card="regular"
@@ -128,7 +128,7 @@ onMounted(async () => {
         <VButton
           type="submit"
           color="primary"
-          :loading="isLoadState"
+          :loading="api.isLoading.value"
           bold
           fullwidth
           raised

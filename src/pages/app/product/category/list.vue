@@ -90,9 +90,11 @@ const onCallTable = async () => {
   table.data = data
   pagination.value = api.tableResponse.value
 }
+
 watch(rowCount, (next, prev) => {
   onCallTable()
 })
+
 onMounted(() => onCallTable())
 </script>
 
@@ -100,7 +102,7 @@ onMounted(() => onCallTable())
   <div>
     <CategoryTable
       :total-rows="
-        table.totalRows.sort(function (a, b) {
+        table.totalRows.sort((a, b) => {
           return a - b
         })
       "
