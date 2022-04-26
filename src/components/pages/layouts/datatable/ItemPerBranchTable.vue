@@ -129,11 +129,10 @@ watch(isReset.value, (current, prev) => {
 
 watchEffect(() => {
   if (props.branch.length > 0) {
-    if (storage.value.branch === 0) {
-      branchId.value = props.branch[0].value
-    } else {
-      branchId.value = storage.value.branch
-    }
+    storage.value.branch === 0
+      ? (branchId.value = props.branch[0].value)
+      : (branchId.value = storage.value.branch)
+
     emit('dropdownValues', { id: branchId.value, row: rowCount.value })
   }
 })
@@ -148,11 +147,10 @@ debouncedWatch(
 )
 
 onMounted(() => {
-  if (storage.value.rows > 0) {
-    rowCount.value = storage.value.rows
-  } else {
-    rowCount.value = props.totalRows[0]
-  }
+  storage.value.rows > 0
+    ? (rowCount.value = storage.value.rows)
+    : (rowCount.value = props.totalRows[0])
+
   type.value = props.searchType[0]
 })
 </script>
