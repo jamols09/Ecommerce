@@ -53,7 +53,7 @@ const onStatus = (id: number) => {
         <div class="meta">
           <span> Edit </span>
           <span>
-            <small>Edit product configuration</small>
+            <small>Edit product config</small>
           </span>
         </div>
       </a>
