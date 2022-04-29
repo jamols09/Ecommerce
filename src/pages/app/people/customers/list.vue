@@ -112,7 +112,7 @@ onMounted(() => onCallTable())
   <div>
     <CustomerTable
       :total-rows="
-        table.totalRows.sort(function (a, b) {
+        table.totalRows.sort((a, b) => {
           return a - b
         })
       "
