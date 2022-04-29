@@ -40,7 +40,7 @@ const isOpen = ref(false)
 const sortException = [0, 8]
 const type = ref()
 const search = ref()
-const rowCount = ref<number>()
+const rowCount = ref(0)
 const checkAll = ref<boolean>(false)
 const checked = ref<Array<number>>([])
 const isLoadState = computed(() => props.isLoading)
