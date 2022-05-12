@@ -38,13 +38,18 @@ const emit = defineEmits([
   'setStatus',
 ])
 
-const storage = useStorage('/product/inventory/list', { branch: 0, rows: 0 })
+const storage = useStorage('/product/inventory/list', { rows: 0 })
 const sortException = [3]
 const type = ref()
 const search = ref()
 const rowCount = ref()
 const checkAll = ref<boolean>(false)
 const checked = ref<Array<number>>([])
+const isLoadState = computed(() => props.isLoading)
+const isReset = ref(() => {
+  return props.resetChecked
+})
+
 const onCheckAll = () => {
   checked.value.length = 0
   if (!checkAll.value) {
@@ -59,10 +64,6 @@ const reset = () => {
   checkAll.value = false
 }
 
-const isLoadState = computed(() => props.isLoading)
-const isReset = ref(() => {
-  return props.resetChecked
-})
 const onHeaderEmit = (header: IHeader, index: number) => {
   !sortException.includes(index)
     ? emit(
