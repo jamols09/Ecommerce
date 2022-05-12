@@ -6,6 +6,7 @@ import 'simple-datatables/src/style.css'
 import { computed, onMounted, ref, watch } from 'vue'
 import { debouncedWatch } from '@vueuse/shared'
 import type { IData, IHeader } from '/@src/models/table'
+import { useStorage } from '@vueuse/core'
 
 interface ITableProps {
   headers: IHeader[]
@@ -34,13 +35,19 @@ const emit = defineEmits([
   'deactivate',
 ])
 
+const storage = useStorage('/branch/list', { rows: 0 })
 const isOpen = ref(false)
 const sortException = [8]
 const type = ref()
 const search = ref()
-const rowCount = ref<number>()
+const rowCount = ref()
 const checkAll = ref<boolean>(false)
 const checked = ref<Array<number>>([])
+const isLoadState = computed(() => props.isLoading)
+const isReset = ref(() => {
+  return props.resetChecked
+})
+
 const onCheckAll = () => {
   checked.value.length = 0
   if (!checkAll.value) {
@@ -50,15 +57,15 @@ const onCheckAll = () => {
   }
 }
 
+const onSetRows = (count: number) => {
+  storage.value.rows = count
+  emit('rowCount', count)
+}
+
 const reset = () => {
   checked.value.length = 0
   checkAll.value = false
 }
-
-const isLoadState = computed(() => props.isLoading)
-const isReset = ref(() => {
-  return props.resetChecked
-})
 
 const onHeaderEmit = (header: IHeader, index: number) => {
   !sortException.includes(index)
@@ -86,7 +93,9 @@ debouncedWatch(
   { debounce: 700 }
 )
 onMounted(() => {
-  rowCount.value = props.totalRows[0]
+  storage.value.rows > 0
+    ? (rowCount.value = storage.value.rows)
+    : (rowCount.value = props.totalRows[0])
   type.value = props.searchType[0]
 })
 </script>
@@ -101,7 +110,7 @@ onMounted(() => {
             <select
               v-model="rowCount"
               class="table-selectOption"
-              @change="emit('rowCount', rowCount)"
+              @change="onSetRows(rowCount)"
             >
               <option
                 v-for="(number, index) in props.totalRows"
