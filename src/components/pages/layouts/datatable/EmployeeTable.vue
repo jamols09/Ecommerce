@@ -35,7 +35,7 @@ const emit = defineEmits([
   'deactivate',
 ])
 
-const storage = useStorage('/product/category/list', { rows: 0 })
+const storage = useStorage('/people/employees/list', { rows: 0 })
 const isOpen = ref(false)
 const sortException = [0, 8]
 const type = ref()

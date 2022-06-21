@@ -48,6 +48,7 @@ const type = ref()
 const search = ref()
 const page = ref(1)
 const reset = ref(false)
+
 const onSearch = (e: any) => {
   search.value = e
   onCallTable()
@@ -102,10 +103,10 @@ const onCallTable = async () => {
   table.data = data
   pagination.value = api.tableResponse.value
 }
+
 watch(rowCount, (next, prev) => {
   onCallTable()
 })
-onMounted(() => onCallTable())
 </script>
 
 <template>

@@ -94,8 +94,6 @@ const onCallTable = async () => {
 watch(rowCount, (next, prev) => {
   onCallTable()
 })
-
-onMounted(() => onCallTable())
 </script>
 
 <template>
